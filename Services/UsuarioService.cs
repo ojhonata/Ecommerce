@@ -17,7 +17,7 @@ namespace Ecommerce.Services
         }
         public Usuario PostUsuario(UsuarioDTO usuarioDTO)
         {
-            throw new NotImplementedException();
+            return _usuarioRepository.PostUsuario(usuarioDTO);
         }
 
         public List<string> GetUsuarios()

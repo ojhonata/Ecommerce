@@ -15,10 +15,12 @@ namespace Ecommerce.Controllers
     public class UsuariosController : ControllerBase
     {
         private readonly AppDbContext _context; // variavel que vai acessar o banco
+        private readonly IUsuarioService _usuarioService;
 
-        public UsuariosController(AppDbContext appDbContext)
+        public UsuariosController(AppDbContext appDbContext, IUsuarioService usuarioService)
         {
             _context = appDbContext; // inicializa o contexto do banco de dados
+            _usuarioService = usuarioService;
         }
 
         [HttpGet(Name = "GetUsuarios")]
@@ -31,15 +33,7 @@ namespace Ecommerce.Controllers
         [HttpPost(Name = "PostUsuario")]
         public IActionResult PostUsuario([FromBody] UsuarioDTO usuarioDTO)
         {
-            var usuario = new Usuario
-            {
-                Nome = usuarioDTO.Nome,
-                Email = usuarioDTO.Email,
-                Senha = usuarioDTO.Senha
-            };
-
-            _context.Usuarios.Add(usuario); // adiciona o novo usuário ao contexto
-            _context.SaveChanges(); // salva as mudanças no banco de dados
+            Usuario usuario = _usuarioService.PostUsuario(usuarioDTO);
             return Ok(usuario);
         }
     }
