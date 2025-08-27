@@ -17,9 +17,9 @@ namespace Ecommerce.Repository
             _context = context;
         }
 
-        public List<UsuarioModel> GetUsuarios()
+        public List<Usuario> GetUsuarios()
         {
-            return _context.ecommerce.ToList(); // retorna a lista de usuários do banco de dados
+            return _context.Usuarios.ToList(); // retorna a lista de usuários do banco de dados
         }
 
     }

@@ -13,6 +13,6 @@ namespace Ecommerce.Data
         {
         }
 
-        public DbSet<UsuarioModel> ecommerce { get; set; } // conjunto de usuários
+        public DbSet<Usuario> Usuarios { get; set; } // conjunto de usuários
     }
 }

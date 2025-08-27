@@ -10,6 +10,6 @@ namespace Ecommerce.Interface
 {
     public interface IUsuarioRepository
     {
-        List<UsuarioModel> GetUsuarios();
+        public List<Usuario> GetUsuarios();
     }
 }
