@@ -17,6 +17,10 @@ namespace Ecommerce.Services
         }
         public Usuario PostUsuario(UsuarioDTO usuarioDTO)
         {
+            if(string.IsNullOrEmpty(usuarioDTO.Nome) || string.IsNullOrEmpty(usuarioDTO.Email) || string.IsNullOrEmpty(usuarioDTO.Senha))
+            {
+                throw new ArgumentException("Nome, Email e Senha são obrigatórios.");
+            }
             return _usuarioRepository.PostUsuario(usuarioDTO);
         }
 
