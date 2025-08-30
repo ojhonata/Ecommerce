@@ -14,5 +14,8 @@ namespace Ecommerce.Data
         }
 
         public DbSet<Usuario> Usuarios { get; set; } // conjunto de usuários
+        public DbSet<Produto> Produtos { get; set; } // conjunto de produtos
+        public DbSet<Categoria> Categorias { get; set; } // conjunto de categorias
+        public DbSet<Marca> Marcas { get; set; } // conjunto de marcas
     }
 }
