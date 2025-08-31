@@ -1,0 +1,87 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Ecommerce.Data;
+using Ecommerce.DTOs;
+using Ecommerce.Interface;
+using Ecommerce.Models;
+using Microsoft.AspNetCore.Mvc;
+
+namespace Ecommerce.Controllers
+{
+    [ApiController]
+    [Route("api/[controller]")]
+    public class MarcaController : ControllerBase
+    {
+        private readonly IMarcaService _marcaService;
+        public MarcaController(IMarcaService marcaService)
+        {
+            _marcaService = marcaService;
+        }
+
+        [HttpGet(Name = "GetMarcas")]
+        public IActionResult GetMarcas()
+        {
+            List<string> marcas = _marcaService.GetMarcas();
+            return Ok(marcas);
+        }
+
+        [HttpGet("{id}", Name = "GetMarcaPorId")]
+        public ActionResult<Models.Marca> GetMarcaPorId(int id)
+        {
+            var marca = _marcaService.ObterMarcaPorId(id);
+            if (marca == null)
+            {
+                return NotFound();
+            }
+            return Ok(marca);
+        }
+
+        [HttpPost(Name = "PostMarca")]
+        public ActionResult<Models.Marca> PostMarca([FromBody] MarcaDTO marcaDto)
+        {
+            try
+            {
+                var marca = _marcaService.PostMarca(marcaDto);
+                return CreatedAtRoute("GetMarcaPorId", new { id = marca.Id }, marca);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+        [HttpPut("{id}", Name = "UpdateMarca")]
+        public IActionResult UpdateMarca(int id, [FromBody] Marca marca)
+        {
+            if (id != marca.Id)
+            {
+                return BadRequest(new { message = "ID da marca não corresponde." });
+            }
+            try
+            {
+                _marcaService.UpdateMarca(marca);
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+
+        }
+
+        [HttpDelete("{id}", Name = "DeleteMarca")]
+        public IActionResult DeleteMarca(int id)
+        {
+            try
+            {
+                _marcaService.DeleteMarca(id);
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+    }
+}

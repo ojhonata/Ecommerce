@@ -49,10 +49,10 @@ namespace Ecommerce.Repository
                 Preco = produto.Preco,
                 Descricao = produto.Descricao,
                 Estoque = produto.Estoque,
+                Ano = produto.Ano,
+                ImagemUrl = produto.ImagemUrl,
                 CategoriaId = produto.CategoriaId,
                 MarcaId = produto.MarcaId,
-                Ano = produto.Ano,
-                ImagemUrl = produto.ImagemUrl
             };
 
             _context.Produtos.Add(novoProduto); // adiciona o novo produto ao contexto
@@ -69,10 +69,10 @@ namespace Ecommerce.Repository
                 produtoExistente.Preco = produto.Preco;
                 produtoExistente.Descricao = produto.Descricao;
                 produtoExistente.Estoque = produto.Estoque;
-                produtoExistente.CategoriaId = produto.CategoriaId;
-                produtoExistente.MarcaId = produto.MarcaId;
                 produtoExistente.Ano = produto.Ano;
                 produtoExistente.ImagemUrl = produto.ImagemUrl;
+                produtoExistente.CategoriaId = produto.CategoriaId;
+                produtoExistente.MarcaId = produto.MarcaId;
 
                 _context.SaveChanges(); // salva as mudanças no banco de dados
             }

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Ecommerce.Data;
 using Ecommerce.DTOs;
 using Ecommerce.Interface;
 using Ecommerce.Models;
@@ -15,19 +16,26 @@ namespace Ecommerce.Services
         {
             _produtoRepository = produtoRepository;
         }
-        public void DeleteProduto(int id)
-        {
-            throw new NotImplementedException();
-        }
 
-        public List<Produto> GetProdutos()
+        public List<string> GetProdutos()
         {
-            return _produtoRepository.GetProdutos();
+            List<Produto> produtos = _produtoRepository.GetProdutos();
+            List<string> nomes = new List<string>();
+            foreach (var produto in produtos)
+            {
+                nomes.Add(produto.Nome);
+            }
+            return nomes;
         }
 
         public Produto ObterProdutoPorId(int id)
         {
-            throw new NotImplementedException();
+            var produto = _produtoRepository.ObterProdutoPorId(id);
+            if (produto == null)
+            {
+                throw new Exception("Produto não encontrado.");
+            }
+            return produto;
         }
 
         public Produto PostProduto(ProdutoDTO produto)
@@ -47,9 +55,37 @@ namespace Ecommerce.Services
             return _produtoRepository.PostProduto(produto);
         }
 
+        public void DeleteProduto(int id)
+        {
+            var produto = _produtoRepository.ObterProdutoPorId(id);
+            if (produto == null)
+            {
+                throw new Exception("Produto não encontrado.");
+            }
+            _produtoRepository.DeleteProduto(id);   
+
+        }
+
         public void UpdateProduto(Produto produto)
         {
-            throw new NotImplementedException();
+            var produtoExistente = _produtoRepository.ObterProdutoPorId(produto.Id);
+            if (produtoExistente == null)
+            {
+                throw new Exception("Produto não encontrado.");
+            }
+            if (string.IsNullOrEmpty(produto.Nome))
+            {
+                throw new Exception("O nome do produto é obrigatório.");
+            }
+            if (produto.Preco <= 0)
+            {
+                throw new Exception("O preço do produto deve ser maior que zero.");
+            }
+            if (produto.Estoque < 0)
+            {
+                throw new Exception("O estoque do produto não pode ser negativo.");
+            }
+            _produtoRepository.UpdateProduto(produto);
         }
     }
 }

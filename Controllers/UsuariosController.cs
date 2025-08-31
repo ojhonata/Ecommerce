@@ -14,20 +14,18 @@ namespace Ecommerce.Controllers
     [Route("api/[controller]")]
     public class UsuariosController : ControllerBase
     {
-        private readonly AppDbContext _context; // variavel que vai acessar o banco
         private readonly IUsuarioService _usuarioService;
 
-        public UsuariosController(AppDbContext appDbContext, IUsuarioService usuarioService)
+        public UsuariosController(IUsuarioService usuarioService)
         {
-            _context = appDbContext; // inicializa o contexto do banco de dados
             _usuarioService = usuarioService;
         }
 
         [HttpGet(Name = "GetUsuarios")]
         public IActionResult GetUsuarios()
         {
-            var usuarios = _context.Usuarios.ToList(); // busca a lista de usuários do banco de dados
-            return Ok(usuarios); // retorna a lista de usuários como resposta HTTP 200
+            var usuarios = _usuarioService.GetUsuarios();
+            return Ok(usuarios);
         }
 
         [HttpPost(Name = "PostUsuario")]
