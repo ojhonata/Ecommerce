@@ -33,13 +33,13 @@ namespace Ecommerce.Controllers
             var marca = _marcaService.ObterMarcaPorId(id);
             if (marca == null)
             {
-                return NotFound();
+                return NotFound(new { message = "Marca não encontrada." });
             }
             return Ok(marca);
         }
 
         [HttpPost(Name = "PostMarca")]
-        public ActionResult<Models.Marca> PostMarca([FromBody] MarcaDTO marcaDto)
+        public ActionResult<Marca> PostMarca([FromBody] MarcaDTO marcaDto)
         {
             try
             {
@@ -61,7 +61,7 @@ namespace Ecommerce.Controllers
             try
             {
                 _marcaService.UpdateMarca(marca);
-                return NoContent();
+                return Ok(new { message = "Marca atualizada com sucesso." });
             }
             catch (Exception ex)
             {
@@ -76,7 +76,7 @@ namespace Ecommerce.Controllers
             try
             {
                 _marcaService.DeleteMarca(id);
-                return NoContent();
+                return Ok(new { message = "Marca deletada com sucesso." });
             }
             catch (Exception ex)
             {

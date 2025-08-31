@@ -49,21 +49,31 @@ namespace Ecommerce.Services
 
         public Marca PostMarca(MarcaDTO marca)
         {
-            if (string.IsNullOrEmpty(marca.Nome))
+            if (string.IsNullOrEmpty(marca.Nome) || string.IsNullOrEmpty(marca.ImagemURL))
             {
-                throw new Exception("O nome da marca é obrigatório.");
+                throw new Exception("O nome e a URL da imagem da marca são obrigatórios.");
             }
+            var novaMarca = new Marca
+            {
+                Nome = marca.Nome,
+                ImagemURL = marca.ImagemURL
+            };
             return _marcaRepository.PostMarca(marca);
         }
 
         public void UpdateMarca(Marca marca)
         {
             var marcaExistente = _marcaRepository.ObterMarcaPorId(marca.Id);
-            if (marcaExistente == null)
+            if (marcaExistente != null)
+            {
+                marcaExistente.Nome = marca.Nome;
+                marcaExistente.ImagemURL = marca.ImagemURL;
+                _marcaRepository.UpdateMarca(marcaExistente);
+            }
+            else
             {
                 throw new Exception("Marca não encontrada.");
             }
-            _marcaRepository.UpdateMarca(marca);
 
         }
     }
