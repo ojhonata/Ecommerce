@@ -6,6 +6,7 @@ using Ecommerce.Data;
 using Ecommerce.DTOs;
 using Ecommerce.Interface;
 using Ecommerce.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Ecommerce.Repository
 {
@@ -33,7 +34,9 @@ namespace Ecommerce.Repository
 
         public List<Marca> GetMarcas()
         {
-            return _context.Marcas.ToList();
+            return _context.Marcas
+                .Include(m => m.Produtos)
+                .ToList();
         }
 
         public Marca ObterMarcaPorId(int id)

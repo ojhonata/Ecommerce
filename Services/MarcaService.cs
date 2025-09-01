@@ -25,16 +25,9 @@ namespace Ecommerce.Services
             _marcaRepository.DeleteMarca(id);
         }
 
-        public List<string> GetMarcas()
+        public List<Marca> GetMarcas()
         {
-            List<Marca> marca = _marcaRepository.GetMarcas();
-            List<string> marcas = new List<string>();
-
-            foreach (var m in marca)
-            {
-                marcas.Add(m.Nome);
-            }
-            return marcas;
+            return _marcaRepository.GetMarcas();
         }
 
         public Marca ObterMarcaPorId(int id)

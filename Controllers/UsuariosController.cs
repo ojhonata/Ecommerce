@@ -25,7 +25,13 @@ namespace Ecommerce.Controllers
         public IActionResult GetUsuarios()
         {
             var usuarios = _usuarioService.GetUsuarios();
-            return Ok(usuarios);
+            var usuarioDtos = usuarios.Select(u => new UsuarioDTO
+            {
+                Nome = u.Nome,
+                Email = u.Email,
+                Senha = u.Senha
+            }).ToList();
+            return Ok(usuarioDtos);
         }
 
         [HttpPost(Name = "PostUsuario")]

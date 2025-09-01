@@ -24,8 +24,19 @@ namespace Ecommerce.Controllers
         [HttpGet(Name = "GetProdutos")]
         public IActionResult GetProdutos()
         {
-            List<Produto> produtos = _produtoService.GetProdutos();
-            return Ok(produtos);
+            var produtos = _produtoService.GetProdutos();
+            var produtoDtos = produtos.Select(p => new ProdutoDTO
+            {
+                Nome = p.Nome,
+                Preco = p.Preco,
+                Descricao = p.Descricao,
+                Estoque = p.Estoque,
+                Ano = p.Ano,
+                ImagemUrl = p.ImagemUrl,
+                CategoriaId = p.CategoriaId,
+                MarcaId = p.MarcaId
+            }).ToList();
+            return Ok(produtoDtos);
         }
 
         [HttpGet("{id}", Name = "GetProdutoPorId")]

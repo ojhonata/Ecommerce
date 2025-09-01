@@ -22,12 +22,27 @@ namespace Ecommerce.Controllers
         [HttpGet(Name = "GetCategorias")]
         public IActionResult GetCategorias()
         {
-            List<string> categorias = _categoriaService.GetCategorias();
-            return Ok(categorias);
+            var categorias = _categoriaService.GetCategorias();
+            var categoriaDtos = categorias.Select(c => new CategoriaDTO
+            {
+                Nome = c.Nome,
+                Produtos = c.Produtos?.Select(p => new ProdutoDTO
+                {
+                    Nome = p.Nome,
+                    Preco = p.Preco,
+                    Descricao = p.Descricao,
+                    Estoque = p.Estoque,
+                    Ano = p.Ano,
+                    ImagemUrl = p.ImagemUrl,
+                    CategoriaId = p.CategoriaId,
+                    MarcaId = p.MarcaId
+                }).ToList()
+            }).ToList();
+            return Ok(categoriaDtos);
         }
 
         [HttpGet("{id}", Name = "GetCategoriaPorId")]
-        public ActionResult<Models.Categoria> GetCategoriaPorId(int id)
+        public ActionResult<Categoria> GetCategoriaPorId(int id)
         {
             var categoria = _categoriaService.ObterCategoriaPorId(id);
             if (categoria == null)

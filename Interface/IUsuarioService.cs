@@ -9,7 +9,7 @@ namespace Ecommerce.Interface
 {
     public interface IUsuarioService
     {
-        public List<string> GetUsuarios();
+        public List<Usuario> GetUsuarios();
         public Usuario PostUsuario(UsuarioDTO usuarioDTO);
     }
 }

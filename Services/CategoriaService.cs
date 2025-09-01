@@ -26,15 +26,9 @@ namespace Ecommerce.Services
 
         }
 
-        public List<string> GetCategorias()
+        public List<Categoria> GetCategorias()
         {
-            List<Categoria> categoria = _categoriaRepository.GetCategorias();
-            List<string> categorias = new List<string>();
-            foreach (var c in categoria)
-            {
-                categorias.Add(c.Nome);
-            }
-            return categorias;
+            return _categoriaRepository.GetCategorias();
         }
 
         public Categoria ObterCategoriaPorId(int id)

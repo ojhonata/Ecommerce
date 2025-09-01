@@ -23,12 +23,28 @@ namespace Ecommerce.Controllers
         [HttpGet(Name = "GetMarcas")]
         public IActionResult GetMarcas()
         {
-            List<string> marcas = _marcaService.GetMarcas();
-            return Ok(marcas);
+            var marcas = _marcaService.GetMarcas();
+            var marcaDtos = marcas.Select(m => new MarcaDTO
+            {
+                Nome = m.Nome,
+                ImagemURL = m.ImagemURL,
+                Produtos = m.Produtos?.Select(p => new ProdutoDTO
+                {
+                    Nome = p.Nome,
+                    Preco = p.Preco,
+                    Descricao = p.Descricao,
+                    Estoque = p.Estoque,
+                    Ano = p.Ano,
+                    ImagemUrl = p.ImagemUrl,
+                    CategoriaId = p.CategoriaId,
+                    MarcaId = p.MarcaId
+                }).ToList()
+            }).ToList();
+            return Ok(marcaDtos);
         }
 
         [HttpGet("{id}", Name = "GetMarcaPorId")]
-        public ActionResult<Models.Marca> GetMarcaPorId(int id)
+        public ActionResult<Marca> GetMarcaPorId(int id)
         {
             var marca = _marcaService.ObterMarcaPorId(id);
             if (marca == null)

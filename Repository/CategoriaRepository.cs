@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Ecommerce.Data;
 using Ecommerce.Interface;
 using Ecommerce.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Ecommerce.Repository
 {
@@ -31,7 +32,9 @@ namespace Ecommerce.Repository
 
         public List<Categoria> GetCategorias()
         {
-            return _context.Categorias.ToList();
+            return _context.Categorias
+                .Include(c => c.Produtos)
+                .ToList();
         }
 
         public Categoria ObterCategoriaPorId(int id)
