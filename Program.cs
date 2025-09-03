@@ -1,3 +1,4 @@
+using DotNetEnv;
 using Ecommerce.Data;
 using Ecommerce.Interface;
 using Ecommerce.Repository;
@@ -13,9 +14,11 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-var connectionString = builder.Configuration.GetConnectionString("AppDbConnectionString");
+Env.Load(); // Carregar variáveis do .env
+
+var pgSqlString = Environment.GetEnvironmentVariable("DATABASE_URL");
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseNpgsql(connectionString));
+    options.UseNpgsql(pgSqlString));
 
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 builder.Services.AddScoped<IUsuarioService, UsuarioService>();
