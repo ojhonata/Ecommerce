@@ -9,7 +9,7 @@ namespace Ecommerce.Interface
 {
     public interface IMarcaService
     {
-        public List<string> GetMarcas();
+        public List<Marca> GetMarcas();
         public Marca ObterMarcaPorId(int id);
         public Marca PostMarca(MarcaDTO marca);
         void UpdateMarca(Marca marca);

@@ -411,3 +411,11 @@ C:\Users\Jhonata\Desktop\Ecommerce\obj\Debug\net8.0\refint\Ecommerce.dll
 C:\Users\Jhonata\Desktop\Ecommerce\obj\Debug\net8.0\Ecommerce.pdb
 C:\Users\Jhonata\Desktop\Ecommerce\obj\Debug\net8.0\Ecommerce.genruntimeconfig.cache
 C:\Users\Jhonata\Desktop\Ecommerce\obj\Debug\net8.0\ref\Ecommerce.dll
+C:\Users\Jhonata\Desktop\Ecommerce\bin\Debug\net8.0\MySqlConnector.dll
+C:\Users\Jhonata\Desktop\Ecommerce\bin\Debug\net8.0\Pomelo.EntityFrameworkCore.MySql.dll
+C:\Users\Jhonata\Desktop\Ecommerce\bin\Debug\net8.0\DotNetEnv.dll
+C:\Users\Jhonata\Desktop\Ecommerce\bin\Debug\net8.0\Sprache.dll
+C:\Users\jhona\Desktop\Ecommerce\bin\Debug\net8.0\DotNetEnv.dll
+C:\Users\jhona\Desktop\Ecommerce\bin\Debug\net8.0\MySqlConnector.dll
+C:\Users\jhona\Desktop\Ecommerce\bin\Debug\net8.0\Pomelo.EntityFrameworkCore.MySql.dll
+C:\Users\jhona\Desktop\Ecommerce\bin\Debug\net8.0\Sprache.dll

@@ -17,15 +17,9 @@ namespace Ecommerce.Services
             _produtoRepository = produtoRepository;
         }
 
-        public List<string> GetProdutos()
+        public List<Produto> GetProdutos()
         {
-            List<Produto> produtos = _produtoRepository.GetProdutos();
-            List<string> nomes = new List<string>();
-            foreach (var produto in produtos)
-            {
-                nomes.Add(produto.Nome);
-            }
-            return nomes;
+            return _produtoRepository.GetProdutos();
         }
 
         public Produto ObterProdutoPorId(int id)

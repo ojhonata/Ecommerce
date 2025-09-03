@@ -24,8 +24,19 @@ namespace Ecommerce.Controllers
         [HttpGet(Name = "GetProdutos")]
         public IActionResult GetProdutos()
         {
-            List<string> produtos = _produtoService.GetProdutos();
-            return Ok(produtos);
+            var produtos = _produtoService.GetProdutos();
+            var produtoDtos = produtos.Select(p => new ProdutoDTO
+            {
+                Nome = p.Nome,
+                Preco = p.Preco,
+                Descricao = p.Descricao,
+                Estoque = p.Estoque,
+                Ano = p.Ano,
+                ImagemUrl = p.ImagemUrl,
+                CategoriaId = p.CategoriaId,
+                MarcaId = p.MarcaId
+            }).ToList();
+            return Ok(produtoDtos);
         }
 
         [HttpGet("{id}", Name = "GetProdutoPorId")]
@@ -34,7 +45,7 @@ namespace Ecommerce.Controllers
             var produto = _produtoService.ObterProdutoPorId(id);
             if (produto == null)
             {
-                return NotFound();
+                return NotFound(new { message = "Produto não encontrado." });
             }
             return Ok(produto);
         }
@@ -63,7 +74,7 @@ namespace Ecommerce.Controllers
             try
             {
                 _produtoService.UpdateProduto(produto);
-                return NoContent();
+                return Ok(new { message = "Produto atualizado com sucesso." });
             }
             catch (Exception ex)
             {
@@ -77,7 +88,7 @@ namespace Ecommerce.Controllers
             try
             {
                 _produtoService.DeleteProduto(id);
-                return NoContent();
+                return Ok(new { message = "Produto deletado com sucesso." });
             }
             catch (Exception ex)
             {

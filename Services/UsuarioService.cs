@@ -24,15 +24,9 @@ namespace Ecommerce.Services
             return _usuarioRepository.PostUsuario(usuarioDTO);
         }
 
-        public List<string> GetUsuarios()
+        public List<Usuario> GetUsuarios()
         {
-            List<Usuario> usuarios = _usuarioRepository.GetUsuarios();
-            List<string> nomes = new List<string>();
-            foreach (var usuario in usuarios)
-            {
-                nomes.Add(usuario.Nome);
-            }
-            return nomes;
+            return _usuarioRepository.GetUsuarios();
         }
     }
 }

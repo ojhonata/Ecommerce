@@ -9,5 +9,7 @@ namespace Ecommerce.DTOs
     {
         public string Nome { get; set; }
         public string ImagemURL { get; set; }
+
+        public List<ProdutoDTO> Produtos { get; set; }
     }
 }

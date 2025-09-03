@@ -8,5 +8,7 @@ namespace Ecommerce.DTOs
     public class CategoriaDTO
     {
         public string Nome { get; set; }
+
+        public List<ProdutoDTO> Produtos { get; set; }
     }
 }

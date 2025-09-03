@@ -23,28 +23,44 @@ namespace Ecommerce.Controllers
         [HttpGet(Name = "GetMarcas")]
         public IActionResult GetMarcas()
         {
-            List<string> marcas = _marcaService.GetMarcas();
-            return Ok(marcas);
+            var marcas = _marcaService.GetMarcas();
+            var marcaDtos = marcas.Select(m => new MarcaDTO
+            {
+                Nome = m.Nome,
+                ImagemURL = m.ImagemURL,
+                Produtos = m.Produtos?.Select(p => new ProdutoDTO
+                {
+                    Nome = p.Nome,
+                    Preco = p.Preco,
+                    Descricao = p.Descricao,
+                    Estoque = p.Estoque,
+                    Ano = p.Ano,
+                    ImagemUrl = p.ImagemUrl,
+                    CategoriaId = p.CategoriaId,
+                    MarcaId = p.MarcaId
+                }).ToList()
+            }).ToList();
+            return Ok(marcaDtos);
         }
 
         [HttpGet("{id}", Name = "GetMarcaPorId")]
-        public ActionResult<Models.Marca> GetMarcaPorId(int id)
+        public ActionResult<Marca> GetMarcaPorId(int id)
         {
             var marca = _marcaService.ObterMarcaPorId(id);
             if (marca == null)
             {
-                return NotFound();
+                return NotFound(new { message = "Marca não encontrada." });
             }
             return Ok(marca);
         }
 
         [HttpPost(Name = "PostMarca")]
-        public ActionResult<Models.Marca> PostMarca([FromBody] MarcaDTO marcaDto)
+        public ActionResult<Marca> PostMarca([FromBody] MarcaDTO marcaDto)
         {
             try
             {
                 var marca = _marcaService.PostMarca(marcaDto);
-                return CreatedAtRoute("GetMarcaPorId", new { id = marca.Id }, marca);
+                return CreatedAtAction(nameof(GetMarcaPorId), new { id = marca.Id }, marca);
             }
             catch (Exception ex)
             {
@@ -61,7 +77,7 @@ namespace Ecommerce.Controllers
             try
             {
                 _marcaService.UpdateMarca(marca);
-                return NoContent();
+                return Ok(new { message = "Marca atualizada com sucesso." });
             }
             catch (Exception ex)
             {
@@ -76,7 +92,7 @@ namespace Ecommerce.Controllers
             try
             {
                 _marcaService.DeleteMarca(id);
-                return NoContent();
+                return Ok(new { message = "Marca deletada com sucesso." });
             }
             catch (Exception ex)
             {

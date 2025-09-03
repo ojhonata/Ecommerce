@@ -1,3 +1,4 @@
+using DotNetEnv;
 using Ecommerce.Data;
 using Ecommerce.Interface;
 using Ecommerce.Repository;
@@ -13,9 +14,15 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-var connectionString = builder.Configuration.GetConnectionString("AppDbConnectionString");
+Env.Load(); // Carregar variáveis do .env
+
+// var pgSqlString = Environment.GetEnvironmentVariable("POSTGRES_URL");
+// builder.Services.AddDbContext<AppDbContext>(options =>
+//     options.UseNpgsql(pgSqlString));
+
+var mySqlString = Environment.GetEnvironmentVariable("MYSQL_URL");
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseNpgsql(connectionString));
+    options.UseMySql(mySqlString, ServerVersion.AutoDetect(mySqlString)));
 
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 builder.Services.AddScoped<IUsuarioService, UsuarioService>();
@@ -25,6 +32,9 @@ builder.Services.AddScoped<IProdutoService, ProdutoService>();
 
 builder.Services.AddScoped<IMarcaRepository, MarcaRepository>();
 builder.Services.AddScoped<IMarcaService, MarcaService>();
+
+builder.Services.AddScoped<ICategoriaRepository, CategoriaRepository>();
+builder.Services.AddScoped<ICategoriaService, CategoriaService>();
 
 
 var app = builder.Build();
