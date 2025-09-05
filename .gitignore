@@ -3,3 +3,7 @@ Migrations/
 .env
 
 .vs/
+
+bin/
+
+obj/
