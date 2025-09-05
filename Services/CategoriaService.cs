@@ -15,7 +15,7 @@ namespace Ecommerce.Services
         {
             _categoriaRepository = categoriaRepository;
         }
-        public void DeleteCategoria(int id)
+        public void DeleteCategoria(Guid id)
         {
             var categoria = _categoriaRepository.ObterCategoriaPorId(id);
             if (categoria == null)
@@ -31,7 +31,7 @@ namespace Ecommerce.Services
             return _categoriaRepository.GetCategorias();
         }
 
-        public Categoria ObterCategoriaPorId(int id)
+        public Categoria ObterCategoriaPorId(Guid id)
         {
             var categoria = _categoriaRepository.ObterCategoriaPorId(id);
             if (categoria == null)

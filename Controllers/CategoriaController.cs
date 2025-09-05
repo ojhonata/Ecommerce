@@ -23,26 +23,26 @@ namespace Ecommerce.Controllers
         public IActionResult GetCategorias()
         {
             var categorias = _categoriaService.GetCategorias();
-            var categoriaDtos = categorias.Select(c => new CategoriaDTO
+            var categoriaDtos = categorias.Select(category => new CategoriaDTO
             {
-                Nome = c.Nome,
-                Produtos = c.Produtos?.Select(p => new ProdutoDTO
+                Nome = category.Nome,
+                Produtos = category.Produtos?.Select(category => new ProdutoDTO
                 {
-                    Nome = p.Nome,
-                    Preco = p.Preco,
-                    Descricao = p.Descricao,
-                    Estoque = p.Estoque,
-                    Ano = p.Ano,
-                    ImagemUrl = p.ImagemUrl,
-                    CategoriaId = p.CategoriaId,
-                    MarcaId = p.MarcaId
+                    Nome = category.Nome,
+                    Preco = category.Preco,
+                    Descricao = category.Descricao,
+                    Estoque = category.Estoque,
+                    Ano = category.Ano,
+                    ImagemUrl = category.ImagemUrl,
+                    CategoriaId = category.CategoriaId,
+                    MarcaId = category.MarcaId
                 }).ToList()
             }).ToList();
             return Ok(categoriaDtos);
         }
 
         [HttpGet("{id}", Name = "GetCategoriaPorId")]
-        public ActionResult<Categoria> GetCategoriaPorId(int id)
+        public ActionResult<Categoria> GetCategoriaPorId(Guid id)
         {
             var categoria = _categoriaService.ObterCategoriaPorId(id);
             if (categoria == null)
@@ -66,14 +66,13 @@ namespace Ecommerce.Controllers
             }
         }
 
-        [HttpPut("{id}", Name = "UpdateCategoria")]
-        public IActionResult UpdateCategoria(int id, [FromBody] Categoria categoria)
+        [HttpPut("{id:guid}", Name = "UpdateCategoria")]
+        public IActionResult UpdateCategoria(Guid id, [FromBody] Categoria categoria)
         {
             if (id != categoria.Id)
             {
                 return BadRequest(new { message = "ID da categoria não corresponde." });
             }
-
             try
             {
                 _categoriaService.UpdateCategoria(categoria);
@@ -86,7 +85,7 @@ namespace Ecommerce.Controllers
         }
 
         [HttpDelete("{id}", Name = "DeleteCategoria")]
-        public IActionResult DeleteCategoria(int id)
+        public IActionResult DeleteCategoria(Guid id)
         {
             try
             {

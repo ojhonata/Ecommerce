@@ -18,7 +18,7 @@ namespace Ecommerce.Repository
             _context = context;
         }
 
-        public void DeleteMarca(int id)
+        public void DeleteMarca(Guid id)
         {
             var marca = ObterMarcaPorId(id);
             if (marca != null)
@@ -39,9 +39,9 @@ namespace Ecommerce.Repository
                 .ToList();
         }
 
-        public Marca ObterMarcaPorId(int id)
+        public Marca ObterMarcaPorId(Guid id)
         {
-            if (id <= 0)
+            if (Guid.Empty == id)
             {
                 throw new ArgumentException("ID inválido.");
             }

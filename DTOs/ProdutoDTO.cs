@@ -13,8 +13,8 @@ namespace Ecommerce.DTOs
         public int Estoque { get; set; }
         public int Ano { get; set; }
         public string ImagemUrl { get; set; }
-        public int CategoriaId { get; set; }
-        public int MarcaId { get; set; }
+        public Guid CategoriaId { get; set; }
+        public Guid MarcaId { get; set; }
 
     }
 }

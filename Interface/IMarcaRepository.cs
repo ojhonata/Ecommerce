@@ -10,9 +10,9 @@ namespace Ecommerce.Interface
     public interface IMarcaRepository
     {
         public List<Marca> GetMarcas();
-        public Marca ObterMarcaPorId(int id);
+        public Marca ObterMarcaPorId(Guid id);
         public Marca PostMarca(MarcaDTO marca);
         void UpdateMarca(Marca marca);
-        void DeleteMarca(int id);
+        void DeleteMarca(Guid id);
     }
 }

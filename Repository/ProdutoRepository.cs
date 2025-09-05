@@ -17,7 +17,7 @@ namespace Ecommerce.Repository
         {
             _context = context;
         }
-        public void DeleteProduto(int id)
+        public void DeleteProduto(Guid id)
         {
             var produto = ObterProdutoPorId(id);
             if (produto != null)
@@ -36,7 +36,7 @@ namespace Ecommerce.Repository
             return _context.Produtos.ToList(); // retorna a lista de produtos do banco de dados
         }
 
-        public Produto ObterProdutoPorId(int id)
+        public Produto ObterProdutoPorId(Guid id)
         {
             return _context.Produtos.FirstOrDefault(p => p.Id == id); // retorna o produto com o ID especificado
         }
@@ -51,8 +51,8 @@ namespace Ecommerce.Repository
                 Estoque = produto.Estoque,
                 Ano = produto.Ano,
                 ImagemUrl = produto.ImagemUrl,
-                CategoriaId = produto.CategoriaId,
-                MarcaId = produto.MarcaId,
+                CategoriaId = Guid.Parse(produto.CategoriaId.ToString()),
+                MarcaId = Guid.Parse(produto.MarcaId.ToString()),
             };
 
             _context.Produtos.Add(novoProduto); // adiciona o novo produto ao contexto

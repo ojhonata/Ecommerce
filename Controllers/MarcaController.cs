@@ -44,7 +44,7 @@ namespace Ecommerce.Controllers
         }
 
         [HttpGet("{id}", Name = "GetMarcaPorId")]
-        public ActionResult<Marca> GetMarcaPorId(int id)
+        public ActionResult<Marca> GetMarcaPorId(Guid id)
         {
             var marca = _marcaService.ObterMarcaPorId(id);
             if (marca == null)
@@ -60,7 +60,7 @@ namespace Ecommerce.Controllers
             try
             {
                 var marca = _marcaService.PostMarca(marcaDto);
-                return CreatedAtRoute("GetMarcaPorId", new { id = marca.Id }, marca);
+                return CreatedAtAction(nameof(GetMarcaPorId), new { id = marca.Id }, marca);
             }
             catch (Exception ex)
             {
@@ -68,7 +68,7 @@ namespace Ecommerce.Controllers
             }
         }
         [HttpPut("{id}", Name = "UpdateMarca")]
-        public IActionResult UpdateMarca(int id, [FromBody] Marca marca)
+        public IActionResult UpdateMarca(Guid id, [FromBody] Marca marca)
         {
             if (id != marca.Id)
             {
@@ -87,7 +87,7 @@ namespace Ecommerce.Controllers
         }
 
         [HttpDelete("{id}", Name = "DeleteMarca")]
-        public IActionResult DeleteMarca(int id)
+        public IActionResult DeleteMarca(Guid id)
         {
             try
             {
