@@ -3,3 +3,9 @@ Migrations/
 .env
 
 .vs/
+
+.github/
+
+bin/
+
+obj/
