@@ -15,6 +15,6 @@ namespace Ecommerce.Models
         public string Nome { get; set; }
         public string ImagemURL { get; set; }
 
-        public ICollection<Produto> Produtos { get; set; }
+        public virtual ICollection<Produto> Produtos { get; set; }
     }
 }

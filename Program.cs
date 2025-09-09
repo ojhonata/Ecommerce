@@ -16,9 +16,13 @@ builder.Services.AddSwaggerGen();
 
 Env.Load(); // Carregar variáveis do .env
 
-var pgSqlString = Environment.GetEnvironmentVariable("DATABASE_URL");
+// var pgSqlString = Environment.GetEnvironmentVariable("POSTGRES_URL");
+// builder.Services.AddDbContext<AppDbContext>(options =>
+//     options.UseNpgsql(pgSqlString));
+
+var mySqlString = Environment.GetEnvironmentVariable("MYSQL_URL");
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseNpgsql(pgSqlString));
+    options.UseMySql(mySqlString, ServerVersion.AutoDetect(mySqlString)));
 
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 builder.Services.AddScoped<IUsuarioService, UsuarioService>();

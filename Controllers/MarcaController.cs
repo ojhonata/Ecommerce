@@ -60,7 +60,7 @@ namespace Ecommerce.Controllers
             try
             {
                 var marca = _marcaService.PostMarca(marcaDto);
-                return CreatedAtRoute("GetMarcaPorId", new { id = marca.Id }, marca);
+                return CreatedAtAction(nameof(GetMarcaPorId), new { id = marca.Id }, marca);
             }
             catch (Exception ex)
             {
