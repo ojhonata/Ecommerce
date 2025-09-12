@@ -39,7 +39,7 @@ namespace Ecommerce.Controllers
             return Ok(produtoDtos);
         }
 
-        [HttpGet("{id}", Name = "GetProdutoPorId")]
+        [HttpGet("{id:guid}", Name = "GetProdutoPorId")]
         public ActionResult<Produto> GetProdutoPorId(Guid id)
         {
             var produto = _produtoService.ObterProdutoPorId(id);
@@ -64,7 +64,7 @@ namespace Ecommerce.Controllers
             }
         }
 
-        [HttpPut("{id}", Name = "UpdateProduto")]
+        [HttpPut("{id:guid}", Name = "UpdateProduto")]
         public IActionResult UpdateProduto(Guid id, [FromBody] Produto produto)
         {
             if (id != produto.Id)
@@ -82,7 +82,7 @@ namespace Ecommerce.Controllers
             }
         }
 
-        [HttpDelete("{id}", Name = "DeleteProduto")]
+        [HttpDelete("{id:guid}", Name = "DeleteProduto")]
         public IActionResult DeleteProduto(Guid id)
         {
             try
