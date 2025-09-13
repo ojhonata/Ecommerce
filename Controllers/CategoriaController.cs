@@ -41,7 +41,7 @@ namespace Ecommerce.Controllers
             return Ok(categoriaDtos);
         }
 
-        [HttpGet("{id}", Name = "GetCategoriaPorId")]
+        [HttpGet("{id:guid}", Name = "GetCategoriaPorId")]
         public ActionResult<Categoria> GetCategoriaPorId(Guid id)
         {
             var categoria = _categoriaService.ObterCategoriaPorId(id);
@@ -84,7 +84,7 @@ namespace Ecommerce.Controllers
             }
         }
 
-        [HttpDelete("{id}", Name = "DeleteCategoria")]
+        [HttpDelete("{id:guid}", Name = "DeleteCategoria")]
         public IActionResult DeleteCategoria(Guid id)
         {
             try

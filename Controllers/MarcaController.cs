@@ -43,7 +43,7 @@ namespace Ecommerce.Controllers
             return Ok(marcaDtos);
         }
 
-        [HttpGet("{id}", Name = "GetMarcaPorId")]
+        [HttpGet("{id:guid}", Name = "GetMarcaPorId")]
         public ActionResult<Marca> GetMarcaPorId(Guid id)
         {
             var marca = _marcaService.ObterMarcaPorId(id);
@@ -67,7 +67,7 @@ namespace Ecommerce.Controllers
                 return BadRequest(new { message = ex.Message });
             }
         }
-        [HttpPut("{id}", Name = "UpdateMarca")]
+        [HttpPut("{id:guid}", Name = "UpdateMarca")]
         public IActionResult UpdateMarca(Guid id, [FromBody] Marca marca)
         {
             if (id != marca.Id)
@@ -86,7 +86,7 @@ namespace Ecommerce.Controllers
 
         }
 
-        [HttpDelete("{id}", Name = "DeleteMarca")]
+        [HttpDelete("{id:guid}", Name = "DeleteMarca")]
         public IActionResult DeleteMarca(Guid id)
         {
             try
