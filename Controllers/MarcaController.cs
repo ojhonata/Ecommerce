@@ -23,35 +23,49 @@ namespace Ecommerce.Controllers
         [HttpGet(Name = "GetMarcas")]
         public IActionResult GetMarcas()
         {
-            var marcas = _marcaService.GetMarcas();
-            var marcaDtos = marcas.Select(m => new MarcaDTO
+            try
             {
-                Nome = m.Nome,
-                ImagemURL = m.ImagemURL,
-                Produtos = m.Produtos?.Select(p => new ProdutoDTO
+                var marcas = _marcaService.GetMarcas();
+                var marcaDtos = marcas.Select(m => new MarcaDTO
                 {
-                    Nome = p.Nome,
-                    Preco = p.Preco,
-                    Descricao = p.Descricao,
-                    Estoque = p.Estoque,
-                    Ano = p.Ano,
-                    ImagemUrl = p.ImagemUrl,
-                    CategoriaId = p.CategoriaId,
-                    MarcaId = p.MarcaId
-                }).ToList()
-            }).ToList();
-            return Ok(marcaDtos);
+                    Nome = m.Nome,
+                    ImagemURL = m.ImagemURL,
+                    Produtos = m.Produtos?.Select(p => new ProdutoDTO
+                    {
+                        Nome = p.Nome,
+                        Preco = p.Preco,
+                        Descricao = p.Descricao,
+                        Estoque = p.Estoque,
+                        Ano = p.Ano,
+                        ImagemUrl = p.ImagemUrl,
+                        CategoriaId = p.CategoriaId,
+                        MarcaId = p.MarcaId
+                    }).ToList()
+                }).ToList();
+                return Ok(marcaDtos);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
         }
 
-        [HttpGet("{id}", Name = "GetMarcaPorId")]
-        public ActionResult<Marca> GetMarcaPorId(int id)
+        [HttpGet("{id:guid}", Name = "GetMarcaPorId")]
+        public ActionResult<Marca> GetMarcaPorId(Guid id)
         {
-            var marca = _marcaService.ObterMarcaPorId(id);
-            if (marca == null)
+            try
             {
-                return NotFound(new { message = "Marca não encontrada." });
+                var marca = _marcaService.ObterMarcaPorId(id);
+                if (marca == null)
+                {
+                    return NotFound(new { message = "Marca não encontrada." });
+                }
+                return Ok(marca);
             }
-            return Ok(marca);
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
         }
 
         [HttpPost(Name = "PostMarca")]
@@ -67,8 +81,8 @@ namespace Ecommerce.Controllers
                 return BadRequest(new { message = ex.Message });
             }
         }
-        [HttpPut("{id}", Name = "UpdateMarca")]
-        public IActionResult UpdateMarca(int id, [FromBody] Marca marca)
+        [HttpPut("{id:guid}", Name = "UpdateMarca")]
+        public IActionResult UpdateMarca(Guid id, [FromBody] Marca marca)
         {
             if (id != marca.Id)
             {
@@ -86,8 +100,8 @@ namespace Ecommerce.Controllers
 
         }
 
-        [HttpDelete("{id}", Name = "DeleteMarca")]
-        public IActionResult DeleteMarca(int id)
+        [HttpDelete("{id:guid}", Name = "DeleteMarca")]
+        public IActionResult DeleteMarca(Guid id)
         {
             try
             {

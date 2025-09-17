@@ -16,7 +16,7 @@ namespace Ecommerce.Repository
         {
             _context = context;
         }
-        public void DeleteCategoria(int id)
+        public void DeleteCategoria(Guid id)
         {
             var categoria = ObterCategoriaPorId(id);
             if (categoria != null)
@@ -37,9 +37,9 @@ namespace Ecommerce.Repository
                 .ToList();
         }
 
-        public Categoria ObterCategoriaPorId(int id)
+        public Categoria ObterCategoriaPorId(Guid id)
         {
-            if (id <= 0)
+            if (id == Guid.Empty)
             {
                 throw new ArgumentException("ID inválido.");
             }

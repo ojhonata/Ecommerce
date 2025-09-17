@@ -9,9 +9,9 @@ namespace Ecommerce.Interface
     public interface ICategoriaRepository
     {
         public List<Categoria> GetCategorias();
-        public Categoria ObterCategoriaPorId(int id);
+        public Categoria ObterCategoriaPorId(Guid id);
         public Categoria PostCategoria(Categoria categoria);
         void UpdateCategoria(Categoria categoria);
-        void DeleteCategoria(int id);
+        void DeleteCategoria(Guid id);
     }
 }

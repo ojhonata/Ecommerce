@@ -15,7 +15,7 @@ namespace Ecommerce.Services
         {
             _marcaRepository = marcaRepository;
         }
-        public void DeleteMarca(int id)
+        public void DeleteMarca(Guid id)
         {
             var marca = _marcaRepository.ObterMarcaPorId(id);
             if (marca == null)
@@ -30,7 +30,7 @@ namespace Ecommerce.Services
             return _marcaRepository.GetMarcas();
         }
 
-        public Marca ObterMarcaPorId(int id)
+        public Marca ObterMarcaPorId(Guid id)
         {
             var marca = _marcaRepository.ObterMarcaPorId(id);
             if (marca == null)

@@ -22,7 +22,7 @@ namespace Ecommerce.Services
             return _produtoRepository.GetProdutos();
         }
 
-        public Produto ObterProdutoPorId(int id)
+        public Produto ObterProdutoPorId(Guid id)
         {
             var produto = _produtoRepository.ObterProdutoPorId(id);
             if (produto == null)
@@ -49,7 +49,7 @@ namespace Ecommerce.Services
             return _produtoRepository.PostProduto(produto);
         }
 
-        public void DeleteProduto(int id)
+        public void DeleteProduto(Guid id)
         {
             var produto = _produtoRepository.ObterProdutoPorId(id);
             if (produto == null)

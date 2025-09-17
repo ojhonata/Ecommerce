@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Ecommerce.Data
 {
-    public class AppDbContext : DbContext // contexto do banco de dados
+    public partial class AppDbContext : DbContext // contexto do banco de dados
     {
         public DbSet<Usuario> Usuarios { get; set; } // conjunto de usuários
         public DbSet<Produto> Produtos { get; set; } // conjunto de produtos

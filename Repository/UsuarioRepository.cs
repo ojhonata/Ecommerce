@@ -20,7 +20,9 @@ namespace Ecommerce.Repository
 
         public List<Usuario> GetUsuarios()
         {
-            return _context.Usuarios.ToList(); // retorna a lista de usuários do banco de dados
+            return _context.Usuarios
+            .Select(usuario => usuario) // seleciona todos os usuários
+            .ToList(); // retorna a lista de usuários do banco de dados
         }
 
         public Usuario PostUsuario(UsuarioDTO usuarioDTO)
