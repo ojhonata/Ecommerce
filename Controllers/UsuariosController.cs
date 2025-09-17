@@ -24,21 +24,34 @@ namespace Ecommerce.Controllers
         [HttpGet(Name = "GetUsuarios")]
         public IActionResult GetUsuarios()
         {
-            var usuarios = _usuarioService.GetUsuarios();
-            var usuarioDtos = usuarios.Select(u => new UsuarioDTO
+            try
             {
-                Nome = u.Nome,
-                Email = u.Email,
-                Senha = u.Senha
-            }).ToList();
-            return Ok(usuarioDtos);
+                var usuarios = _usuarioService.GetUsuarios();
+                var usuarioDtos = usuarios.Select(u => new UsuarioDTO
+                {
+                    Nome = u.Nome,
+                    Email = u.Email,
+                    Senha = u.Senha
+                }).ToList();
+                return Ok(usuarioDtos);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
         }
 
         [HttpPost(Name = "PostUsuario")]
         public IActionResult PostUsuario([FromBody] UsuarioDTO usuarioDTO)
         {
-            Usuario usuario = _usuarioService.PostUsuario(usuarioDTO);
-            return Ok(usuario);
+            try
+            {
+                Usuario usuario = _usuarioService.PostUsuario(usuarioDTO);
+                return Ok(usuario);
+            } catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
         }
     }
 }

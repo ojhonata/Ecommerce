@@ -22,34 +22,49 @@ namespace Ecommerce.Controllers
         [HttpGet(Name = "GetCategorias")]
         public IActionResult GetCategorias()
         {
-            var categorias = _categoriaService.GetCategorias();
-            var categoriaDtos = categorias.Select(category => new CategoriaDTO
+            try
             {
-                Nome = category.Nome,
-                Produtos = category.Produtos?.Select(category => new ProdutoDTO
+                var categorias = _categoriaService.GetCategorias();
+                var categoriaDtos = categorias.Select(category => new CategoriaDTO
                 {
                     Nome = category.Nome,
-                    Preco = category.Preco,
-                    Descricao = category.Descricao,
-                    Estoque = category.Estoque,
-                    Ano = category.Ano,
-                    ImagemUrl = category.ImagemUrl,
-                    CategoriaId = category.CategoriaId,
-                    MarcaId = category.MarcaId
-                }).ToList()
-            }).ToList();
-            return Ok(categoriaDtos);
+                    Produtos = category.Produtos?.Select(category => new ProdutoDTO
+                    {
+                        Nome = category.Nome,
+                        Preco = category.Preco,
+                        Descricao = category.Descricao,
+                        Estoque = category.Estoque,
+                        Ano = category.Ano,
+                        ImagemUrl = category.ImagemUrl,
+                        CategoriaId = category.CategoriaId,
+                        MarcaId = category.MarcaId
+                    }).ToList()
+                }).ToList();
+                return Ok(categoriaDtos);
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+
         }
 
         [HttpGet("{id:guid}", Name = "GetCategoriaPorId")]
         public ActionResult<Categoria> GetCategoriaPorId(Guid id)
         {
-            var categoria = _categoriaService.ObterCategoriaPorId(id);
-            if (categoria == null)
+            try
             {
-                return NotFound();
+                var categoria = _categoriaService.ObterCategoriaPorId(id);
+                if (categoria == null)
+                {
+                    return NotFound();
+                }
+                return Ok(categoria);
+            } catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
             }
-            return Ok(categoria);
         }
 
         [HttpPost(Name = "PostCategoria")]
@@ -87,6 +102,10 @@ namespace Ecommerce.Controllers
         [HttpDelete("{id:guid}", Name = "DeleteCategoria")]
         public IActionResult DeleteCategoria(Guid id)
         {
+            if (id == Guid.Empty)
+            {
+                return BadRequest(new { message = "ID da categoria inválido." });
+            }
             try
             {
                 _categoriaService.DeleteCategoria(id);

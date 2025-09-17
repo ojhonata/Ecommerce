@@ -24,30 +24,44 @@ namespace Ecommerce.Controllers
         [HttpGet(Name = "GetProdutos")]
         public IActionResult GetProdutos()
         {
-            var produtos = _produtoService.GetProdutos();
-            var produtoDtos = produtos.Select(p => new ProdutoDTO
+            try
             {
-                Nome = p.Nome,
-                Preco = p.Preco,
-                Descricao = p.Descricao,
-                Estoque = p.Estoque,
-                Ano = p.Ano,
-                ImagemUrl = p.ImagemUrl,
-                CategoriaId = p.CategoriaId,
-                MarcaId = p.MarcaId
-            }).ToList();
-            return Ok(produtoDtos);
+                var produtos = _produtoService.GetProdutos();
+                var produtoDtos = produtos.Select(p => new ProdutoDTO
+                {
+                    Nome = p.Nome,
+                    Preco = p.Preco,
+                    Descricao = p.Descricao,
+                    Estoque = p.Estoque,
+                    Ano = p.Ano,
+                    ImagemUrl = p.ImagemUrl,
+                    CategoriaId = p.CategoriaId,
+                    MarcaId = p.MarcaId
+                }).ToList();
+                return Ok(produtoDtos);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
         }
 
         [HttpGet("{id:guid}", Name = "GetProdutoPorId")]
         public ActionResult<Produto> GetProdutoPorId(Guid id)
         {
-            var produto = _produtoService.ObterProdutoPorId(id);
-            if (produto == null)
+            try
             {
-                return NotFound(new { message = "Produto não encontrado." });
+                var produto = _produtoService.ObterProdutoPorId(id);
+                if (produto == null)
+                {
+                    return NotFound(new { message = "Produto não encontrado." });
+                }
+                return Ok(produto);
             }
-            return Ok(produto);
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
         }
 
         [HttpPost(Name = "PostProduto")]
