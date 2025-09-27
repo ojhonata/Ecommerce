@@ -9,19 +9,19 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Ecommerce.Repository
 {
-    public class CategoriaRepository : ICategoriaRepository
+    public class CategoryRepository : ICategoryRepository
     {
         private readonly AppDbContext _context;
-        public CategoriaRepository(AppDbContext context)
+        public CategoryRepository(AppDbContext context)
         {
             _context = context;
         }
-        public void DeleteCategoria(Guid id)
+        public void DeleteCategory(Guid id)
         {
-            var categoria = ObterCategoriaPorId(id);
-            if (categoria != null)
+            var category = GetCategoryById(id);
+            if (category != null)
             {
-                _context.Categorias.Remove(categoria);
+                _context.Categorias.Remove(category);
                 _context.SaveChanges();
             }
             else
@@ -30,14 +30,14 @@ namespace Ecommerce.Repository
             }
         }
 
-        public List<Categoria> GetCategorias()
+        public List<Category> GetCategories()
         {
             return _context.Categorias
                 .Include(c => c.Produtos)
                 .ToList();
         }
 
-        public Categoria ObterCategoriaPorId(Guid id)
+        public Category GetCategoryById(Guid id)
         {
             if (id == Guid.Empty)
             {
@@ -51,24 +51,24 @@ namespace Ecommerce.Repository
             return categoria;
         }
 
-        public Categoria PostCategoria(Categoria categoria)
+        public Category PostCategory(Category category)
         {
-            var novaCategoria = new Categoria
+            var newCategories = new Category
             {
-                Nome = categoria.Nome
+                Nome = category.Nome
 
             };
-            _context.Categorias.Add(novaCategoria);
+            _context.Categorias.Add(newCategories);
             _context.SaveChanges();
-            return novaCategoria;
+            return newCategories;
         }
 
-        public void UpdateCategoria(Categoria categoria)
+        public void UpdateCategory(Category category)
         {
-            var categoriaExistente = ObterCategoriaPorId(categoria.Id);
-            if (categoriaExistente != null)
+            var existingCategory = GetCategoryById(category.Id);
+            if (existingCategory != null)
             {
-                categoriaExistente.Nome = categoria.Nome;
+                existingCategory.Nome = category.Nome;
                 _context.SaveChanges();
             }
             else

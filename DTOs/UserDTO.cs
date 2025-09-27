@@ -5,10 +5,10 @@ using System.Threading.Tasks;
 
 namespace Ecommerce.DTOs
 {
-    public class CategoriaDTO
+    public class UserDTO
     {
         public string Nome { get; set; }
-
-        public List<ProdutoDTO> Produtos { get; set; }
+        public string Email { get; set; }
+        public string Senha { get; set; }
     }
 }

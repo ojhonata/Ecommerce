@@ -12,28 +12,28 @@ namespace Ecommerce.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class UsuariosController : ControllerBase
+    public class UserController : ControllerBase
     {
-        private readonly IUsuarioService _usuarioService;
+        private readonly IUserService _userService;
 
-        public UsuariosController(IUsuarioService usuarioService)
+        public UserController(IUserService userService)
         {
-            _usuarioService = usuarioService;
+            _userService = userService;
         }
 
-        [HttpGet(Name = "GetUsuarios")]
-        public IActionResult GetUsuarios()
+        [HttpGet("GetUsers")]
+        public IActionResult GetUser()
         {
             try
             {
-                var usuarios = _usuarioService.GetUsuarios();
-                var usuarioDtos = usuarios.Select(u => new UsuarioDTO
+                var users = _userService.GetUsers();
+                var userDtos = users.Select(u => new UserDTO
                 {
                     Nome = u.Nome,
                     Email = u.Email,
                     Senha = u.Senha
                 }).ToList();
-                return Ok(usuarioDtos);
+                return Ok(userDtos);
             }
             catch (Exception ex)
             {
@@ -41,13 +41,13 @@ namespace Ecommerce.Controllers
             }
         }
 
-        [HttpPost(Name = "PostUsuario")]
-        public IActionResult PostUsuario([FromBody] UsuarioDTO usuarioDTO)
+        [HttpPost("PostUser")]
+        public IActionResult PostUsuario([FromBody] UserDTO userDTO)
         {
             try
             {
-                Usuario usuario = _usuarioService.PostUsuario(usuarioDTO);
-                return Ok(usuario);
+                User user = _userService.PostUser(userDTO);
+                return Ok(user);
             } catch (Exception ex)
             {
                 return BadRequest(new { message = ex.Message });

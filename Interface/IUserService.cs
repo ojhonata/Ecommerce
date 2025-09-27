@@ -7,9 +7,9 @@ using Ecommerce.Models;
 
 namespace Ecommerce.Interface
 {
-    public interface IUsuarioService
+    public interface IUserService
     {
-        public List<Usuario> GetUsuarios();
-        public Usuario PostUsuario(UsuarioDTO usuarioDTO);
+        public List<User> GetUsers();
+        public User PostUser(UserDTO userDTO);
     }
 }

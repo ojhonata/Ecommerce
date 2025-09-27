@@ -12,22 +12,22 @@ namespace Ecommerce.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class ProdutosController : ControllerBase
+    public class CarController : ControllerBase
     {
-        private readonly IProdutoService _produtoService;
+        private readonly ICarService _carService;
 
-        public ProdutosController(IProdutoService produtoService)
+        public CarController(ICarService carService)
         {
-            _produtoService = produtoService;
+            _carService = carService;
         }
 
-        [HttpGet(Name = "GetProdutos")]
-        public IActionResult GetProdutos()
+        [HttpGet("GetCars")]
+        public IActionResult GetCars()
         {
             try
             {
-                var produtos = _produtoService.GetProdutos();
-                var produtoDtos = produtos.Select(p => new ProdutoDTO
+                var cars = _carService.GetCars();
+                var carDtos = cars.Select(p => new CarDTO
                 {
                     Nome = p.Nome,
                     Preco = p.Preco,
@@ -38,7 +38,7 @@ namespace Ecommerce.Controllers
                     CategoriaId = p.CategoriaId,
                     MarcaId = p.MarcaId
                 }).ToList();
-                return Ok(produtoDtos);
+                return Ok(carDtos);
             }
             catch (Exception ex)
             {
@@ -46,12 +46,12 @@ namespace Ecommerce.Controllers
             }
         }
 
-        [HttpGet("{id:guid}", Name = "GetProdutoPorId")]
-        public ActionResult<Produto> GetProdutoPorId(Guid id)
+        [HttpGet("{id:guid}", Name = "GetCarById")]
+        public ActionResult<Car> GetCarById(Guid id)
         {
             try
             {
-                var produto = _produtoService.ObterProdutoPorId(id);
+                var produto = _carService.GetCarById(id);
                 if (produto == null)
                 {
                     return NotFound(new { message = "Produto não encontrado." });
@@ -64,13 +64,13 @@ namespace Ecommerce.Controllers
             }
         }
 
-        [HttpPost(Name = "PostProduto")]
-        public ActionResult<Produto> PostProduto([FromBody] ProdutoDTO produtoDto)
+        [HttpPost("PostCar")]
+        public ActionResult<Car> PostCar([FromBody] CarDTO CarDto)
         {
             try
             {
-                var produto = _produtoService.PostProduto(produtoDto);
-                return CreatedAtRoute("GetProdutoPorId", new { id = produto.Id }, produto);
+                var car = _carService.PostCar(CarDto);
+                return CreatedAtRoute("GetCarById", new { id = car.Id }, car);
             }
             catch (Exception ex)
             {
@@ -78,16 +78,16 @@ namespace Ecommerce.Controllers
             }
         }
 
-        [HttpPut("{id:guid}", Name = "UpdateProduto")]
-        public IActionResult UpdateProduto(Guid id, [FromBody] Produto produto)
+        [HttpPut("{id:guid}", Name = "UpdateCar")]
+        public IActionResult UpdateCar(Guid id, [FromBody] Car car)
         {
-            if (id != produto.Id)
+            if (id != car.Id)
             {
-                return BadRequest(new { message = "ID do produto inválido." });
+                return BadRequest(new { message = "ID do car inválido." });
             }
             try
             {
-                _produtoService.UpdateProduto(produto);
+                _carService.UpdateProduto(car);
                 return Ok(new { message = "Produto atualizado com sucesso." });
             }
             catch (Exception ex)
@@ -96,12 +96,12 @@ namespace Ecommerce.Controllers
             }
         }
 
-        [HttpDelete("{id:guid}", Name = "DeleteProduto")]
-        public IActionResult DeleteProduto(Guid id)
+        [HttpDelete("{id:guid}", Name = "DeleteCar")]
+        public IActionResult DeleteCar(Guid id)
         {
             try
             {
-                _produtoService.DeleteProduto(id);
+                _carService.DeleteCar(id);
                 return Ok(new { message = "Produto deletado com sucesso." });
             }
             catch (Exception ex)

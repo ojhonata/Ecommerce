@@ -9,9 +9,9 @@ using Ecommerce.Models;
 // exemplo: listar usuários, buscar usuário por id, adicionar usuário, atualizar usuário, deletar usuário, neste caso estou dizendo para a minha classe usuario ele vai poder obter uma lista de usuarios
 namespace Ecommerce.Interface
 {
-    public interface IUsuarioRepository
+    public interface IUserRepository
     {
-        public List<Usuario> GetUsuarios();
-        public Usuario PostUsuario(UsuarioDTO usuarioDTO);
+        public List<User> GetUsers();
+        public User PostUser(UserDTO userDTO);
     }
 }

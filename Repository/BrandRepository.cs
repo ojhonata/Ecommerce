@@ -10,20 +10,20 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Ecommerce.Repository
 {
-    public class MarcaRepository : IMarcaRepository
+    public class BrandRepository : IBrandRepository
     {
         private readonly AppDbContext _context;
-        public MarcaRepository(AppDbContext context)
+        public BrandRepository(AppDbContext context)
         {
             _context = context;
         }
 
-        public void DeleteMarca(Guid id)
+        public void DeleteBrand(Guid id)
         {
-            var marca = ObterMarcaPorId(id);
-            if (marca != null)
+            var brand = GetBrandById(id);
+            if (brand != null)
             {
-                _context.Marcas.Remove(marca);
+                _context.Marcas.Remove(brand);
                 _context.SaveChanges();
             }
             else
@@ -32,47 +32,47 @@ namespace Ecommerce.Repository
             }
         }
 
-        public List<Marca> GetMarcas()
+        public List<Brand> GetBrands()
         {
             return _context.Marcas
                 .Include(m => m.Produtos)
                 .ToList();
         }
 
-        public Marca ObterMarcaPorId(Guid id)
+        public Brand GetBrandById(Guid id)
         {
             if (Guid.Empty == id)
             {
                 throw new ArgumentException("ID inválido.");
             }
-            var marca = _context.Marcas.FirstOrDefault(m => m.Id == id);
-            if (marca == null)
+            var brand = _context.Marcas.FirstOrDefault(m => m.Id == id);
+            if (brand == null)
             {
                 throw new Exception("Marca não encontrada.");
             }
-            return marca;
+            return brand;
         }
 
-        public Marca PostMarca(MarcaDTO marca)
+        public Brand PostBrand(BrandDTO brand)
         {
-            var novaMarca = new Marca
+            var newBrand = new Brand
             {
-                Nome = marca.Nome,
-                ImagemURL = marca.ImagemURL
+                Nome = brand.Nome,
+                ImagemURL = brand.ImagemURL
 
             };
-            _context.Marcas.Add(novaMarca);
+            _context.Marcas.Add(newBrand);
             _context.SaveChanges();
-            return novaMarca;
+            return newBrand;
         }
 
-        public void UpdateMarca(Marca marca)
+        public void UpdateBrand(Brand brand)
         {
-            var marcaExistente = ObterMarcaPorId(marca.Id);
-            if (marcaExistente != null)
+            var brandExistente = GetBrandById(brand.Id);
+            if (brandExistente != null)
             {
-                marcaExistente.Nome = marca.Nome;
-                marcaExistente.ImagemURL = marca.ImagemURL;
+                brandExistente.Nome = brand.Nome;
+                brandExistente.ImagemURL = brand.ImagemURL;
                 _context.SaveChanges();
             }
             else

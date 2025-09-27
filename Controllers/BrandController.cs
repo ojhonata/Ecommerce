@@ -1,8 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Ecommerce.Data;
 using Ecommerce.DTOs;
 using Ecommerce.Interface;
 using Ecommerce.Models;
@@ -12,25 +7,25 @@ namespace Ecommerce.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class MarcaController : ControllerBase
+    public class BrandController : ControllerBase
     {
-        private readonly IMarcaService _marcaService;
-        public MarcaController(IMarcaService marcaService)
+        private readonly IBrandService _brandService;
+        public BrandController(IBrandService brandService)
         {
-            _marcaService = marcaService;
+            _brandService = brandService;
         }
 
-        [HttpGet(Name = "GetMarcas")]
-        public IActionResult GetMarcas()
+        [HttpGet("GetBrand")]
+        public IActionResult GetBrands()
         {
             try
             {
-                var marcas = _marcaService.GetMarcas();
-                var marcaDtos = marcas.Select(m => new MarcaDTO
+                var brands = _brandService.GetBrands();
+                var brandDtos = brands.Select(m => new BrandDTO
                 {
                     Nome = m.Nome,
                     ImagemURL = m.ImagemURL,
-                    Produtos = m.Produtos?.Select(p => new ProdutoDTO
+                    Produtos = m.Produtos?.Select(p => new CarDTO
                     {
                         Nome = p.Nome,
                         Preco = p.Preco,
@@ -42,7 +37,7 @@ namespace Ecommerce.Controllers
                         MarcaId = p.MarcaId
                     }).ToList()
                 }).ToList();
-                return Ok(marcaDtos);
+                return Ok(brandDtos);
             }
             catch (Exception ex)
             {
@@ -50,17 +45,17 @@ namespace Ecommerce.Controllers
             }
         }
 
-        [HttpGet("{id:guid}", Name = "GetMarcaPorId")]
-        public ActionResult<Marca> GetMarcaPorId(Guid id)
+        [HttpGet("{id:guid}", Name = "GetBrandById")]
+        public ActionResult<Brand> GetBrandById(Guid id)
         {
             try
             {
-                var marca = _marcaService.ObterMarcaPorId(id);
-                if (marca == null)
+                var brand = _brandService.GetBrandById(id);
+                if (brand == null)
                 {
                     return NotFound(new { message = "Marca não encontrada." });
                 }
-                return Ok(marca);
+                return Ok(brand);
             }
             catch (Exception ex)
             {
@@ -68,29 +63,29 @@ namespace Ecommerce.Controllers
             }
         }
 
-        [HttpPost(Name = "PostMarca")]
-        public ActionResult<Marca> PostMarca([FromBody] MarcaDTO marcaDto)
+        [HttpPost("PostBrnad")]
+        public ActionResult<Brand> PostMarca([FromBody] BrandDTO brandDto)
         {
             try
             {
-                var marca = _marcaService.PostMarca(marcaDto);
-                return CreatedAtAction(nameof(GetMarcaPorId), new { id = marca.Id }, marca);
+                var brand = _brandService.PostBrand(brandDto);
+                return CreatedAtAction(nameof(GetBrandById), new { id = brand.Id }, brand);
             }
             catch (Exception ex)
             {
                 return BadRequest(new { message = ex.Message });
             }
         }
-        [HttpPut("{id:guid}", Name = "UpdateMarca")]
-        public IActionResult UpdateMarca(Guid id, [FromBody] Marca marca)
+        [HttpPut("{id:guid}", Name = "UpdateBrand")]
+        public IActionResult UpdateBrand(Guid id, [FromBody] Brand brand)
         {
-            if (id != marca.Id)
+            if (id != brand.Id)
             {
-                return BadRequest(new { message = "ID da marca não corresponde." });
+                return BadRequest(new { message = "ID da brand não corresponde." });
             }
             try
             {
-                _marcaService.UpdateMarca(marca);
+                _brandService.UpdateBrand(brand);
                 return Ok(new { message = "Marca atualizada com sucesso." });
             }
             catch (Exception ex)
@@ -100,12 +95,12 @@ namespace Ecommerce.Controllers
 
         }
 
-        [HttpDelete("{id:guid}", Name = "DeleteMarca")]
-        public IActionResult DeleteMarca(Guid id)
+        [HttpDelete("{id:guid}", Name = "DeleteBrand")]
+        public IActionResult DeleteBrand(Guid id)
         {
             try
             {
-                _marcaService.DeleteMarca(id);
+                _brandService.DeleteBrand(id);
                 return Ok(new { message = "Marca deletada com sucesso." });
             }
             catch (Exception ex)

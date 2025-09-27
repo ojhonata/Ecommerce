@@ -7,13 +7,12 @@ using System.Threading.Tasks;
 
 namespace Ecommerce.Models
 {
-    [Table("marcas")]
-    public class Marca
+    [Table("categories")]
+    public class Category
     {
         public Guid Id { get; set; }
         public string Nome { get; set; }
-        public string ImagemURL { get; set; }
 
-        public virtual ICollection<Produto> Produtos { get; set; }
+        public virtual ICollection<Car> Produtos { get; set; }
     }
 }
