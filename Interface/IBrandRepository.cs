@@ -12,7 +12,7 @@ namespace Ecommerce.Interface
         public List<Brand> GetBrands();
         public Brand GetBrandById(Guid id);
         public Brand PostBrand(BrandDTO brand);
-        void UpdateBrand(Brand marca);
+        void UpdateBrand(Brand brand);
         void DeleteBrand(Guid id);
     }
 }
