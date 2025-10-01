@@ -17,9 +17,22 @@ namespace Ecommerce.Services
             _produtoRepository = produtoRepository;
         }
 
-        public List<Produto> GetProdutos()
+        public List<ProdutoDTO> GetProdutos()
         {
-            return _produtoRepository.GetProdutos();
+            var produtos = _produtoRepository.GetProdutos();
+            var produtoDtos = produtos.Select(p => new ProdutoDTO
+            {
+                Nome = p.Nome,
+                Preco = p.Preco,
+                Descricao = p.Descricao,
+                Estoque = p.Estoque,
+                Ano = p.Ano,
+                ImagemUrl = p.ImagemUrl,
+                CategoriaId = p.CategoriaId,
+                MarcaId = p.MarcaId
+            }).ToList();
+            
+            return produtoDtos;
         }
 
         public Produto ObterProdutoPorId(Guid id)

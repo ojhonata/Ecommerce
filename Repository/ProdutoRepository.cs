@@ -50,7 +50,7 @@ namespace Ecommerce.Repository
                 Descricao = produto.Descricao,
                 Estoque = produto.Estoque,
                 Ano = produto.Ano,
-                ImagemUrl = produto.ImagemUrl,
+                //ImagemUrl = produto.ImagemUrl,
                 CategoriaId = Guid.Parse(produto.CategoriaId.ToString()),
                 MarcaId = Guid.Parse(produto.MarcaId.ToString()),
             };

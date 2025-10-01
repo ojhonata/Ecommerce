@@ -26,18 +26,7 @@ namespace Ecommerce.Controllers
         {
             try
             {
-                var produtos = _produtoService.GetProdutos();
-                var produtoDtos = produtos.Select(p => new ProdutoDTO
-                {
-                    Nome = p.Nome,
-                    Preco = p.Preco,
-                    Descricao = p.Descricao,
-                    Estoque = p.Estoque,
-                    Ano = p.Ano,
-                    ImagemUrl = p.ImagemUrl,
-                    CategoriaId = p.CategoriaId,
-                    MarcaId = p.MarcaId
-                }).ToList();
+                var produtoDtos = _produtoService.GetProdutos();
                 return Ok(produtoDtos);
             }
             catch (Exception ex)
@@ -64,19 +53,24 @@ namespace Ecommerce.Controllers
             }
         }
 
-        [HttpPost(Name = "PostProduto")]
-        public ActionResult<Produto> PostProduto([FromBody] ProdutoDTO produtoDto)
-        {
-            try
-            {
-                var produto = _produtoService.PostProduto(produtoDto);
-                return CreatedAtRoute("GetProdutoPorId", new { id = produto.Id }, produto);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new { message = ex.Message });
-            }
-        }
+        // [HttpPost(Name = "PostProduto")]
+        // public ActionResult<Produto> PostProduto([FromForm] ProdutoDTO produtoDto)
+        // {
+        //     try
+        //     {
+        //         var filePath = Path.Combine("Storage", produtoDto.ImagemUrl.FileName);
+
+        //         using Stream fileStream = new FileStream(filePath, FileMode.Create);
+        //         produtoDto.ImagemUrl.CopyTo(fileStream);
+
+        //         var produto = _produtoService.PostProduto(produtoDto);
+        //         return CreatedAtRoute("GetProdutoPorId", new { id = produto.Id }, produto);
+        //     }
+        //     catch (Exception ex)
+        //     {
+        //         return BadRequest(new { message = ex.Message });
+        //     }
+        // }
 
         [HttpPut("{id:guid}", Name = "UpdateProduto")]
         public IActionResult UpdateProduto(Guid id, [FromBody] Produto produto)

@@ -28,16 +28,16 @@ namespace Ecommerce.Controllers
                 var categoriaDtos = categorias.Select(category => new CategoriaDTO
                 {
                     Nome = category.Nome,
-                    Produtos = category.Produtos?.Select(category => new ProdutoDTO
+                    Produtos = category.Produtos?.Select(produto => new ProdutoDTO
                     {
-                        Nome = category.Nome,
-                        Preco = category.Preco,
-                        Descricao = category.Descricao,
-                        Estoque = category.Estoque,
-                        Ano = category.Ano,
-                        ImagemUrl = category.ImagemUrl,
-                        CategoriaId = category.CategoriaId,
-                        MarcaId = category.MarcaId
+                        Nome = produto.Nome,
+                        Preco = produto.Preco,
+                        Descricao = produto.Descricao,
+                        Estoque = produto.Estoque,
+                        Ano = produto.Ano,
+                        ImagemUrl = produto.ImagemUrl,
+                        CategoriaId = produto.CategoriaId,
+                        MarcaId = produto.MarcaId
                     }).ToList()
                 }).ToList();
                 return Ok(categoriaDtos);
