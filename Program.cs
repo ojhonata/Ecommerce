@@ -16,13 +16,13 @@ builder.Services.AddSwaggerGen();
 
 Env.Load(); // Carregar variáveis do .env
 
-var pgSqlString = Environment.GetEnvironmentVariable("POSTGRES_URL");
-builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseNpgsql(pgSqlString));
+// var pgSqlString = Environment.GetEnvironmentVariable("POSTGRES_URL");
+// builder.Services.AddDbContext<AppDbContext>(options =>
+//     options.UseNpgsql(pgSqlString));
 
-//var mySqlString = Environment.GetEnvironmentVariable("MYSQL_URL");
-//builder.Services.AddDbContext<AppDbContext>(options =>
-//    options.UseMySql(mySqlString, ServerVersion.AutoDetect(mySqlString)));
+var mySqlString = Environment.GetEnvironmentVariable("MYSQL_URL");
+builder.Services.AddDbContext<AppDbContext>(options =>
+   options.UseMySql(mySqlString, ServerVersion.AutoDetect(mySqlString)));
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
@@ -36,6 +36,16 @@ builder.Services.AddScoped<IBrandService, BrandService>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: "AllowAll",
+        policy =>
+        {
+            policy.WithOrigins("http://localhost:5173")
+                    .AllowAnyMethod()
+                    .AllowAnyHeader();
+        });
+});
 
 var app = builder.Build();
 
@@ -45,6 +55,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseCors("AllowAll");
 
 app.UseHttpsRedirection();
 
