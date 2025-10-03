@@ -7,3 +7,5 @@ Migrations/
 obj/
 
 bin/
+
+Storage/

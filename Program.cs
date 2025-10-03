@@ -22,22 +22,24 @@ Env.Load(); // Carregar variáveis do .env
 
 var mySqlString = Environment.GetEnvironmentVariable("MYSQL_URL");
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseMySql(mySqlString, ServerVersion.AutoDetect(mySqlString)));
+   options.UseMySql(mySqlString, ServerVersion.AutoDetect(mySqlString)));
 
-builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
-builder.Services.AddScoped<IUsuarioService, UsuarioService>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IUserService, UserService>();
 
-builder.Services.AddScoped<IProdutoRepository, ProdutoRepository>();
-builder.Services.AddScoped<IProdutoService, ProdutoService>();
+builder.Services.AddScoped<ICarRepository, CarRepository>();
+builder.Services.AddScoped<ICarService, CarService>();
 
-builder.Services.AddScoped<IMarcaRepository, MarcaRepository>();
-builder.Services.AddScoped<IMarcaService, MarcaService>();
+builder.Services.AddScoped<IBrandRepository, BrandRepository>();
+builder.Services.AddScoped<IBrandService, BrandService>();
 
-builder.Services.AddScoped<ICategoriaRepository, CategoriaRepository>();
-builder.Services.AddScoped<ICategoriaService, CategoriaService>();
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
 
 
 var app = builder.Build();
+
+app.UseStaticFiles();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

@@ -9,34 +9,34 @@ using Ecommerce.Models;
 
 namespace Ecommerce.Repository
 {
-    public class UsuarioRepository : IUsuarioRepository
+    public class UserRepository : IUserRepository
     {
         private readonly AppDbContext _context;
 
-        public UsuarioRepository(AppDbContext context)
+        public UserRepository(AppDbContext context)
         {
             _context = context;
         }
 
-        public List<Usuario> GetUsuarios()
+        public List<User> GetUsers()
         {
             return _context.Usuarios
-            .Select(usuario => usuario) // seleciona todos os usuários
+            .Select(user => user) // seleciona todos os usuários
             .ToList(); // retorna a lista de usuários do banco de dados
         }
 
-        public Usuario PostUsuario(UsuarioDTO usuarioDTO)
+        public User PostUser(UserDTO userDTO)
         {
-            var usuario = new Usuario
+            var user = new User
             {
-                Nome = usuarioDTO.Nome,
-                Email = usuarioDTO.Email,
-                Senha = usuarioDTO.Senha
+                Nome = userDTO.Nome,
+                Email = userDTO.Email,
+                Senha = userDTO.Senha
             };
 
-            _context.Usuarios.Add(usuario); // adiciona o novo usuário ao contexto
+            _context.Usuarios.Add(user); // adiciona o novo usuário ao contexto
             _context.SaveChanges(); // salva as mudanças no banco de dados
-            return usuario;
+            return user;
         }
 
     }

@@ -5,11 +5,17 @@ using System.Threading.Tasks;
 
 namespace Ecommerce.DTOs
 {
-    public class MarcaDTO
+    public class BrandDTO
     {
         public string Nome { get; set; }
         public string ImagemURL { get; set; }
 
-        public List<ProdutoDTO> Produtos { get; set; }
+        public List<CarDTO> Produtos { get; set; }
+    }
+
+        public class BrandImgDTO
+    {
+        public string Nome { get; set; }
+        public IFormFile Imagem { get; set; }
     }
 }
