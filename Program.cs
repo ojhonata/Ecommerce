@@ -36,6 +36,16 @@ builder.Services.AddScoped<IBrandService, BrandService>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: "AllowAll",
+        policy =>
+        {
+            policy.WithOrigins("http://localhost:5173")
+                   .AllowAnyMethod()
+                   .AllowAnyHeader();
+        });
+});
 
 var app = builder.Build();
 
@@ -47,6 +57,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseCors("AllowAll");
 
 app.UseHttpsRedirection();
 
