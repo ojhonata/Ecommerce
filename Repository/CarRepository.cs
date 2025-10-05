@@ -6,6 +6,7 @@ using Ecommerce.Data;
 using Ecommerce.DTOs;
 using Ecommerce.Interface;
 using Ecommerce.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Ecommerce.Repository
 {
@@ -31,9 +32,16 @@ namespace Ecommerce.Repository
             }
         }
 
+        // Em algum lugar como Data/CarRepository.cs
+        // Certifique-se de ter este using!
+
         public List<Car> GetCars()
         {
-            return _context.Produtos.ToList(); // retorna a lista de produtos do banco de dados
+            // A MUDANÇA É AQUI: .Include(c => c.Marca)
+            // Isso diz ao Entity Framework: "Para cada Carro, inclua também o objeto Marca relacionado."
+            return _context.Produtos
+                           .Include(c => c.Marca) // <-- ADICIONE ESTA LINHA
+                           .ToList();
         }
 
         public Car GetCarById(Guid id)

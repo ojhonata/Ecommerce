@@ -65,19 +65,10 @@ namespace Ecommerce.Services
             var brands = _brandRepository.GetBrands();
             var brandDtos = brands.Select(b => new BrandDTO
             {
+                Id = b.Id,
                 Nome = b.Nome,
                 ImagemURL = b.ImagemURL,
-                Produtos = b.Produtos?.Select(p => new CarDTO
-                {
-                    Nome = p.Nome,
-                    Preco = p.Preco,
-                    Descricao = p.Descricao,
-                    Estoque = p.Estoque,
-                    Ano = p.Ano,
-                    ImagemUrl = p.ImagemUrl,
-                    CategoriaId = p.CategoriaId,
-                    MarcaId = p.MarcaId
-                }).ToList()
+                
             }).ToList();
 
             return brandDtos;

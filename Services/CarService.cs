@@ -21,8 +21,10 @@ namespace Ecommerce.Services
 
         public List<CarDTO> GetCars()
         {
-            var cars = _carRepository.GetCars();
+            // 1. Busque os carros com o Include que você já fez no repositório
+            var cars = _carRepository.GetCars(); // Ex: _context.Cars.Include(c => c.Marca).ToList();
 
+            // 2. Mapeie para o DTO, incluindo o novo objeto Marca
             var carDtos = cars.Select(p => new CarDTO
             {
                 Nome = p.Nome,
@@ -32,7 +34,15 @@ namespace Ecommerce.Services
                 Ano = p.Ano,
                 ImagemUrl = p.ImagemUrl,
                 CategoriaId = p.CategoriaId,
-                MarcaId = p.MarcaId
+                MarcaId = p.MarcaId,
+
+                // A MUDANÇA PRINCIPAL ESTÁ AQUI
+                Marca = p.Marca == null ? null : new BrandDTO
+                {
+                    Nome = p.Marca.Nome,
+                    ImagemURL = p.Marca.ImagemURL
+                }
+
             }).ToList();
 
             return carDtos;
