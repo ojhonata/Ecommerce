@@ -11,7 +11,7 @@ namespace Ecommerce.Interface
     {
         public Car PostCar(CreateCarDTO car);
         public Car GetCarById(Guid id);
-        public List<CarDTO> GetCars();
+        public List<CarDTO> GetCars(int numberPage, int numberQuantity);
         public Car PostCar(CarDTO car);
         void UpdateProduto(Car car);
         void DeleteCar(Guid id);

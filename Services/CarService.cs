@@ -19,12 +19,9 @@ namespace Ecommerce.Services
             _carRepository = carRepository;
         }
 
-        public List<CarDTO> GetCars()
+        public List<CarDTO> GetCars(int numberPage = 1, int numberQuantity = 10)
         {
-            // 1. Busque os carros com o Include que você já fez no repositório
-            var cars = _carRepository.GetCars(); // Ex: _context.Cars.Include(c => c.Marca).ToList();
-
-            // 2. Mapeie para o DTO, incluindo o novo objeto Marca
+            var cars = _carRepository.GetCars(numberPage, numberQuantity);
             var carDtos = cars.Select(p => new CarDTO
             {
                 Nome = p.Nome,

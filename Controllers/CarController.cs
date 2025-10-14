@@ -22,11 +22,11 @@ namespace Ecommerce.Controllers
         }
 
         [HttpGet("GetCars")]
-        public IActionResult GetCars()
+        public IActionResult GetCars(int numberPage = 1, int numberQuantity = 10)
         {
             try 
             {
-                var cars = _carService.GetCars();
+                var cars = _carService.GetCars(numberPage, numberQuantity);
                 return Ok(cars);
             }
             catch (Exception ex)

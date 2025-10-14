@@ -35,13 +35,13 @@ namespace Ecommerce.Repository
         // Em algum lugar como Data/CarRepository.cs
         // Certifique-se de ter este using!
 
-        public List<Car> GetCars()
+        public List<Car> GetCars(int numberPage, int numberQuantity)
         {
-            // A MUDANÇA É AQUI: .Include(c => c.Marca)
-            // Isso diz ao Entity Framework: "Para cada Carro, inclua também o objeto Marca relacionado."
             return _context.Produtos
-                           .Include(c => c.Marca) // <-- ADICIONE ESTA LINHA
-                           .ToList();
+                    .Skip((numberPage - 1) * numberQuantity)
+                    .Take(numberQuantity)
+                    .Include(c => c.Marca)
+                    .ToList();
         }
 
         public Car GetCarById(Guid id)
