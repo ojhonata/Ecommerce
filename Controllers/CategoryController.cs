@@ -20,11 +20,11 @@ namespace Ecommerce.Controllers
         }
 
         [HttpGet("GetCategories")]
-        public IActionResult GetCategory()
+        public IActionResult GetCategory(int pageNumber = 1, int pageQuantity = 10)
         {
             try 
             {
-                var categories = _categoryService.GetCategories();
+                var categories = _categoryService.GetCategories(pageNumber, pageQuantity);
                 return Ok(categories);
             }
             catch (Exception ex)

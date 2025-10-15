@@ -9,7 +9,7 @@ namespace Ecommerce.Interface
 {
     public interface ICategoryService
     {
-        public List<CategoryDTO> GetCategories();
+        public List<CategoryDTO> GetCategories(int pageNumber, int pageQuantity);
         public CategoryDTO GetCategoryById(Guid id);
         public Category PostCategory(CategoryDTO category);
         void UpdateCategory(Category category);

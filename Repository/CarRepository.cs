@@ -24,7 +24,7 @@ namespace Ecommerce.Repository
             if (car != null)
             {
                 _context.Produtos.Remove(car);
-                _context.SaveChanges(); // salva as mudanças no banco de dados
+                _context.SaveChanges();
             }
             else
             {
@@ -32,21 +32,18 @@ namespace Ecommerce.Repository
             }
         }
 
-        // Em algum lugar como Data/CarRepository.cs
-        // Certifique-se de ter este using!
-
-        public List<Car> GetCars(int numberPage, int numberQuantity)
+        public List<Car> GetCars(int pageNumber, int pageQuantity)
         {
             return _context.Produtos
-                    .Skip((numberPage - 1) * numberQuantity)
-                    .Take(numberQuantity)
+                    .Skip((pageNumber - 1) * pageQuantity)
+                    .Take(pageQuantity)
                     .Include(c => c.Marca)
                     .ToList();
         }
 
         public Car GetCarById(Guid id)
         {
-            return _context.Produtos.FirstOrDefault(p => p.Id == id); // retorna o car com o ID especificado
+            return _context.Produtos.FirstOrDefault(p => p.Id == id);
         }
 
         public Car PostProduto(CarDTO car)
@@ -63,8 +60,8 @@ namespace Ecommerce.Repository
                 MarcaId = Guid.Parse(car.MarcaId.ToString()),
             };
 
-            _context.Produtos.Add(newCar); // adiciona o novo car ao contexto
-            _context.SaveChanges(); // salva as mudanças no banco de dados
+            _context.Produtos.Add(newCar);
+            _context.SaveChanges();
             return newCar;
         }
 

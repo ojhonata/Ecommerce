@@ -10,7 +10,7 @@ namespace Ecommerce.Interface
     public interface IBrandService
     {
         public Brand PostBrand(BrandImgDTO dto);
-        public List<BrandDTO> GetBrands();
+        public List<BrandDTO> GetBrands(int pageNumber, int pageQuantity);
         public Brand GetBrandById(Guid id);
         public Brand PostBrand(BrandDTO brand);
         void UpdateBrand(Brand brand);

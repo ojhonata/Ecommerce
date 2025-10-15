@@ -16,11 +16,11 @@ namespace Ecommerce.Controllers
         }
 
         [HttpGet("GetBrand")]
-        public IActionResult GetBrands()
+        public IActionResult GetBrands(int pageNumber = 1, int pageQuantity = 10)
         {
             try 
             {
-                var brands = _brandService.GetBrands();
+                var brands = _brandService.GetBrands(pageNumber, pageQuantity);
                 return Ok(brands);
             }
             catch (Exception ex)

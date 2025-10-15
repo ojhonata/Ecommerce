@@ -23,12 +23,10 @@ namespace Ecommerce.Services
             if (string.IsNullOrEmpty(dto.Nome) || dto.Imagem == null)
                 throw new Exception("Nome e imagem são obrigatórios.");
 
-            // Pasta para salvar
             var pasta = Path.Combine(_env.WebRootPath, "imagens");
             if (!Directory.Exists(pasta))
                 Directory.CreateDirectory(pasta);
 
-            // Nome único para o arquivo
             var nomeArquivo = Guid.NewGuid() + Path.GetExtension(dto.Imagem.FileName);
             var caminhoArquivo = Path.Combine(pasta, nomeArquivo);
 
@@ -48,7 +46,7 @@ namespace Ecommerce.Services
 
             _brandRepository.PostBrand(newBrand);
 
-            return newBrand; // versão síncrona do repositório
+            return newBrand;
         }
         public void DeleteBrand(Guid id)
         {
@@ -60,9 +58,9 @@ namespace Ecommerce.Services
             _brandRepository.DeleteBrand(id);
         }
 
-        public List<BrandDTO> GetBrands()
+        public List<BrandDTO> GetBrands(int pageNumber, int pageQuantity)
         {
-            var brands = _brandRepository.GetBrands();
+            var brands = _brandRepository.GetBrands(pageNumber, pageQuantity);
             var brandDtos = brands.Select(b => new BrandDTO
             {
                 Id = b.Id,

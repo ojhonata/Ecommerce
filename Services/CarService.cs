@@ -19,9 +19,9 @@ namespace Ecommerce.Services
             _carRepository = carRepository;
         }
 
-        public List<CarDTO> GetCars(int numberPage = 1, int numberQuantity = 10)
+        public List<CarDTO> GetCars(int pageNumber, int pageQuantity)
         {
-            var cars = _carRepository.GetCars(numberPage, numberQuantity);
+            var cars = _carRepository.GetCars(pageNumber, pageQuantity);
             var carDtos = cars.Select(p => new CarDTO
             {
                 Nome = p.Nome,
@@ -33,7 +33,6 @@ namespace Ecommerce.Services
                 CategoriaId = p.CategoriaId,
                 MarcaId = p.MarcaId,
 
-                // A MUDANÇA PRINCIPAL ESTÁ AQUI
                 Marca = p.Marca == null ? null : new BrandDTO
                 {
                     Nome = p.Marca.Nome,
@@ -50,12 +49,10 @@ namespace Ecommerce.Services
             if (string.IsNullOrEmpty(car.Nome) || car.Imagem == null)
                 throw new Exception("Nome e imagem são obrigatórios.");
 
-            // pasta de armazenamento
             var pasta = Path.Combine(_env.WebRootPath, "imagens");
             if (!Directory.Exists(pasta))
                 Directory.CreateDirectory(pasta);
 
-            // nome único para o arquivo
             var nomeArquivo = Guid.NewGuid() + Path.GetExtension(car.Imagem.FileName);
             var caminhoArquivo = Path.Combine(pasta, nomeArquivo);
 
@@ -64,7 +61,6 @@ namespace Ecommerce.Services
                 car.Imagem.CopyTo(stream);
             }
 
-            // URL pública
             var url = $"/imagens/{nomeArquivo}";
 
             var newCar = new Car

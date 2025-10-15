@@ -9,7 +9,7 @@ namespace Ecommerce.Interface
 {
     public interface IBrandRepository
     {
-        public List<Brand> GetBrands();
+        public List<Brand> GetBrands(int pageNumber, int pageQuantity);
         public Brand GetBrandById(Guid id);
         public Brand PostBrand(BrandDTO brand);
         public Brand PostBrand(Brand brand);

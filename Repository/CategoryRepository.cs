@@ -30,9 +30,11 @@ namespace Ecommerce.Repository
             }
         }
 
-        public List<Category> GetCategories()
+        public List<Category> GetCategories(int pageNumber, int pageQuantity)
         {
             return _context.Categorias
+                .Skip((pageNumber - 1) * pageQuantity)
+                .Take(pageQuantity)
                 .Include(c => c.Produtos)
                 .ToList();
         }

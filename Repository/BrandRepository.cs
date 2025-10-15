@@ -32,9 +32,11 @@ namespace Ecommerce.Repository
             }
         }
 
-        public List<Brand> GetBrands()
+        public List<Brand> GetBrands(int pageNumber, int pageQuantity)
         {
             return _context.Marcas
+                .Skip((pageNumber - 1) * pageQuantity)
+                .Take(pageQuantity)
                 .Include(m => m.Produtos)
                 .ToList();
         }
