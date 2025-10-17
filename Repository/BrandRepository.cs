@@ -29,7 +29,7 @@ namespace Ecommerce.Repository
             }
             else
             {
-                throw new Exception("Marca não encontrada.");
+                throw new ArgumentException("Marca não encontrada.");
             }
         }
 
@@ -51,7 +51,7 @@ namespace Ecommerce.Repository
             var brand = _context.Marcas.FirstOrDefault(m => m.Id == id);
             if (brand == null)
             {
-                throw new Exception("Marca não encontrada.");
+                throw new ArgumentException("Marca não encontrada.");
             }
             return brand;
         }
@@ -82,7 +82,7 @@ namespace Ecommerce.Repository
             }
             else
             {
-                throw new Exception("Marca não encontrada.");
+                throw new ArgumentException("Marca não encontrada.");
             }
         }
     }

@@ -22,7 +22,7 @@ namespace Ecommerce.Services
             var category = _categoryRepository.GetCategoryById(id);
             if (category == null)
             {
-                throw new Exception("Categoria não encontrada.");
+                throw new ArgumentException("Categoria não encontrada.");
             }
             _categoryRepository.DeleteCategory(id);
         }
@@ -69,7 +69,7 @@ namespace Ecommerce.Services
             var category = _categoryRepository.GetCategoryById(id);
             if (category == null)
             {
-                throw new Exception("Categoria não encontrada.");
+                throw new ArgumentException("Categoria não encontrada.");
             }
 
             var categoryDto = new CategoryDTO
@@ -102,7 +102,7 @@ namespace Ecommerce.Services
         {
             if (string.IsNullOrEmpty(category.Nome))
             {
-                throw new Exception("O nome da category é obrigatório.");
+                throw new ArgumentException("O nome da category é obrigatório.");
             }
             var newCategory = new Category { Nome = category.Nome };
             return _categoryRepository.PostCategory(newCategory);
@@ -118,7 +118,7 @@ namespace Ecommerce.Services
             }
             else
             {
-                throw new Exception("Categoria não encontrada.");
+                throw new ArgumentException("Categoria não encontrada.");
             }
         }
     }

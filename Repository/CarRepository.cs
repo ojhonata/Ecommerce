@@ -29,7 +29,7 @@ namespace Ecommerce.Repository
             }
             else
             {
-                throw new Exception("Produto não encontrado.");
+                throw new ArgumentException("Produto não encontrado.");
             }
         }
 
@@ -91,7 +91,7 @@ namespace Ecommerce.Repository
             }
             else
             {
-                throw new Exception("Produto não encontrado.");
+                throw new ArgumentException("Produto não encontrado.");
             }
         }
     }

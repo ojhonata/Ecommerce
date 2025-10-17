@@ -28,7 +28,7 @@ namespace Ecommerce.Repository
             }
             else
             {
-                throw new Exception("Categoria não encontrada.");
+                throw new ArgumentException("Categoria não encontrada.");
             }
         }
 
@@ -50,7 +50,7 @@ namespace Ecommerce.Repository
             var categoria = _context.Categorias.FirstOrDefault(c => c.Id == id);
             if (categoria == null)
             {
-                throw new Exception("Categoria não encontrada.");
+                throw new ArgumentException("Categoria não encontrada.");
             }
             return categoria;
         }
@@ -73,7 +73,7 @@ namespace Ecommerce.Repository
             }
             else
             {
-                throw new Exception("Categoria não encontrada.");
+                throw new ArgumentException("Categoria não encontrada.");
             }
         }
     }

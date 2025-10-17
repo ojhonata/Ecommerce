@@ -22,7 +22,7 @@ namespace Ecommerce.Services
         public Brand PostBrand(BrandImgDTO dto)
         {
             if (string.IsNullOrEmpty(dto.Nome) || dto.Imagem == null)
-                throw new Exception("Nome e imagem são obrigatórios.");
+                throw new ArgumentException("Nome e imagem são obrigatórios.");
 
             var pasta = Path.Combine(_env.WebRootPath, "imagens");
             if (!Directory.Exists(pasta))
@@ -55,7 +55,7 @@ namespace Ecommerce.Services
             var brand = _brandRepository.GetBrandById(id);
             if (brand == null)
             {
-                throw new Exception("Marca não encontrada.");
+                throw new ArgumentException("Marca não encontrada.");
             }
             _brandRepository.DeleteBrand(id);
         }
@@ -80,7 +80,7 @@ namespace Ecommerce.Services
             var brand = _brandRepository.GetBrandById(id);
             if (brand == null)
             {
-                throw new Exception("Marca não encontrada.");
+                throw new ArgumentException("Marca não encontrada.");
             }
             return brand;
         }
@@ -89,7 +89,7 @@ namespace Ecommerce.Services
         {
             if (string.IsNullOrEmpty(brand.Nome) || string.IsNullOrEmpty(brand.ImagemURL))
             {
-                throw new Exception("O nome e a URL da imagem da brand são obrigatórios.");
+                throw new ArgumentException("O nome e a URL da imagem da brand são obrigatórios.");
             }
             var newBrand = new BrandDTO { Nome = brand.Nome, ImagemURL = brand.ImagemURL };
             return _brandRepository.PostBrand(newBrand);
@@ -106,7 +106,7 @@ namespace Ecommerce.Services
             }
             else
             {
-                throw new Exception("Marca não encontrada.");
+                throw new ArgumentException("Marca não encontrada.");
             }
         }
     }

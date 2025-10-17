@@ -47,7 +47,7 @@ namespace Ecommerce.Services
         public Car PostCar(CreateCarDTO car)
         {
             if (string.IsNullOrEmpty(car.Nome) || car.Imagem == null)
-                throw new Exception("Nome e imagem são obrigatórios.");
+                throw new ArgumentException("Nome e imagem são obrigatórios.");
 
             var pasta = Path.Combine(_env.WebRootPath, "imagens");
             if (!Directory.Exists(pasta))
@@ -86,7 +86,7 @@ namespace Ecommerce.Services
             var produto = _carRepository.GetCarById(id);
             if (produto == null)
             {
-                throw new Exception("Produto não encontrado.");
+                throw new ArgumentException("Produto não encontrado.");
             }
             return produto;
         }
@@ -95,15 +95,15 @@ namespace Ecommerce.Services
         {
             if (string.IsNullOrEmpty(car.Nome))
             {
-                throw new Exception("O nome do car é obrigatório.");
+                throw new ArgumentException("O nome do carro é obrigatório.");
             }
             if (car.Preco <= 0)
             {
-                throw new Exception("O preço do car deve ser maior que zero.");
+                throw new ArgumentException("O preço do carro deve ser maior que zero.");
             }
             if (car.Estoque < 0)
             {
-                throw new Exception("O estoque do car não pode ser negativo.");
+                throw new ArgumentException("O estoque do carro não pode ser negativo.");
             }
             return _carRepository.PostProduto(car);
         }
@@ -113,7 +113,7 @@ namespace Ecommerce.Services
             var produto = _carRepository.GetCarById(id);
             if (produto == null)
             {
-                throw new Exception("Produto não encontrado.");
+                throw new ArgumentException("Produto não encontrado.");
             }
             _carRepository.DeleteCar(id);
         }
@@ -123,19 +123,19 @@ namespace Ecommerce.Services
             var existingCar = _carRepository.GetCarById(car.Id);
             if (existingCar == null)
             {
-                throw new Exception("Produto não encontrado.");
+                throw new ArgumentException("Produto não encontrado.");
             }
             if (string.IsNullOrEmpty(car.Nome))
             {
-                throw new Exception("O nome do car é obrigatório.");
+                throw new ArgumentException("O nome do car é obrigatório.");
             }
             if (car.Preco <= 0)
             {
-                throw new Exception("O preço do car deve ser maior que zero.");
+                throw new ArgumentException("O preço do car deve ser maior que zero.");
             }
             if (car.Estoque < 0)
             {
-                throw new Exception("O estoque do car não pode ser negativo.");
+                throw new ArgumentException("O estoque do car não pode ser negativo.");
             }
             _carRepository.UpdateProduto(car);
         }
