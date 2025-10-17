@@ -24,7 +24,7 @@ namespace Ecommerce.Controllers
         [HttpGet("GetCars")]
         public IActionResult GetCars(int pageNumber = 1, int pageQuantity = 10)
         {
-            try 
+            try
             {
                 var cars = _carService.GetCars(pageNumber, pageQuantity);
                 return Ok(cars);

@@ -10,6 +10,7 @@ namespace Ecommerce.Controllers
     public class BrandController : ControllerBase
     {
         private readonly IBrandService _brandService;
+
         public BrandController(IBrandService brandService)
         {
             _brandService = brandService;
@@ -18,7 +19,7 @@ namespace Ecommerce.Controllers
         [HttpGet("GetBrand")]
         public IActionResult GetBrands(int pageNumber = 1, int pageQuantity = 10)
         {
-            try 
+            try
             {
                 var brands = _brandService.GetBrands(pageNumber, pageQuantity);
                 return Ok(brands);
@@ -60,6 +61,7 @@ namespace Ecommerce.Controllers
                 return BadRequest(new { message = ex.Message });
             }
         }
+
         [HttpPut("{id:guid}", Name = "UpdateBrand")]
         public IActionResult UpdateBrand(Guid id, [FromBody] Brand brand)
         {
@@ -76,7 +78,6 @@ namespace Ecommerce.Controllers
             {
                 return BadRequest(new { message = ex.Message });
             }
-
         }
 
         [HttpDelete("{id:guid}", Name = "DeleteBrand")]

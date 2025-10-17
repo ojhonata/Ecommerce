@@ -24,7 +24,7 @@ namespace Ecommerce.Controllers
         [HttpGet("GetUsers")]
         public IActionResult GetUser()
         {
-            try 
+            try
             {
                 var users = _userService.GetUsers();
                 return Ok(users);
@@ -42,7 +42,8 @@ namespace Ecommerce.Controllers
             {
                 User user = _userService.PostUser(userDTO);
                 return Ok(user);
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 return BadRequest(new { message = ex.Message });
             }

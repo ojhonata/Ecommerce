@@ -12,6 +12,7 @@ namespace Ecommerce.Services
     {
         private readonly IWebHostEnvironment _env;
         private readonly IBrandRepository _brandRepository;
+
         public BrandService(IWebHostEnvironment env, IBrandRepository brandRepository)
         {
             _env = env;
@@ -41,13 +42,14 @@ namespace Ecommerce.Services
             {
                 Id = Guid.NewGuid(),
                 Nome = dto.Nome,
-                ImagemURL = url
+                ImagemURL = url,
             };
 
             _brandRepository.PostBrand(newBrand);
 
             return newBrand;
         }
+
         public void DeleteBrand(Guid id)
         {
             var brand = _brandRepository.GetBrandById(id);
@@ -61,13 +63,14 @@ namespace Ecommerce.Services
         public List<BrandDTO> GetBrands(int pageNumber, int pageQuantity)
         {
             var brands = _brandRepository.GetBrands(pageNumber, pageQuantity);
-            var brandDtos = brands.Select(b => new BrandDTO
-            {
-                Id = b.Id,
-                Nome = b.Nome,
-                ImagemURL = b.ImagemURL,
-                
-            }).ToList();
+            var brandDtos = brands
+                .Select(b => new BrandDTO
+                {
+                    Id = b.Id,
+                    Nome = b.Nome,
+                    ImagemURL = b.ImagemURL,
+                })
+                .ToList();
 
             return brandDtos;
         }
@@ -88,11 +91,7 @@ namespace Ecommerce.Services
             {
                 throw new Exception("O nome e a URL da imagem da brand são obrigatórios.");
             }
-            var newBrand = new BrandDTO
-            {
-                Nome = brand.Nome,
-                ImagemURL = brand.ImagemURL
-            };
+            var newBrand = new BrandDTO { Nome = brand.Nome, ImagemURL = brand.ImagemURL };
             return _brandRepository.PostBrand(newBrand);
         }
 
@@ -109,7 +108,6 @@ namespace Ecommerce.Services
             {
                 throw new Exception("Marca não encontrada.");
             }
-
         }
     }
 }

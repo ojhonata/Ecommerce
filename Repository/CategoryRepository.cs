@@ -12,10 +12,12 @@ namespace Ecommerce.Repository
     public class CategoryRepository : ICategoryRepository
     {
         private readonly AppDbContext _context;
+
         public CategoryRepository(AppDbContext context)
         {
             _context = context;
         }
+
         public void DeleteCategory(Guid id)
         {
             var category = GetCategoryById(id);
@@ -32,8 +34,8 @@ namespace Ecommerce.Repository
 
         public List<Category> GetCategories(int pageNumber, int pageQuantity)
         {
-            return _context.Categorias
-                .Skip((pageNumber - 1) * pageQuantity)
+            return _context
+                .Categorias.Skip((pageNumber - 1) * pageQuantity)
                 .Take(pageQuantity)
                 .Include(c => c.Produtos)
                 .ToList();
@@ -55,11 +57,7 @@ namespace Ecommerce.Repository
 
         public Category PostCategory(Category category)
         {
-            var newCategories = new Category
-            {
-                Nome = category.Nome
-
-            };
+            var newCategories = new Category { Nome = category.Nome };
             _context.Categorias.Add(newCategories);
             _context.SaveChanges();
             return newCategories;

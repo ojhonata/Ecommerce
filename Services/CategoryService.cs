@@ -11,10 +11,12 @@ namespace Ecommerce.Services
     public class CategoryService : ICategoryService
     {
         private readonly ICategoryRepository _categoryRepository;
+
         public CategoryService(ICategoryRepository categoryRepository)
         {
             _categoryRepository = categoryRepository;
         }
+
         public void DeleteCategory(Guid id)
         {
             var category = _categoryRepository.GetCategoryById(id);
@@ -23,35 +25,41 @@ namespace Ecommerce.Services
                 throw new Exception("Categoria não encontrada.");
             }
             _categoryRepository.DeleteCategory(id);
-
         }
 
         public List<CategoryDTO> GetCategories(int pageNumber, int pageQuantity)
         {
             var categories = _categoryRepository.GetCategories(pageNumber, pageQuantity);
 
-            var categoryDtos = categories.Select(cat => new CategoryDTO
-            {
-                Id = cat.Id,
-                Nome = cat.Nome,
-                Produtos = cat.Produtos?.Select(prod => new CarDTO
+            var categoryDtos = categories
+                .Select(cat => new CategoryDTO
                 {
-                    Nome = prod.Nome,
-                    Preco = prod.Preco,
-                    Descricao = prod.Descricao,
-                    Estoque = prod.Estoque,
-                    Ano = prod.Ano,
-                    ImagemUrl = prod.ImagemUrl,
-                    CategoriaId = prod.CategoriaId,
-                    MarcaId = prod.MarcaId,
+                    Id = cat.Id,
+                    Nome = cat.Nome,
+                    Produtos = cat
+                        .Produtos?.Select(prod => new CarDTO
+                        {
+                            Nome = prod.Nome,
+                            Preco = prod.Preco,
+                            Descricao = prod.Descricao,
+                            Estoque = prod.Estoque,
+                            Ano = prod.Ano,
+                            ImagemUrl = prod.ImagemUrl,
+                            CategoriaId = prod.CategoriaId,
+                            MarcaId = prod.MarcaId,
 
-                    Marca = prod.Marca == null ? null : new BrandDTO
-                    {
-                        Nome = prod.Marca.Nome,
-                        ImagemURL = prod.Marca.ImagemURL
-                    }
-                }).ToList()
-            }).ToList();
+                            Marca =
+                                prod.Marca == null
+                                    ? null
+                                    : new BrandDTO
+                                    {
+                                        Nome = prod.Marca.Nome,
+                                        ImagemURL = prod.Marca.ImagemURL,
+                                    },
+                        })
+                        .ToList(),
+                })
+                .ToList();
 
             return categoryDtos;
         }
@@ -67,19 +75,24 @@ namespace Ecommerce.Services
             var categoryDto = new CategoryDTO
             {
                 Nome = category.Nome,
-                Produtos = category.Produtos?.Select(prod => new CarDTO
-                {
-                    Nome = prod.Nome,
-                    Preco = prod.Preco,
-                    Ano = prod.Ano,
-                    ImagemUrl = prod.ImagemUrl,
-                    MarcaId = prod.MarcaId,
-                    Marca = prod.Marca == null ? null : new BrandDTO
+                Produtos = category
+                    .Produtos?.Select(prod => new CarDTO
                     {
-                        Nome = prod.Marca.Nome,
-                        ImagemURL = prod.Marca.ImagemURL
-                    }
-                }).ToList()
+                        Nome = prod.Nome,
+                        Preco = prod.Preco,
+                        Ano = prod.Ano,
+                        ImagemUrl = prod.ImagemUrl,
+                        MarcaId = prod.MarcaId,
+                        Marca =
+                            prod.Marca == null
+                                ? null
+                                : new BrandDTO
+                                {
+                                    Nome = prod.Marca.Nome,
+                                    ImagemURL = prod.Marca.ImagemURL,
+                                },
+                    })
+                    .ToList(),
             };
 
             return categoryDto;
@@ -91,10 +104,7 @@ namespace Ecommerce.Services
             {
                 throw new Exception("O nome da category é obrigatório.");
             }
-            var newCategory = new Category
-            {
-                Nome = category.Nome
-            };
+            var newCategory = new Category { Nome = category.Nome };
             return _categoryRepository.PostCategory(newCategory);
         }
 

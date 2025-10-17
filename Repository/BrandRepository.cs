@@ -13,6 +13,7 @@ namespace Ecommerce.Repository
     public class BrandRepository : IBrandRepository
     {
         private readonly AppDbContext _context;
+
         public BrandRepository(AppDbContext context)
         {
             _context = context;
@@ -34,8 +35,8 @@ namespace Ecommerce.Repository
 
         public List<Brand> GetBrands(int pageNumber, int pageQuantity)
         {
-            return _context.Marcas
-                .Skip((pageNumber - 1) * pageQuantity)
+            return _context
+                .Marcas.Skip((pageNumber - 1) * pageQuantity)
                 .Take(pageQuantity)
                 .Include(m => m.Produtos)
                 .ToList();
@@ -57,12 +58,7 @@ namespace Ecommerce.Repository
 
         public Brand PostBrand(BrandDTO brand)
         {
-            var newBrand = new Brand
-            {
-                Nome = brand.Nome,
-                ImagemURL = brand.ImagemURL
-
-            };
+            var newBrand = new Brand { Nome = brand.Nome, ImagemURL = brand.ImagemURL };
             _context.Marcas.Add(newBrand);
             _context.SaveChanges();
             return newBrand;
@@ -74,7 +70,6 @@ namespace Ecommerce.Repository
             _context.SaveChanges();
             return brand;
         }
-
 
         public void UpdateBrand(Brand brand)
         {

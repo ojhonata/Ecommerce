@@ -13,6 +13,7 @@ namespace Ecommerce.Services
     {
         private readonly IWebHostEnvironment _env;
         private readonly ICarRepository _carRepository;
+
         public CarService(IWebHostEnvironment env, ICarRepository carRepository)
         {
             _env = env;
@@ -23,23 +24,22 @@ namespace Ecommerce.Services
         {
             var cars = _carRepository.GetCars(pageNumber, pageQuantity);
             var carDtos = cars.Select(p => new CarDTO
-            {
-                Nome = p.Nome,
-                Preco = p.Preco,
-                Descricao = p.Descricao,
-                Estoque = p.Estoque,
-                Ano = p.Ano,
-                ImagemUrl = p.ImagemUrl,
-                CategoriaId = p.CategoriaId,
-                MarcaId = p.MarcaId,
-
-                Marca = p.Marca == null ? null : new BrandDTO
                 {
-                    Nome = p.Marca.Nome,
-                    ImagemURL = p.Marca.ImagemURL
-                }
+                    Nome = p.Nome,
+                    Preco = p.Preco,
+                    Descricao = p.Descricao,
+                    Estoque = p.Estoque,
+                    Ano = p.Ano,
+                    ImagemUrl = p.ImagemUrl,
+                    CategoriaId = p.CategoriaId,
+                    MarcaId = p.MarcaId,
 
-            }).ToList();
+                    Marca =
+                        p.Marca == null
+                            ? null
+                            : new BrandDTO { Nome = p.Marca.Nome, ImagemURL = p.Marca.ImagemURL },
+                })
+                .ToList();
 
             return carDtos;
         }
@@ -73,14 +73,13 @@ namespace Ecommerce.Services
                 Ano = car.Ano,
                 ImagemUrl = url,
                 CategoriaId = car.CategoriaId,
-                MarcaId = car.MarcaId
+                MarcaId = car.MarcaId,
             };
 
             _carRepository.PostCar(newCar);
 
             return newCar;
         }
-
 
         public Car GetCarById(Guid id)
         {
@@ -117,7 +116,6 @@ namespace Ecommerce.Services
                 throw new Exception("Produto não encontrado.");
             }
             _carRepository.DeleteCar(id);
-
         }
 
         public void UpdateProduto(Car car)

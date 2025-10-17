@@ -14,6 +14,7 @@ namespace Ecommerce.Controllers
     public class CategoryController : ControllerBase
     {
         private readonly ICategoryService _categoryService;
+
         public CategoryController(ICategoryService categoryService)
         {
             _categoryService = categoryService;
@@ -22,7 +23,7 @@ namespace Ecommerce.Controllers
         [HttpGet("GetCategories")]
         public IActionResult GetCategory(int pageNumber = 1, int pageQuantity = 10)
         {
-            try 
+            try
             {
                 var categories = _categoryService.GetCategories(pageNumber, pageQuantity);
                 return Ok(categories);
@@ -31,7 +32,6 @@ namespace Ecommerce.Controllers
             {
                 return BadRequest(new { message = ex.Message });
             }
-
         }
 
         [HttpGet("{id:guid}", Name = "GetCategoryById")]
@@ -45,7 +45,8 @@ namespace Ecommerce.Controllers
                     return NotFound();
                 }
                 return Ok(category);
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 return BadRequest(new { message = ex.Message });
             }

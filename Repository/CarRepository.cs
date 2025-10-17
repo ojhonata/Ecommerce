@@ -18,6 +18,7 @@ namespace Ecommerce.Repository
         {
             _context = context;
         }
+
         public void DeleteCar(Guid id)
         {
             var car = GetCarById(id);
@@ -34,11 +35,11 @@ namespace Ecommerce.Repository
 
         public List<Car> GetCars(int pageNumber, int pageQuantity)
         {
-            return _context.Produtos
-                    .Skip((pageNumber - 1) * pageQuantity)
-                    .Take(pageQuantity)
-                    .Include(c => c.Marca)
-                    .ToList();
+            return _context
+                .Produtos.Skip((pageNumber - 1) * pageQuantity)
+                .Take(pageQuantity)
+                .Include(c => c.Marca)
+                .ToList();
         }
 
         public Car GetCarById(Guid id)
@@ -86,7 +87,7 @@ namespace Ecommerce.Repository
                 exisitngCar.CategoriaId = car.CategoriaId;
                 exisitngCar.MarcaId = car.MarcaId;
 
-                _context.SaveChanges(); // salva as mudanças no banco de dados
+                _context.SaveChanges();
             }
             else
             {

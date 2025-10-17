@@ -20,9 +20,7 @@ namespace Ecommerce.Repository
 
         public List<User> GetUsers()
         {
-            return _context.Usuarios
-            .Select(user => user)
-            .ToList();
+            return _context.Usuarios.Select(user => user).ToList();
         }
 
         public User PostUser(UserDTO userDTO)
@@ -31,15 +29,12 @@ namespace Ecommerce.Repository
             {
                 Nome = userDTO.Nome,
                 Email = userDTO.Email,
-                Senha = userDTO.Senha
+                Senha = userDTO.Senha,
             };
 
             _context.Usuarios.Add(user);
             _context.SaveChanges();
             return user;
         }
-
     }
-        
-    
 }
