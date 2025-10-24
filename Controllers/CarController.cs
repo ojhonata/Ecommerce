@@ -22,23 +22,12 @@ namespace Ecommerce.Controllers
         }
 
         [HttpGet("GetCars")]
-        public IActionResult GetCars()
+        public IActionResult GetCars(int pageNumber = 1, int pageQuantity = 10)
         {
             try
             {
-                var cars = _carService.GetCars();
-                var carDtos = cars.Select(p => new CarDTO
-                {
-                    Nome = p.Nome,
-                    Preco = p.Preco,
-                    Descricao = p.Descricao,
-                    Estoque = p.Estoque,
-                    Ano = p.Ano,
-                    ImagemUrl = p.ImagemUrl,
-                    CategoriaId = p.CategoriaId,
-                    MarcaId = p.MarcaId
-                }).ToList();
-                return Ok(carDtos);
+                var cars = _carService.GetCars(pageNumber, pageQuantity);
+                return Ok(cars);
             }
             catch (Exception ex)
             {
@@ -65,12 +54,12 @@ namespace Ecommerce.Controllers
         }
 
         [HttpPost("PostCar")]
-        public ActionResult<Car> PostCar([FromBody] CarDTO CarDto)
+        public ActionResult<Car> PostCar([FromForm] CreateCarDTO carDto)
         {
             try
             {
-                var car = _carService.PostCar(CarDto);
-                return CreatedAtRoute("GetCarById", new { id = car.Id }, car);
+                var car = _carService.PostCar(carDto);
+                return CreatedAtRoute(nameof(GetCarById), new { id = car.Id }, car);
             }
             catch (Exception ex)
             {

@@ -11,15 +11,74 @@ namespace Ecommerce.Services
 {
     public class CarService : ICarService
     {
+        private readonly IWebHostEnvironment _env;
         private readonly ICarRepository _carRepository;
-        public CarService(ICarRepository carRepository)
+
+        public CarService(IWebHostEnvironment env, ICarRepository carRepository)
         {
+            _env = env;
             _carRepository = carRepository;
         }
 
-        public List<Car> GetCars()
+        public List<CarDTO> GetCars(int pageNumber, int pageQuantity)
         {
-            return _carRepository.GetCars();
+            var cars = _carRepository.GetCars(pageNumber, pageQuantity);
+            var carDtos = cars.Select(p => new CarDTO
+                {
+                    Nome = p.Nome,
+                    Preco = p.Preco,
+                    Descricao = p.Descricao,
+                    Estoque = p.Estoque,
+                    Ano = p.Ano,
+                    ImagemUrl = p.ImagemUrl,
+                    CategoriaId = p.CategoriaId,
+                    MarcaId = p.MarcaId,
+
+                    Marca =
+                        p.Marca == null
+                            ? null
+                            : new BrandDTO { Nome = p.Marca.Nome, ImagemURL = p.Marca.ImagemURL },
+                })
+                .ToList();
+
+            return carDtos;
+        }
+
+        public Car PostCar(CreateCarDTO car)
+        {
+            if (string.IsNullOrEmpty(car.Nome) || car.Imagem == null)
+                throw new ArgumentException("Nome e imagem são obrigatórios.");
+
+            var pasta = Path.Combine(_env.WebRootPath, "imagens");
+            if (!Directory.Exists(pasta))
+                Directory.CreateDirectory(pasta);
+
+            var nomeArquivo = Guid.NewGuid() + Path.GetExtension(car.Imagem.FileName);
+            var caminhoArquivo = Path.Combine(pasta, nomeArquivo);
+
+            using (var stream = new FileStream(caminhoArquivo, FileMode.Create))
+            {
+                car.Imagem.CopyTo(stream);
+            }
+
+            var url = $"/imagens/{nomeArquivo}";
+
+            var newCar = new Car
+            {
+                Id = Guid.NewGuid(),
+                Nome = car.Nome,
+                Preco = car.Preco,
+                Descricao = car.Descricao,
+                Estoque = car.Estoque,
+                Ano = car.Ano,
+                ImagemUrl = url,
+                CategoriaId = car.CategoriaId,
+                MarcaId = car.MarcaId,
+            };
+
+            _carRepository.PostCar(newCar);
+
+            return newCar;
         }
 
         public Car GetCarById(Guid id)
@@ -27,7 +86,7 @@ namespace Ecommerce.Services
             var produto = _carRepository.GetCarById(id);
             if (produto == null)
             {
-                throw new Exception("Produto não encontrado.");
+                throw new ArgumentException("Produto não encontrado.");
             }
             return produto;
         }
@@ -36,15 +95,15 @@ namespace Ecommerce.Services
         {
             if (string.IsNullOrEmpty(car.Nome))
             {
-                throw new Exception("O nome do car é obrigatório.");
+                throw new ArgumentException("O nome do carro é obrigatório.");
             }
             if (car.Preco <= 0)
             {
-                throw new Exception("O preço do car deve ser maior que zero.");
+                throw new ArgumentException("O preço do carro deve ser maior que zero.");
             }
             if (car.Estoque < 0)
             {
-                throw new Exception("O estoque do car não pode ser negativo.");
+                throw new ArgumentException("O estoque do carro não pode ser negativo.");
             }
             return _carRepository.PostProduto(car);
         }
@@ -54,10 +113,9 @@ namespace Ecommerce.Services
             var produto = _carRepository.GetCarById(id);
             if (produto == null)
             {
-                throw new Exception("Produto não encontrado.");
+                throw new ArgumentException("Produto não encontrado.");
             }
-            _carRepository.DeleteCar(id);   
-
+            _carRepository.DeleteCar(id);
         }
 
         public void UpdateProduto(Car car)
@@ -65,19 +123,19 @@ namespace Ecommerce.Services
             var existingCar = _carRepository.GetCarById(car.Id);
             if (existingCar == null)
             {
-                throw new Exception("Produto não encontrado.");
+                throw new ArgumentException("Produto não encontrado.");
             }
             if (string.IsNullOrEmpty(car.Nome))
             {
-                throw new Exception("O nome do car é obrigatório.");
+                throw new ArgumentException("O nome do car é obrigatório.");
             }
             if (car.Preco <= 0)
             {
-                throw new Exception("O preço do car deve ser maior que zero.");
+                throw new ArgumentException("O preço do car deve ser maior que zero.");
             }
             if (car.Estoque < 0)
             {
-                throw new Exception("O estoque do car não pode ser negativo.");
+                throw new ArgumentException("O estoque do car não pode ser negativo.");
             }
             _carRepository.UpdateProduto(car);
         }

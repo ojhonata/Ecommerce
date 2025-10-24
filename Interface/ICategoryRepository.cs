@@ -8,10 +8,10 @@ namespace Ecommerce.Interface
 {
     public interface ICategoryRepository
     {
-        public List<Category> GetCategories();
+        public List<Category> GetCategories(int pageNumber, int pageQuantity);
         public Category GetCategoryById(Guid id);
-        public Category PostCategory(Category categoria);
-        void UpdateCategory(Category categoria);
+        public Category PostCategory(Category category);
+        void UpdateCategory(Category category);
         void DeleteCategory(Guid id);
     }
 }

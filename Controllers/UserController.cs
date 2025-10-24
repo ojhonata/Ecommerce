@@ -27,13 +27,7 @@ namespace Ecommerce.Controllers
             try
             {
                 var users = _userService.GetUsers();
-                var userDtos = users.Select(u => new UserDTO
-                {
-                    Nome = u.Nome,
-                    Email = u.Email,
-                    Senha = u.Senha
-                }).ToList();
-                return Ok(userDtos);
+                return Ok(users);
             }
             catch (Exception ex)
             {
@@ -48,7 +42,8 @@ namespace Ecommerce.Controllers
             {
                 User user = _userService.PostUser(userDTO);
                 return Ok(user);
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 return BadRequest(new { message = ex.Message });
             }

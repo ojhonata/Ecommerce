@@ -10,8 +10,9 @@ namespace Ecommerce.Interface
     public interface ICarRepository
     {
         public Car GetCarById(Guid id);
-        public List<Car> GetCars();
+        public List<Car> GetCars(int pageNumber, int pageQuantity);
         public Car PostProduto(CarDTO car);
+        public Car PostCar(Car car);
         void UpdateProduto(Car car);
         void DeleteCar(Guid id);
     }

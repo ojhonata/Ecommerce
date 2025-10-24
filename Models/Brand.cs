@@ -11,6 +11,8 @@ namespace Ecommerce.Models
     public class Brand
     {
         public Guid Id { get; set; }
+
+        [Required(ErrorMessage = "O nome da marca é obrigatório.")]
         public string Nome { get; set; }
         public string ImagemURL { get; set; }
 

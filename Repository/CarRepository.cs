@@ -6,6 +6,7 @@ using Ecommerce.Data;
 using Ecommerce.DTOs;
 using Ecommerce.Interface;
 using Ecommerce.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Ecommerce.Repository
 {
@@ -17,28 +18,33 @@ namespace Ecommerce.Repository
         {
             _context = context;
         }
+
         public void DeleteCar(Guid id)
         {
             var car = GetCarById(id);
             if (car != null)
             {
                 _context.Produtos.Remove(car);
-                _context.SaveChanges(); // salva as mudanças no banco de dados
+                _context.SaveChanges();
             }
             else
             {
-                throw new Exception("Produto não encontrado.");
+                throw new ArgumentException("Produto não encontrado.");
             }
         }
 
-        public List<Car> GetCars()
+        public List<Car> GetCars(int pageNumber, int pageQuantity)
         {
-            return _context.Produtos.ToList(); // retorna a lista de produtos do banco de dados
+            return _context
+                .Produtos.Skip((pageNumber - 1) * pageQuantity)
+                .Take(pageQuantity)
+                .Include(c => c.Marca)
+                .ToList();
         }
 
         public Car GetCarById(Guid id)
         {
-            return _context.Produtos.FirstOrDefault(p => p.Id == id); // retorna o car com o ID especificado
+            return _context.Produtos.FirstOrDefault(p => p.Id == id);
         }
 
         public Car PostProduto(CarDTO car)
@@ -55,9 +61,16 @@ namespace Ecommerce.Repository
                 MarcaId = Guid.Parse(car.MarcaId.ToString()),
             };
 
-            _context.Produtos.Add(newCar); // adiciona o novo car ao contexto
-            _context.SaveChanges(); // salva as mudanças no banco de dados
+            _context.Produtos.Add(newCar);
+            _context.SaveChanges();
             return newCar;
+        }
+
+        public Car PostCar(Car car)
+        {
+            _context.Produtos.Add(car);
+            _context.SaveChanges();
+            return car;
         }
 
         public void UpdateProduto(Car car)
@@ -74,11 +87,11 @@ namespace Ecommerce.Repository
                 exisitngCar.CategoriaId = car.CategoriaId;
                 exisitngCar.MarcaId = car.MarcaId;
 
-                _context.SaveChanges(); // salva as mudanças no banco de dados
+                _context.SaveChanges();
             }
             else
             {
-                throw new Exception("Produto não encontrado.");
+                throw new ArgumentException("Produto não encontrado.");
             }
         }
     }

@@ -10,34 +10,19 @@ namespace Ecommerce.Controllers
     public class BrandController : ControllerBase
     {
         private readonly IBrandService _brandService;
+
         public BrandController(IBrandService brandService)
         {
             _brandService = brandService;
         }
 
         [HttpGet("GetBrand")]
-        public IActionResult GetBrands()
+        public IActionResult GetBrands(int pageNumber = 1, int pageQuantity = 10)
         {
             try
             {
-                var brands = _brandService.GetBrands();
-                var brandDtos = brands.Select(m => new BrandDTO
-                {
-                    Nome = m.Nome,
-                    ImagemURL = m.ImagemURL,
-                    Produtos = m.Produtos?.Select(p => new CarDTO
-                    {
-                        Nome = p.Nome,
-                        Preco = p.Preco,
-                        Descricao = p.Descricao,
-                        Estoque = p.Estoque,
-                        Ano = p.Ano,
-                        ImagemUrl = p.ImagemUrl,
-                        CategoriaId = p.CategoriaId,
-                        MarcaId = p.MarcaId
-                    }).ToList()
-                }).ToList();
-                return Ok(brandDtos);
+                var brands = _brandService.GetBrands(pageNumber, pageQuantity);
+                return Ok(brands);
             }
             catch (Exception ex)
             {
@@ -63,8 +48,8 @@ namespace Ecommerce.Controllers
             }
         }
 
-        [HttpPost("PostBrnad")]
-        public ActionResult<Brand> PostMarca([FromBody] BrandDTO brandDto)
+        [HttpPost("PostBrand")]
+        public ActionResult<Brand> PostMarca([FromForm] BrandImgDTO brandDto)
         {
             try
             {
@@ -76,6 +61,7 @@ namespace Ecommerce.Controllers
                 return BadRequest(new { message = ex.Message });
             }
         }
+
         [HttpPut("{id:guid}", Name = "UpdateBrand")]
         public IActionResult UpdateBrand(Guid id, [FromBody] Brand brand)
         {
@@ -92,7 +78,6 @@ namespace Ecommerce.Controllers
             {
                 return BadRequest(new { message = ex.Message });
             }
-
         }
 
         [HttpDelete("{id:guid}", Name = "DeleteBrand")]

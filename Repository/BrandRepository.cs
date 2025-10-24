@@ -13,6 +13,7 @@ namespace Ecommerce.Repository
     public class BrandRepository : IBrandRepository
     {
         private readonly AppDbContext _context;
+
         public BrandRepository(AppDbContext context)
         {
             _context = context;
@@ -28,13 +29,15 @@ namespace Ecommerce.Repository
             }
             else
             {
-                throw new Exception("Marca não encontrada.");
+                throw new ArgumentException("Marca não encontrada.");
             }
         }
 
-        public List<Brand> GetBrands()
+        public List<Brand> GetBrands(int pageNumber, int pageQuantity)
         {
-            return _context.Marcas
+            return _context
+                .Marcas.Skip((pageNumber - 1) * pageQuantity)
+                .Take(pageQuantity)
                 .Include(m => m.Produtos)
                 .ToList();
         }
@@ -48,22 +51,24 @@ namespace Ecommerce.Repository
             var brand = _context.Marcas.FirstOrDefault(m => m.Id == id);
             if (brand == null)
             {
-                throw new Exception("Marca não encontrada.");
+                throw new ArgumentException("Marca não encontrada.");
             }
             return brand;
         }
 
         public Brand PostBrand(BrandDTO brand)
         {
-            var newBrand = new Brand
-            {
-                Nome = brand.Nome,
-                ImagemURL = brand.ImagemURL
-
-            };
+            var newBrand = new Brand { Nome = brand.Nome, ImagemURL = brand.ImagemURL };
             _context.Marcas.Add(newBrand);
             _context.SaveChanges();
             return newBrand;
+        }
+
+        public Brand PostBrand(Brand brand)
+        {
+            _context.Marcas.Add(brand);
+            _context.SaveChanges();
+            return brand;
         }
 
         public void UpdateBrand(Brand brand)
@@ -77,7 +82,7 @@ namespace Ecommerce.Repository
             }
             else
             {
-                throw new Exception("Marca não encontrada.");
+                throw new ArgumentException("Marca não encontrada.");
             }
         }
     }

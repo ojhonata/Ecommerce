@@ -14,40 +14,24 @@ namespace Ecommerce.Controllers
     public class CategoryController : ControllerBase
     {
         private readonly ICategoryService _categoryService;
+
         public CategoryController(ICategoryService categoryService)
         {
             _categoryService = categoryService;
         }
 
         [HttpGet("GetCategories")]
-        public IActionResult GetCategory()
+        public IActionResult GetCategory(int pageNumber = 1, int pageQuantity = 10)
         {
             try
             {
-                var categories = _categoryService.GetCategories();
-                var categoryDtos = categories.Select(category => new CategoryDTO
-                {
-                    Nome = category.Nome,
-                    Produtos = category.Produtos?.Select(category => new CarDTO
-                    {
-                        Nome = category.Nome,
-                        Preco = category.Preco,
-                        Descricao = category.Descricao,
-                        Estoque = category.Estoque,
-                        Ano = category.Ano,
-                        ImagemUrl = category.ImagemUrl,
-                        CategoriaId = category.CategoriaId,
-                        MarcaId = category.MarcaId
-                    }).ToList()
-                }).ToList();
-                return Ok(categoryDtos);
-
+                var categories = _categoryService.GetCategories(pageNumber, pageQuantity);
+                return Ok(categories);
             }
             catch (Exception ex)
             {
                 return BadRequest(new { message = ex.Message });
             }
-
         }
 
         [HttpGet("{id:guid}", Name = "GetCategoryById")]
@@ -61,7 +45,8 @@ namespace Ecommerce.Controllers
                     return NotFound();
                 }
                 return Ok(category);
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 return BadRequest(new { message = ex.Message });
             }

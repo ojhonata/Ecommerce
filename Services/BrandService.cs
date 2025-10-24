@@ -10,24 +10,69 @@ namespace Ecommerce.Services
 {
     public class BrandService : IBrandService
     {
+        private readonly IWebHostEnvironment _env;
         private readonly IBrandRepository _brandRepository;
-        public BrandService(IBrandRepository brandRepository)
+
+        public BrandService(IWebHostEnvironment env, IBrandRepository brandRepository)
         {
+            _env = env;
             _brandRepository = brandRepository;
         }
+
+        public Brand PostBrand(BrandImgDTO dto)
+        {
+            if (string.IsNullOrEmpty(dto.Nome) || dto.Imagem == null)
+                throw new ArgumentException("Nome e imagem são obrigatórios.");
+
+            var pasta = Path.Combine(_env.WebRootPath, "imagens");
+            if (!Directory.Exists(pasta))
+                Directory.CreateDirectory(pasta);
+
+            var nomeArquivo = Guid.NewGuid() + Path.GetExtension(dto.Imagem.FileName);
+            var caminhoArquivo = Path.Combine(pasta, nomeArquivo);
+
+            using (var stream = new FileStream(caminhoArquivo, FileMode.Create))
+            {
+                dto.Imagem.CopyTo(stream);
+            }
+
+            var url = $"/imagens/{nomeArquivo}";
+
+            var newBrand = new Brand
+            {
+                Id = Guid.NewGuid(),
+                Nome = dto.Nome,
+                ImagemURL = url,
+            };
+
+            _brandRepository.PostBrand(newBrand);
+
+            return newBrand;
+        }
+
         public void DeleteBrand(Guid id)
         {
             var brand = _brandRepository.GetBrandById(id);
             if (brand == null)
             {
-                throw new Exception("Marca não encontrada.");
+                throw new ArgumentException("Marca não encontrada.");
             }
             _brandRepository.DeleteBrand(id);
         }
 
-        public List<Brand> GetBrands()
+        public List<BrandDTO> GetBrands(int pageNumber, int pageQuantity)
         {
-            return _brandRepository.GetBrands();
+            var brands = _brandRepository.GetBrands(pageNumber, pageQuantity);
+            var brandDtos = brands
+                .Select(b => new BrandDTO
+                {
+                    Id = b.Id,
+                    Nome = b.Nome,
+                    ImagemURL = b.ImagemURL,
+                })
+                .ToList();
+
+            return brandDtos;
         }
 
         public Brand GetBrandById(Guid id)
@@ -35,7 +80,7 @@ namespace Ecommerce.Services
             var brand = _brandRepository.GetBrandById(id);
             if (brand == null)
             {
-                throw new Exception("Marca não encontrada.");
+                throw new ArgumentException("Marca não encontrada.");
             }
             return brand;
         }
@@ -44,14 +89,10 @@ namespace Ecommerce.Services
         {
             if (string.IsNullOrEmpty(brand.Nome) || string.IsNullOrEmpty(brand.ImagemURL))
             {
-                throw new Exception("O nome e a URL da imagem da brand são obrigatórios.");
+                throw new ArgumentException("O nome e a URL da imagem da brand são obrigatórios.");
             }
-            var newBrand = new Brand
-            {
-                Nome = brand.Nome,
-                ImagemURL = brand.ImagemURL
-            };
-            return _brandRepository.PostBrand(brand);
+            var newBrand = new BrandDTO { Nome = brand.Nome, ImagemURL = brand.ImagemURL };
+            return _brandRepository.PostBrand(newBrand);
         }
 
         public void UpdateBrand(Brand brand)
@@ -65,9 +106,8 @@ namespace Ecommerce.Services
             }
             else
             {
-                throw new Exception("Marca não encontrada.");
+                throw new ArgumentException("Marca não encontrada.");
             }
-
         }
     }
 }

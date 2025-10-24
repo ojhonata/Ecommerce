@@ -21,6 +21,5 @@ namespace Ecommerce.Models
         public Category Categoria { get; set; }
         public Guid MarcaId { get; set; }
         public Brand Marca { get; set; }
-
     }
 }

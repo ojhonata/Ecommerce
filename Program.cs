@@ -10,6 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddControllers();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -22,7 +23,8 @@ Env.Load(); // Carregar variáveis do .env
 
 var mySqlString = Environment.GetEnvironmentVariable("MYSQL_URL");
 builder.Services.AddDbContext<AppDbContext>(options =>
-   options.UseMySql(mySqlString, ServerVersion.AutoDetect(mySqlString)));
+    options.UseMySql(mySqlString, ServerVersion.AutoDetect(mySqlString))
+);
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
@@ -38,16 +40,18 @@ builder.Services.AddScoped<ICategoryService, CategoryService>();
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy(name: "AllowAll",
+    options.AddPolicy(
+        name: "AllowAll",
         policy =>
         {
-            policy.WithOrigins("http://localhost:5173")
-                    .AllowAnyMethod()
-                    .AllowAnyHeader();
-        });
+            policy.WithOrigins("http://localhost:5173").AllowAnyMethod().AllowAnyHeader();
+        }
+    );
 });
 
 var app = builder.Build();
+
+app.UseStaticFiles();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

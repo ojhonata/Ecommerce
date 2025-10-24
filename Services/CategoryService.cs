@@ -11,46 +11,100 @@ namespace Ecommerce.Services
     public class CategoryService : ICategoryService
     {
         private readonly ICategoryRepository _categoryRepository;
+
         public CategoryService(ICategoryRepository categoryRepository)
         {
             _categoryRepository = categoryRepository;
         }
+
         public void DeleteCategory(Guid id)
         {
             var category = _categoryRepository.GetCategoryById(id);
             if (category == null)
             {
-                throw new Exception("Categoria não encontrada.");
+                throw new ArgumentException("Categoria não encontrada.");
             }
             _categoryRepository.DeleteCategory(id);
-
         }
 
-        public List<Category> GetCategories()
+        public List<CategoryDTO> GetCategories(int pageNumber, int pageQuantity)
         {
-            return _categoryRepository.GetCategories();
+            var categories = _categoryRepository.GetCategories(pageNumber, pageQuantity);
+
+            var categoryDtos = categories
+                .Select(cat => new CategoryDTO
+                {
+                    Id = cat.Id,
+                    Nome = cat.Nome,
+                    Produtos = cat
+                        .Produtos?.Select(prod => new CarDTO
+                        {
+                            Nome = prod.Nome,
+                            Preco = prod.Preco,
+                            Descricao = prod.Descricao,
+                            Estoque = prod.Estoque,
+                            Ano = prod.Ano,
+                            ImagemUrl = prod.ImagemUrl,
+                            CategoriaId = prod.CategoriaId,
+                            MarcaId = prod.MarcaId,
+
+                            Marca =
+                                prod.Marca == null
+                                    ? null
+                                    : new BrandDTO
+                                    {
+                                        Nome = prod.Marca.Nome,
+                                        ImagemURL = prod.Marca.ImagemURL,
+                                    },
+                        })
+                        .ToList(),
+                })
+                .ToList();
+
+            return categoryDtos;
         }
 
-        public Category GetCategoryById(Guid id)
+        public CategoryDTO GetCategoryById(Guid id)
         {
             var category = _categoryRepository.GetCategoryById(id);
             if (category == null)
             {
-                throw new Exception("Categoria não encontrada.");
+                throw new ArgumentException("Categoria não encontrada.");
             }
-            return category;
+
+            var categoryDto = new CategoryDTO
+            {
+                Nome = category.Nome,
+                Produtos = category
+                    .Produtos?.Select(prod => new CarDTO
+                    {
+                        Nome = prod.Nome,
+                        Preco = prod.Preco,
+                        Ano = prod.Ano,
+                        ImagemUrl = prod.ImagemUrl,
+                        MarcaId = prod.MarcaId,
+                        Marca =
+                            prod.Marca == null
+                                ? null
+                                : new BrandDTO
+                                {
+                                    Nome = prod.Marca.Nome,
+                                    ImagemURL = prod.Marca.ImagemURL,
+                                },
+                    })
+                    .ToList(),
+            };
+
+            return categoryDto;
         }
 
         public Category PostCategory(CategoryDTO category)
         {
             if (string.IsNullOrEmpty(category.Nome))
             {
-                throw new Exception("O nome da category é obrigatório.");
+                throw new ArgumentException("O nome da category é obrigatório.");
             }
-            var newCategory = new Category
-            {
-                Nome = category.Nome
-            };
+            var newCategory = new Category { Nome = category.Nome };
             return _categoryRepository.PostCategory(newCategory);
         }
 
@@ -64,7 +118,7 @@ namespace Ecommerce.Services
             }
             else
             {
-                throw new Exception("Categoria não encontrada.");
+                throw new ArgumentException("Categoria não encontrada.");
             }
         }
     }
