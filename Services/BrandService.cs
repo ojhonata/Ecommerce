@@ -21,9 +21,6 @@ namespace Ecommerce.Services
 
         public Brand PostBrand(BrandImgDTO dto)
         {
-            if (string.IsNullOrEmpty(dto.Nome) || dto.Imagem == null)
-                throw new ArgumentException("Nome e imagem são obrigatórios.");
-
             var pasta = Path.Combine(_env.WebRootPath, "imagens");
             if (!Directory.Exists(pasta))
                 Directory.CreateDirectory(pasta);

@@ -46,9 +46,6 @@ namespace Ecommerce.Services
 
         public Car PostCar(CreateCarDTO car)
         {
-            if (string.IsNullOrEmpty(car.Nome) || car.Imagem == null)
-                throw new ArgumentException("Nome e imagem são obrigatórios.");
-
             var pasta = Path.Combine(_env.WebRootPath, "imagens");
             if (!Directory.Exists(pasta))
                 Directory.CreateDirectory(pasta);

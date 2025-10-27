@@ -11,11 +11,16 @@ namespace Ecommerce.Models
     public class Car
     {
         public Guid Id { get; set; }
+        [Required(ErrorMessage = "O nome do carro é obrigatório.")]
         public string Nome { get; set; }
+        [DataType(DataType.Currency)]
         public decimal Preco { get; set; }
+        [DataType(DataType.MultilineText)]
         public string Descricao { get; set; }
         public int Estoque { get; set; }
+        [DataType(DataType.Date)]
         public int Ano { get; set; }
+        [DataType(DataType.ImageUrl)]
         public string ImagemUrl { get; set; }
         public Guid CategoriaId { get; set; }
         public Category Categoria { get; set; }
