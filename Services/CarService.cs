@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Ecommerce.Data;
 using Ecommerce.DTOs;
 using Ecommerce.Interface;
@@ -13,35 +14,19 @@ namespace Ecommerce.Services
     {
         private readonly IWebHostEnvironment _env;
         private readonly ICarRepository _carRepository;
+        private readonly IMapper _mapper;
 
-        public CarService(IWebHostEnvironment env, ICarRepository carRepository)
+        public CarService(IWebHostEnvironment env, ICarRepository carRepository, IMapper mapper)
         {
             _env = env;
             _carRepository = carRepository;
+            _mapper = mapper;
         }
 
         public List<CarDTO> GetCars(int pageNumber, int pageQuantity)
         {
             var cars = _carRepository.GetCars(pageNumber, pageQuantity);
-            var carDtos = cars.Select(p => new CarDTO
-                {
-                    Nome = p.Nome,
-                    Preco = p.Preco,
-                    Descricao = p.Descricao,
-                    Estoque = p.Estoque,
-                    Ano = p.Ano,
-                    ImagemUrl = p.ImagemUrl,
-                    CategoriaId = p.CategoriaId,
-                    MarcaId = p.MarcaId,
-
-                    Marca =
-                        p.Marca == null
-                            ? null
-                            : new BrandDTO { Nome = p.Marca.Nome, ImagemURL = p.Marca.ImagemURL },
-                })
-                .ToList();
-
-            return carDtos;
+            return _mapper.Map<List<CarDTO>>(cars);
         }
 
         public Car PostCar(CreateCarDTO car)

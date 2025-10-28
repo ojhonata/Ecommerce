@@ -1,6 +1,7 @@
 using DotNetEnv;
 using Ecommerce.Data;
 using Ecommerce.Interface;
+using Ecommerce.Mapping;
 using Ecommerce.Repository;
 using Ecommerce.Services;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,8 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the   container.
 
 builder.Services.AddControllers();
+
+builder.Services.AddAutoMapper(typeof(MappingDTO));
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -21,7 +24,7 @@ Env.Load(); // Carregar variáveis do .env
 // builder.Services.AddDbContext<AppDbContext>(options =>
 //     options.UseNpgsql(pgSqlString));
 
-var mySqlString = Environment.GetEnvironmentVariable("MYSQL_URL");
+var mySqlString = Environment.GetEnvironmentVariable("MYSQL_URL");  
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseMySql(mySqlString, ServerVersion.AutoDetect(mySqlString))
 );

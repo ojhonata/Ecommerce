@@ -1,8 +1,5 @@
-// DTOs/CarDTO.cs
-
 namespace Ecommerce.DTOs
 {
-    // ESTE DTO ESTÁ CORRETO
     public class CarDTO
     {
         public string Nome { get; set; }
@@ -14,7 +11,7 @@ namespace Ecommerce.DTOs
         public Guid CategoriaId { get; set; }
         public Guid MarcaId { get; set; }
 
-        public BrandDTO Marca { get; set; }
+        public BrandDTO? Marca { get; set; }
     }
 
     public class CreateCarDTO
