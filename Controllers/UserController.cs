@@ -36,12 +36,12 @@ namespace Ecommerce.Controllers
         }
 
         [HttpPost("PostUser")]
-        public IActionResult PostUsuario([FromBody] UserDTO userDTO)
+        public IActionResult PostUsuario([FromBody] User user)
         {
             try
             {
-                User user = _userService.PostUser(userDTO);
-                return Ok(user);
+                User users = _userService.PostUser(user);
+                return Ok(users);
             }
             catch (Exception ex)
             {

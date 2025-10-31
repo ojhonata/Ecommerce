@@ -19,9 +19,9 @@ namespace Ecommerce.Repository
             _context = context;
         }
 
-        public void DeleteBrand(Guid id)
+        public void Delete(Guid id)
         {
-            var brand = GetBrandById(id);
+            var brand = GetById(id);
             if (brand != null)
             {
                 _context.Marcas.Remove(brand);
@@ -33,7 +33,7 @@ namespace Ecommerce.Repository
             }
         }
 
-        public List<Brand> GetBrands(int pageNumber, int pageQuantity)
+        public List<Brand> GetAll(int pageNumber, int pageQuantity)
         {
             return _context
                 .Marcas.Skip((pageNumber - 1) * pageQuantity)
@@ -42,7 +42,7 @@ namespace Ecommerce.Repository
                 .ToList();
         }
 
-        public Brand GetBrandById(Guid id)
+        public Brand GetById(Guid id)
         {
             if (Guid.Empty == id)
             {
@@ -56,7 +56,7 @@ namespace Ecommerce.Repository
             return brand;
         }
 
-        public Brand PostBrand(BrandDTO brand)
+        public Brand AddFromDTO(BrandDTO brand)
         {
             var newBrand = new Brand { Nome = brand.Nome, ImagemURL = brand.ImagemURL };
             _context.Marcas.Add(newBrand);
@@ -64,26 +64,24 @@ namespace Ecommerce.Repository
             return newBrand;
         }
 
-        public Brand PostBrand(Brand brand)
+        public Brand Add(Brand brand)
         {
             _context.Marcas.Add(brand);
             _context.SaveChanges();
             return brand;
         }
 
-        public void UpdateBrand(Brand brand)
+        public void Update(Brand brand)
         {
-            var brandExistente = GetBrandById(brand.Id);
-            if (brandExistente != null)
-            {
-                brandExistente.Nome = brand.Nome;
-                brandExistente.ImagemURL = brand.ImagemURL;
-                _context.SaveChanges();
-            }
-            else
+            var existing = _context.Marcas.Find(brand.Id);
+            if (existing != null)
             {
                 throw new ArgumentException("Marca não encontrada.");
             }
+
+            _context.Entry(existing).CurrentValues.SetValues(brand);
+            _context.SaveChanges();
+
         }
     }
 }

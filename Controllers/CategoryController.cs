@@ -20,7 +20,7 @@ namespace Ecommerce.Controllers
             _categoryService = categoryService;
         }
 
-        [HttpGet("GetCategories")]
+        [HttpGet("GetCategory")]
         public IActionResult GetCategory(int pageNumber = 1, int pageQuantity = 10)
         {
             try
@@ -52,13 +52,13 @@ namespace Ecommerce.Controllers
             }
         }
 
-        [HttpPost("PostCategory")]
+        [HttpPost("AddCategory")]
         public ActionResult<Category> PostCategory([FromBody] CategoryDTO categoryDto)
         {
             try
             {
                 var category = _categoryService.PostCategory(categoryDto);
-                return CreatedAtRoute("GetCategoryById", new { id = category.Id }, category);
+                return CreatedAtRoute("GetById", new { id = category.Id }, category);
             }
             catch (Exception ex)
             {
@@ -66,7 +66,7 @@ namespace Ecommerce.Controllers
             }
         }
 
-        [HttpPut("{id:guid}", Name = "UpdateCategory")]
+        [HttpPut("{id:guid}", Name = "UpdateCategoiry")]
         public IActionResult UpdateCategory(Guid id, [FromBody] Category category)
         {
             if (id != category.Id)
@@ -84,7 +84,7 @@ namespace Ecommerce.Controllers
             }
         }
 
-        [HttpDelete("{id:guid}", Name = "DeleteCategory")]
+        [HttpDelete("{id:guid}", Name = "RemoveCategroy")]
         public IActionResult DeleteCategory(Guid id)
         {
             if (id == Guid.Empty)

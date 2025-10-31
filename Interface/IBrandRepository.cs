@@ -9,11 +9,11 @@ namespace Ecommerce.Interface
 {
     public interface IBrandRepository
     {
-        public List<Brand> GetBrands(int pageNumber, int pageQuantity);
-        public Brand GetBrandById(Guid id);
-        public Brand PostBrand(BrandDTO brand);
-        public Brand PostBrand(Brand brand);
-        void UpdateBrand(Brand brand);
-        void DeleteBrand(Guid id);
+        public List<Brand> GetAll(int pageNumber, int pageQuantity);
+        public Brand GetById(Guid id);
+        public Brand AddFromDTO(BrandDTO brand);
+        public Brand Add(Brand brand);
+        void Update(Brand brand);
+        void Delete(Guid id);
     }
 }

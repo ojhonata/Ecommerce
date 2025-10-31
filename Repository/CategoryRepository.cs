@@ -18,9 +18,9 @@ namespace Ecommerce.Repository
             _context = context;
         }
 
-        public void DeleteCategory(Guid id)
+        public void Remove(Guid id)
         {
-            var category = GetCategoryById(id);
+            var category = GetById(id);
             if (category != null)
             {
                 _context.Categorias.Remove(category);
@@ -32,7 +32,7 @@ namespace Ecommerce.Repository
             }
         }
 
-        public List<Category> GetCategories(int pageNumber, int pageQuantity)
+        public List<Category> GetAll(int pageNumber, int pageQuantity)
         {
             return _context
                 .Categorias.Skip((pageNumber - 1) * pageQuantity)
@@ -41,7 +41,7 @@ namespace Ecommerce.Repository
                 .ToList();
         }
 
-        public Category GetCategoryById(Guid id)
+        public Category GetById(Guid id)
         {
             if (id == Guid.Empty)
             {
@@ -55,7 +55,7 @@ namespace Ecommerce.Repository
             return categoria;
         }
 
-        public Category PostCategory(Category category)
+        public Category Add(Category category)
         {
             var newCategories = new Category { Nome = category.Nome };
             _context.Categorias.Add(newCategories);
@@ -63,18 +63,16 @@ namespace Ecommerce.Repository
             return newCategories;
         }
 
-        public void UpdateCategory(Category category)
+        public void Update(Category category)
         {
-            var existingCategory = GetCategoryById(category.Id);
-            if (existingCategory != null)
-            {
-                existingCategory.Nome = category.Nome;
-                _context.SaveChanges();
-            }
-            else
+            var existing = _context.Categorias.Find(category.Id);
+            if (existing != null)
             {
                 throw new ArgumentException("Categoria não encontrada.");
             }
+            
+            _context.Entry(existing).CurrentValues.SetValues(category);
+            _context.SaveChanges();
         }
     }
 }

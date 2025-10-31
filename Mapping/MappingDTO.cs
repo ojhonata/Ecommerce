@@ -10,7 +10,8 @@ namespace Ecommerce.Mapping
         {
             CreateMap<Car, CarDTO>();
             CreateMap<Brand, BrandDTO>();
+            CreateMap<Category, CategoryDTO>();
+            CreateMap<User, UserDTO>();
         }
-
     }
 }

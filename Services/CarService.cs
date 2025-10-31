@@ -25,7 +25,7 @@ namespace Ecommerce.Services
 
         public List<CarDTO> GetCars(int pageNumber, int pageQuantity)
         {
-            var cars = _carRepository.GetCars(pageNumber, pageQuantity);
+            var cars = _carRepository.GetAll(pageNumber, pageQuantity);
             return _mapper.Map<List<CarDTO>>(cars);
         }
 
@@ -65,7 +65,7 @@ namespace Ecommerce.Services
 
         public Car GetCarById(Guid id)
         {
-            var produto = _carRepository.GetCarById(id);
+            var produto = _carRepository.GetById(id);
             if (produto == null)
             {
                 throw new ArgumentException("Produto não encontrado.");
@@ -73,7 +73,7 @@ namespace Ecommerce.Services
             return produto;
         }
 
-        public Car PostCar(CarDTO car)
+        public Car PostCar(Car car)
         {
             if (string.IsNullOrEmpty(car.Nome))
             {
@@ -87,22 +87,22 @@ namespace Ecommerce.Services
             {
                 throw new ArgumentException("O estoque do carro não pode ser negativo.");
             }
-            return _carRepository.PostProduto(car);
+            return _carRepository.Add(car);
         }
 
         public void DeleteCar(Guid id)
         {
-            var produto = _carRepository.GetCarById(id);
+            var produto = _carRepository.GetById(id);
             if (produto == null)
             {
                 throw new ArgumentException("Produto não encontrado.");
             }
-            _carRepository.DeleteCar(id);
+            _carRepository.Remove(id);
         }
 
         public void UpdateProduto(Car car)
         {
-            var existingCar = _carRepository.GetCarById(car.Id);
+            var existingCar = _carRepository.GetById(car.Id);
             if (existingCar == null)
             {
                 throw new ArgumentException("Produto não encontrado.");
@@ -119,7 +119,7 @@ namespace Ecommerce.Services
             {
                 throw new ArgumentException("O estoque do car não pode ser negativo.");
             }
-            _carRepository.UpdateProduto(car);
+            _carRepository.Update(car);
         }
     }
 }

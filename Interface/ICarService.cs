@@ -12,7 +12,7 @@ namespace Ecommerce.Interface
         public Car PostCar(CreateCarDTO car);
         public Car GetCarById(Guid id);
         public List<CarDTO> GetCars(int pageNumber, int pageQuantity);
-        public Car PostCar(CarDTO car);
+        public Car PostCar(Car car);
         void UpdateProduto(Car car);
         void DeleteCar(Guid id);
     }
