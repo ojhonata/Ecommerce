@@ -12,15 +12,15 @@ namespace Ecommerce.Services
 {
     public class CarService : ICarService
     {
-        private readonly IWebHostEnvironment _env;
         private readonly ICarRepository _carRepository;
         private readonly IMapper _mapper;
+        private readonly IImageService _imageService;
 
-        public CarService(IWebHostEnvironment env, ICarRepository carRepository, IMapper mapper)
+        public CarService(ICarRepository carRepository, IMapper mapper, IImageService imageService)
         {
-            _env = env;
             _carRepository = carRepository;
             _mapper = mapper;
+            _imageService = imageService;
         }
 
         public List<CarDTO> GetCars(int pageNumber, int pageQuantity)
@@ -31,32 +31,11 @@ namespace Ecommerce.Services
 
         public Car PostCar(CreateCarDTO car)
         {
-            var pasta = Path.Combine(_env.WebRootPath, "imagens");
-            if (!Directory.Exists(pasta))
-                Directory.CreateDirectory(pasta);
+            var urlImage = _imageService.ImageSave(car.Imagem);
 
-            var nomeArquivo = Guid.NewGuid() + Path.GetExtension(car.Imagem.FileName);
-            var caminhoArquivo = Path.Combine(pasta, nomeArquivo);
-
-            using (var stream = new FileStream(caminhoArquivo, FileMode.Create))
-            {
-                car.Imagem.CopyTo(stream);
-            }
-
-            var url = $"/imagens/{nomeArquivo}";
-
-            var newCar = new Car
-            {
-                Id = Guid.NewGuid(),
-                Nome = car.Nome,
-                Preco = car.Preco,
-                Descricao = car.Descricao,
-                Estoque = car.Estoque,
-                Ano = car.Ano,
-                ImagemUrl = url,
-                CategoriaId = car.CategoriaId,
-                MarcaId = car.MarcaId,
-            };
+            var newCar = _mapper.Map<Car>(car);
+            newCar.Id = Guid.NewGuid();
+            newCar.ImagemUrl = urlImage;
 
             _carRepository.PostCar(newCar);
 

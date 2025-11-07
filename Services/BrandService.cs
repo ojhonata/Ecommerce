@@ -11,39 +11,24 @@ namespace Ecommerce.Services
 {
     public class BrandService : IBrandService
     {
-        private readonly IWebHostEnvironment _env;
         private readonly IBrandRepository _brandRepository;
         private readonly IMapper _mapper;
+        private readonly IImageService _imageService;    
 
-        public BrandService(IWebHostEnvironment env, IBrandRepository brandRepository, IMapper mapper)
+        public BrandService(IBrandRepository brandRepository, IMapper mapper, IImageService imageService)
         {
-            _env = env;
             _brandRepository = brandRepository;
             _mapper = mapper;
+            _imageService = imageService;
         }
 
         public Brand PostBrand(BrandImgDTO dto)
         {
-            var pasta = Path.Combine(_env.WebRootPath, "imagens");
-            if (!Directory.Exists(pasta))
-                Directory.CreateDirectory(pasta);
+            var url = _imageService.ImageSave(dto.Imagem);
 
-            var nomeArquivo = Guid.NewGuid() + Path.GetExtension(dto.Imagem.FileName);
-            var caminhoArquivo = Path.Combine(pasta, nomeArquivo);
-
-            using (var stream = new FileStream(caminhoArquivo, FileMode.Create))
-            {
-                dto.Imagem.CopyTo(stream);
-            }
-
-            var url = $"/imagens/{nomeArquivo}";
-
-            var newBrand = new Brand
-            {
-                Id = Guid.NewGuid(),
-                Nome = dto.Nome,
-                ImagemURL = url,
-            };
+            var newBrand = _mapper.Map<Brand>(dto);
+            newBrand.Id = Guid.NewGuid();
+            newBrand.ImagemURL = url;
 
             _brandRepository.Add(newBrand);
 
