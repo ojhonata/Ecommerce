@@ -19,9 +19,9 @@ namespace Ecommerce.Repository
             _context = context;
         }
 
-        public void DeleteCar(Guid id)
+        public void Remove(Guid id)
         {
-            var car = GetCarById(id);
+            var car = GetById(id);
             if (car != null)
             {
                 _context.Produtos.Remove(car);
@@ -33,7 +33,7 @@ namespace Ecommerce.Repository
             }
         }
 
-        public List<Car> GetCars(int pageNumber, int pageQuantity)
+        public List<Car> GetAll(int pageNumber, int pageQuantity)
         {
             return _context
                 .Produtos.Skip((pageNumber - 1) * pageQuantity)
@@ -42,28 +42,16 @@ namespace Ecommerce.Repository
                 .ToList();
         }
 
-        public Car GetCarById(Guid id)
+        public Car GetById(Guid id)
         {
             return _context.Produtos.FirstOrDefault(p => p.Id == id);
         }
 
-        public Car PostProduto(CarDTO car)
+        public Car Add(Car car)
         {
-            var newCar = new Car
-            {
-                Nome = car.Nome,
-                Preco = car.Preco,
-                Descricao = car.Descricao,
-                Estoque = car.Estoque,
-                Ano = car.Ano,
-                ImagemUrl = car.ImagemUrl,
-                CategoriaId = Guid.Parse(car.CategoriaId.ToString()),
-                MarcaId = Guid.Parse(car.MarcaId.ToString()),
-            };
-
-            _context.Produtos.Add(newCar);
+            _context.Produtos.Add(car);
             _context.SaveChanges();
-            return newCar;
+            return car;
         }
 
         public Car PostCar(Car car)
@@ -73,26 +61,16 @@ namespace Ecommerce.Repository
             return car;
         }
 
-        public void UpdateProduto(Car car)
+        public void Update(Car car)
         {
             var exisitngCar = _context.Produtos.Find(car.Id);
             if (exisitngCar != null)
             {
-                exisitngCar.Nome = car.Nome;
-                exisitngCar.Preco = car.Preco;
-                exisitngCar.Descricao = car.Descricao;
-                exisitngCar.Estoque = car.Estoque;
-                exisitngCar.Ano = car.Ano;
-                exisitngCar.ImagemUrl = car.ImagemUrl;
-                exisitngCar.CategoriaId = car.CategoriaId;
-                exisitngCar.MarcaId = car.MarcaId;
-
-                _context.SaveChanges();
-            }
-            else
-            {
                 throw new ArgumentException("Produto não encontrado.");
             }
+            
+            _context.Entry(exisitngCar).CurrentValues.SetValues(car);
+            _context.SaveChanges();
         }
     }
 }

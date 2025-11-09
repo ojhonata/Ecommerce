@@ -48,7 +48,7 @@ namespace Ecommerce.Controllers
             }
         }
 
-        [HttpPost("PostBrand")]
+        [HttpPost("AddBrand")]
         public ActionResult<Brand> PostMarca([FromForm] BrandImgDTO brandDto)
         {
             try
@@ -80,7 +80,7 @@ namespace Ecommerce.Controllers
             }
         }
 
-        [HttpDelete("{id:guid}", Name = "DeleteBrand")]
+        [HttpDelete("{id:guid}", Name = "RemoveBrand")]
         public IActionResult DeleteBrand(Guid id)
         {
             try

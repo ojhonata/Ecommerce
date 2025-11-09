@@ -21,7 +21,7 @@ namespace Ecommerce.Controllers
             _carService = carService;
         }
 
-        [HttpGet("GetCars")]
+        [HttpGet("GetCar")]
         public IActionResult GetCars(int pageNumber = 1, int pageQuantity = 10)
         {
             try
@@ -53,7 +53,7 @@ namespace Ecommerce.Controllers
             }
         }
 
-        [HttpPost("PostCar")]
+        [HttpPost("AddCar")]
         public ActionResult<Car> PostCar([FromForm] CreateCarDTO carDto)
         {
             try
@@ -85,7 +85,7 @@ namespace Ecommerce.Controllers
             }
         }
 
-        [HttpDelete("{id:guid}", Name = "DeleteCar")]
+        [HttpDelete("{id:guid}", Name = "RemoveCar")]
         public IActionResult DeleteCar(Guid id)
         {
             try

@@ -14,8 +14,9 @@ namespace Ecommerce.Models
 
         [Required(ErrorMessage = "O nome da marca é obrigatório.")]
         public string Nome { get; set; }
+        [DataType(DataType.ImageUrl)]
         public string ImagemURL { get; set; }
 
-        public virtual ICollection<Car> Produtos { get; set; }
+        public virtual ICollection<Car>? Produtos { get; set; }
     }
 }

@@ -12,6 +12,6 @@ namespace Ecommerce.Interface
     public interface IUserRepository
     {
         public List<User> GetUsers();
-        public User PostUser(UserDTO userDTO);
+        public User PostUser(User user);
     }
 }

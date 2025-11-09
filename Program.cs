@@ -1,15 +1,24 @@
 using DotNetEnv;
 using Ecommerce.Data;
 using Ecommerce.Interface;
+using Ecommerce.Mapping;
 using Ecommerce.Repository;
 using Ecommerce.Services;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+builder.Services.Configure<FormOptions>(options =>
+{
+    options.MultipartBodyLengthLimit = 1024 * 1024 * 200; // 200mb
+});
+
+// Add services to the   container.
 
 builder.Services.AddControllers();
+
+builder.Services.AddAutoMapper(typeof(MappingDTO));
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -21,7 +30,7 @@ Env.Load(); // Carregar variáveis do .env
 // builder.Services.AddDbContext<AppDbContext>(options =>
 //     options.UseNpgsql(pgSqlString));
 
-var mySqlString = Environment.GetEnvironmentVariable("MYSQL_URL");
+var mySqlString = Environment.GetEnvironmentVariable("MYSQL_URL");  
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseMySql(mySqlString, ServerVersion.AutoDetect(mySqlString))
 );
@@ -37,6 +46,10 @@ builder.Services.AddScoped<IBrandService, BrandService>();
 
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
+
+builder.Services.AddScoped<IImageService, ImageService>();
+
+builder.Services.AddScoped<IPaymentService, PaymentService>();
 
 builder.Services.AddCors(options =>
 {

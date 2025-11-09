@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Ecommerce.DTOs;
 using Ecommerce.Interface;
 using Ecommerce.Models;
@@ -11,91 +12,40 @@ namespace Ecommerce.Services
     public class CategoryService : ICategoryService
     {
         private readonly ICategoryRepository _categoryRepository;
+        private readonly IMapper _mapper;
 
-        public CategoryService(ICategoryRepository categoryRepository)
+        public CategoryService(ICategoryRepository categoryRepository, IMapper mapper)
         {
             _categoryRepository = categoryRepository;
+            _mapper = mapper;
         }
 
         public void DeleteCategory(Guid id)
         {
-            var category = _categoryRepository.GetCategoryById(id);
+            var category = _categoryRepository.GetById(id);
             if (category == null)
             {
                 throw new ArgumentException("Categoria não encontrada.");
             }
-            _categoryRepository.DeleteCategory(id);
+            _categoryRepository.Remove(id);
         }
 
         public List<CategoryDTO> GetCategories(int pageNumber, int pageQuantity)
         {
-            var categories = _categoryRepository.GetCategories(pageNumber, pageQuantity);
+            var categories = _categoryRepository.GetAll(pageNumber, pageQuantity);
 
-            var categoryDtos = categories
-                .Select(cat => new CategoryDTO
-                {
-                    Id = cat.Id,
-                    Nome = cat.Nome,
-                    Produtos = cat
-                        .Produtos?.Select(prod => new CarDTO
-                        {
-                            Nome = prod.Nome,
-                            Preco = prod.Preco,
-                            Descricao = prod.Descricao,
-                            Estoque = prod.Estoque,
-                            Ano = prod.Ano,
-                            ImagemUrl = prod.ImagemUrl,
-                            CategoriaId = prod.CategoriaId,
-                            MarcaId = prod.MarcaId,
-
-                            Marca =
-                                prod.Marca == null
-                                    ? null
-                                    : new BrandDTO
-                                    {
-                                        Nome = prod.Marca.Nome,
-                                        ImagemURL = prod.Marca.ImagemURL,
-                                    },
-                        })
-                        .ToList(),
-                })
-                .ToList();
-
-            return categoryDtos;
+            return _mapper.Map<List<CategoryDTO>>(categories);
         }
 
         public CategoryDTO GetCategoryById(Guid id)
         {
-            var category = _categoryRepository.GetCategoryById(id);
+            var category = _categoryRepository.GetById(id);
             if (category == null)
             {
                 throw new ArgumentException("Categoria não encontrada.");
             }
 
-            var categoryDto = new CategoryDTO
-            {
-                Nome = category.Nome,
-                Produtos = category
-                    .Produtos?.Select(prod => new CarDTO
-                    {
-                        Nome = prod.Nome,
-                        Preco = prod.Preco,
-                        Ano = prod.Ano,
-                        ImagemUrl = prod.ImagemUrl,
-                        MarcaId = prod.MarcaId,
-                        Marca =
-                            prod.Marca == null
-                                ? null
-                                : new BrandDTO
-                                {
-                                    Nome = prod.Marca.Nome,
-                                    ImagemURL = prod.Marca.ImagemURL,
-                                },
-                    })
-                    .ToList(),
-            };
-
-            return categoryDto;
+            return _mapper.Map<CategoryDTO>(category);
         }
 
         public Category PostCategory(CategoryDTO category)
@@ -105,16 +55,16 @@ namespace Ecommerce.Services
                 throw new ArgumentException("O nome da category é obrigatório.");
             }
             var newCategory = new Category { Nome = category.Nome };
-            return _categoryRepository.PostCategory(newCategory);
+            return _categoryRepository.Add(newCategory);
         }
 
         public void UpdateCategory(Category category)
         {
-            var existingCategory = _categoryRepository.GetCategoryById(category.Id);
+            var existingCategory = _categoryRepository.GetById(category.Id);
             if (existingCategory != null)
             {
                 existingCategory.Nome = category.Nome;
-                _categoryRepository.UpdateCategory(existingCategory);
+                _categoryRepository.Update(existingCategory);
             }
             else
             {

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Ecommerce.DTOs;
 using Ecommerce.Interface;
 using Ecommerce.Models;
@@ -11,37 +12,31 @@ namespace Ecommerce.Services
     public class UserService : IUserService
     {
         private readonly IUserRepository _usuarioRepository;
+        private readonly IMapper _mapper;
 
-        public UserService(IUserRepository usuarioRepository)
+        public UserService(IUserRepository usuarioRepository, IMapper mapper)
         {
             _usuarioRepository = usuarioRepository;
+            _mapper = mapper;
         }
 
-        public User PostUser(UserDTO userDTO)
+        public User PostUser(User user)
         {
             if (
-                string.IsNullOrEmpty(userDTO.Nome)
-                || string.IsNullOrEmpty(userDTO.Email)
-                || string.IsNullOrEmpty(userDTO.Senha)
+                string.IsNullOrEmpty(user.Nome)
+                || string.IsNullOrEmpty(user.Email)
+                || string.IsNullOrEmpty(user.Senha)
             )
             {
                 throw new ArgumentException("Nome, Email e Senha são obrigatórios.");
             }
-            return _usuarioRepository.PostUser(userDTO);
+            return _usuarioRepository.PostUser(user);
         }
 
         public List<UserDTO> GetUsers()
         {
             var users = _usuarioRepository.GetUsers();
-            var userDtos = users
-                .Select(u => new UserDTO
-                {
-                    Nome = u.Nome,
-                    Email = u.Email,
-                    Senha = u.Senha,
-                })
-                .ToList();
-            return userDtos;
+            return _mapper.Map<List<UserDTO>>(users);
         }
     }
 }
