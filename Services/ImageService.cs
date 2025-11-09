@@ -39,7 +39,7 @@ namespace Ecommerce.Services
             {
                 imageFile.CopyTo(stream);
             }
-            var url = $"/imagens_interior/{nomeArquivo}";
+            var url = $"/imagensInterior/{nomeArquivo}";
             return url;
         }
 
@@ -54,7 +54,7 @@ namespace Ecommerce.Services
             {
                 imageFile.CopyTo(stream);
             }
-            var url = $"/imagens_motor/{nomeArquivo}";
+            var url = $"/imagensMotor/{nomeArquivo}";
             return url;
         }
 
