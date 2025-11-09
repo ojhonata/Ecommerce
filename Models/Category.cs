@@ -14,6 +14,6 @@ namespace Ecommerce.Models
         [Required(ErrorMessage = "O nome da categoria é obrigatório.")]
         public string Nome { get; set; }
 
-        public virtual ICollection<Car> Produtos { get; set; }
+        public virtual ICollection<Car>? Produtos { get; set; }
     }
 }

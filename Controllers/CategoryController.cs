@@ -58,7 +58,7 @@ namespace Ecommerce.Controllers
             try
             {
                 var category = _categoryService.PostCategory(categoryDto);
-                return CreatedAtRoute("GetById", new { id = category.Id }, category);
+                return CreatedAtRoute("GetCategoryById", new { id = category.Id }, category);
             }
             catch (Exception ex)
             {

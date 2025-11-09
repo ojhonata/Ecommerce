@@ -32,10 +32,17 @@ namespace Ecommerce.Services
         public Car PostCar(CreateCarDTO car)
         {
             var urlImage = _imageService.ImageSave(car.Imagem);
+            var urlImageInterior = _imageService.IamgeInternalSave(car.ImagemInterior);
+            var urlImageMotor = _imageService.ImageEngineSave(car.ImagemMotor);
+            var urlVideoDemo = _imageService.VideoSave(car.VideoDemoUrl);
+
 
             var newCar = _mapper.Map<Car>(car);
             newCar.Id = Guid.NewGuid();
             newCar.ImagemUrl = urlImage;
+            newCar.ImagemInteriorUrl = urlImageInterior;
+            newCar.ImagemMotorUrl = urlImageMotor;
+            newCar.VideoDemoUrl = urlVideoDemo;
 
             _carRepository.PostCar(newCar);
 

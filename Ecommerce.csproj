@@ -21,4 +21,9 @@
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="9.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="wwwroot\imagensMotor\" />
+    <Folder Include="wwwroot\imagensInterior\" />
+    <Folder Include="wwwroot\videos\" />
+  </ItemGroup>
 </Project>

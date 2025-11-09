@@ -4,9 +4,15 @@ using Ecommerce.Interface;
 using Ecommerce.Mapping;
 using Ecommerce.Repository;
 using Ecommerce.Services;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.Configure<FormOptions>(options =>
+{
+    options.MultipartBodyLengthLimit = 1024 * 1024 * 200; // 200mb
+});
 
 // Add services to the   container.
 

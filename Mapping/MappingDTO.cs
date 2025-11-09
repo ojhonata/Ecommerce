@@ -9,7 +9,9 @@ namespace Ecommerce.Mapping
         public MappingDTO()
         {
             CreateMap<Car, CarDTO>();
+            CreateMap<CreateCarDTO, Car>();
             CreateMap<Brand, BrandDTO>();
+            CreateMap<BrandImgDTO, Brand>();
             CreateMap<Category, CategoryDTO>();
             CreateMap<User, UserDTO>();
         }

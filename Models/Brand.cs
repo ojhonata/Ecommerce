@@ -17,6 +17,6 @@ namespace Ecommerce.Models
         [DataType(DataType.ImageUrl)]
         public string ImagemURL { get; set; }
 
-        public virtual ICollection<Car> Produtos { get; set; }
+        public virtual ICollection<Car>? Produtos { get; set; }
     }
 }
