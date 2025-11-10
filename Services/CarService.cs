@@ -15,12 +15,14 @@ namespace Ecommerce.Services
         private readonly ICarRepository _carRepository;
         private readonly IMapper _mapper;
         private readonly IImageService _imageService;
+        private readonly ICloudinaryService _cloudinaryService;
 
-        public CarService(ICarRepository carRepository, IMapper mapper, IImageService imageService)
+        public CarService(ICarRepository carRepository, IMapper mapper, IImageService imageService, ICloudinaryService cloudinaryService)
         {
             _carRepository = carRepository;
             _mapper = mapper;
             _imageService = imageService;
+            _cloudinaryService = cloudinaryService;
         }
 
         public List<CarDTO> GetCars(int pageNumber, int pageQuantity)
@@ -46,6 +48,24 @@ namespace Ecommerce.Services
 
             _carRepository.PostCar(newCar);
 
+            return newCar;
+        }
+
+        public Car PostCarCloudinary(CreateCarDTO car)
+        {
+            var urlImage = _cloudinaryService.UploadImage(car.Imagem);
+            var urlImageInterior = _cloudinaryService.UploadImage(car.ImagemInterior);
+            var urlImageMotor = _cloudinaryService.UploadImage(car.ImagemMotor);
+            var urlVideoDemo = _cloudinaryService.UploadVideo(car.VideoDemoUrl);
+
+            var newCar = _mapper.Map<Car>(car);
+            newCar.Id = Guid.NewGuid();
+            newCar.ImagemUrl = urlImage;
+            newCar.ImagemInteriorUrl = urlImageInterior;
+            newCar.ImagemMotorUrl = urlImageMotor;
+            newCar.VideoDemoUrl = urlVideoDemo;
+
+            _carRepository.PostCar(newCar);
             return newCar;
         }
 

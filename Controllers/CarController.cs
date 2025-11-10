@@ -15,10 +15,12 @@ namespace Ecommerce.Controllers
     public class CarController : ControllerBase
     {
         private readonly ICarService _carService;
+        private readonly ICloudinaryService _cloudinaryService;
 
-        public CarController(ICarService carService)
+        public CarController(ICarService carService, ICloudinaryService cloudinaryService)
         {
             _carService = carService;
+            _cloudinaryService = cloudinaryService;
         }
 
         [HttpGet("GetCar")]
@@ -60,6 +62,21 @@ namespace Ecommerce.Controllers
             {
                 var car = _carService.PostCar(carDto);
                 return CreatedAtRoute(nameof(GetCarById), new { id = car.Id }, car);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
+        [HttpPost("PostCarCloudinary")]
+        public IActionResult PostCarCloudinary([FromForm] CreateCarDTO dto)
+        {
+            try
+            {
+                var car = _carService.PostCarCloudinary(dto);
+                return CreatedAtRoute(nameof(GetCarById), new { id = car.Id }, car);
+
             }
             catch (Exception ex)
             {

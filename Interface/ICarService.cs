@@ -10,6 +10,7 @@ namespace Ecommerce.Interface
     public interface ICarService
     {
         public Car PostCar(CreateCarDTO car);
+        public Car PostCarCloudinary(CreateCarDTO car);
         public Car GetCarById(Guid id);
         public List<CarDTO> GetCars(int pageNumber, int pageQuantity);
         public Car PostCar(Car car);
