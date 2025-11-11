@@ -21,5 +21,6 @@ namespace Ecommerce.Models
         [Required(ErrorMessage = "A senha é obrigatória.")]
         [DataType(DataType.Password)]
         public string Senha { get; set; }
+        public string Role { get; set; }
     }
 }
