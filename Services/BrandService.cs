@@ -13,16 +13,18 @@ namespace Ecommerce.Services
     {
         private readonly IBrandRepository _brandRepository;
         private readonly IMapper _mapper;
-        private readonly IImageService _imageService;    
+        private readonly IImageService _imageService;
+        private readonly ICloudinaryService _cloudinaryService;
 
-        public BrandService(IBrandRepository brandRepository, IMapper mapper, IImageService imageService)
+        public BrandService(IBrandRepository brandRepository, IMapper mapper, IImageService imageService, ICloudinaryService cloudinaryService)
         {
             _brandRepository = brandRepository;
             _mapper = mapper;
             _imageService = imageService;
+            _cloudinaryService = cloudinaryService;
         }
 
-        public Brand PostBrand(BrandImgDTO dto)
+        public Brand PostBrand(CreateBrandDto dto)
         {
             var url = _imageService.ImageSave(dto.Imagem);
 
@@ -69,6 +71,19 @@ namespace Ecommerce.Services
             }
             var newBrand = new BrandDTO { Nome = brand.Nome, ImagemURL = brand.ImagemURL };
             return _brandRepository.AddFromDTO(newBrand);
+        }
+
+        public Brand PostBrandCloudinary(CreateBrandDto dto)
+        {
+            var url = _cloudinaryService.UploadImage(dto.Imagem);
+            var newBrand = _mapper.Map<Brand>(dto);
+
+            newBrand.Id = Guid.NewGuid();
+            newBrand.ImagemURL = url;
+            _brandRepository.Add(newBrand);
+
+            return newBrand;
+
         }
 
         public void UpdateBrand(Brand brand)

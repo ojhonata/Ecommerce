@@ -49,11 +49,25 @@ namespace Ecommerce.Controllers
         }
 
         [HttpPost("AddBrand")]
-        public ActionResult<Brand> PostMarca([FromForm] BrandImgDTO brandDto)
+        public ActionResult<Brand> PostMarca([FromForm] CreateBrandDto brandDto)
         {
             try
             {
                 var brand = _brandService.PostBrand(brandDto);
+                return CreatedAtAction(nameof(GetBrandById), new { id = brand.Id }, brand);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
+        [HttpPost("AddCloudinary")]
+        public ActionResult<Brand> PostBrandCloudinary([FromForm] CreateBrandDto brandDto)
+        {
+            try
+            {
+                var brand = _brandService.PostBrandCloudinary(brandDto);
                 return CreatedAtAction(nameof(GetBrandById), new { id = brand.Id }, brand);
             }
             catch (Exception ex)

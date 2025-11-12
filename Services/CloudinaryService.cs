@@ -9,9 +9,9 @@ namespace Ecommerce.Services
         private readonly Cloudinary _cloudinary;
         public CloudinaryService(IConfiguration config)
         {
-            var cloudName = config["CloudinarySettings:CloudName"];
-            var apiKey = config["CloudinarySettings:ApiKey"];
-            var apiSecret = config["CloudinarySettings:ApiSecret"];
+            var cloudName = Environment.GetEnvironmentVariable("CloudName");
+            var apiKey = Environment.GetEnvironmentVariable("ApiKey");
+            var apiSecret = Environment.GetEnvironmentVariable("ApiSecret");
 
             var account = new Account(cloudName, apiKey, apiSecret);
             _cloudinary = new Cloudinary(account);

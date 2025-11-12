@@ -12,7 +12,7 @@ namespace Ecommerce.DTOs
         public string ImagemURL { get; set; }
     }
 
-    public class BrandImgDTO
+    public class CreateBrandDto
     {
         public string Nome { get; set; }
         public IFormFile Imagem { get; set; }
