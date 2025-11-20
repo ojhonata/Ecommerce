@@ -29,7 +29,7 @@ namespace Ecommerce.Repository
             }
             else
             {
-                throw new ArgumentException("Produto não encontrado.");
+                throw new ArgumentException("Car not found.");
             }
         }
 
@@ -60,7 +60,7 @@ namespace Ecommerce.Repository
             var exisitngCar = _context.Cars.Find(car.Id);
             if (exisitngCar != null)
             {
-                throw new ArgumentException("Produto não encontrado.");
+                throw new ArgumentException("cra not found.");
             }
             
             _context.Entry(exisitngCar).CurrentValues.SetValues(car);

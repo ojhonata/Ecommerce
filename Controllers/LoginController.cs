@@ -27,7 +27,7 @@ namespace Ecommerce.Controllers
 
                 if (user == null || user.Password != dto.Password)
                 {
-                    return Unauthorized(new { message = "Email ou senha inválidos." });
+                    return Unauthorized(new { message = "Invalid email address or password." });
                 }
 
                 var token = TokenService.GenerateToken(user);

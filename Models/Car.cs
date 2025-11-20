@@ -7,7 +7,7 @@ namespace Ecommerce.Models
     public class Car
     {
         public Guid Id { get; set; }
-        [Required(ErrorMessage = "O nome do carro é obrigatório.")]
+        [Required(ErrorMessage = "The car's name is required.")]
         public string Name { get; set; }
         [DataType(DataType.Currency)]
         public decimal Price { get; set; }

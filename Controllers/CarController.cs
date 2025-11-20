@@ -46,7 +46,7 @@ namespace Ecommerce.Controllers
                 var produto = _carService.GetCarById(id);
                 if (produto == null)
                 {
-                    return NotFound(new { message = "Produto não encontrado." });
+                    return NotFound(new { message = "Produto not found." });
                 }
                 return Ok(produto);
             }
@@ -78,12 +78,12 @@ namespace Ecommerce.Controllers
         {
             if (id != car.Id)
             {
-                return BadRequest(new { message = "ID do car inválido." });
+                return BadRequest(new { message = "Invalid car ID." });
             }
             try
             {
                 _carService.UpdateProduto(car);
-                return Ok(new { message = "Produto atualizado com sucesso." });
+                return Ok(new { message = "Product updated successfully." });
             }
             catch (Exception ex)
             {
@@ -98,7 +98,7 @@ namespace Ecommerce.Controllers
             try
             {
                 _carService.DeleteCar(id);
-                return Ok(new { message = "Produto deletado com sucesso." });
+                return Ok(new { message = "Product successfully deleted." });
             }
             catch (Exception ex)
             {

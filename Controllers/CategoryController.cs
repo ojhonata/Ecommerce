@@ -74,12 +74,12 @@ namespace Ecommerce.Controllers
         {
             if (id != category.Id)
             {
-                return BadRequest(new { message = "ID da category não corresponde." });
+                return BadRequest(new { message = "The category ID does not match." });
             }
             try
             {
                 _categoryService.UpdateCategory(category);
-                return Ok(new { message = "Category atualizada com sucesso." });
+                return Ok(new { message = "Category updated successfully." });
             }
             catch (Exception ex)
             {
@@ -93,12 +93,12 @@ namespace Ecommerce.Controllers
         {
             if (id == Guid.Empty)
             {
-                return BadRequest(new { message = "ID da category inválido." });
+                return BadRequest(new { message = "Invalid category ID." });
             }
             try
             {
                 _categoryService.DeleteCategory(id);
-                return Ok(new { message = "Category deletada com sucesso." });
+                return Ok(new { message = "Category successfully deleted." });
             }
             catch (Exception ex)
             {

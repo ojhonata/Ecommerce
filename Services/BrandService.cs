@@ -28,7 +28,7 @@ namespace Ecommerce.Services
             var brand = _brandRepository.GetById(id);
             if (brand == null)
             {
-                throw new ArgumentException("Brand não encontrada.");
+                throw new ArgumentException("Brand not found.");
             }
             _brandRepository.Delete(id);
         }
@@ -44,7 +44,7 @@ namespace Ecommerce.Services
             var brand = _brandRepository.GetById(id);
             if (brand == null)
             {
-                throw new ArgumentException("Brand não encontrada.");
+                throw new ArgumentException("Brand not found.");
             }
             return brand;
         }
@@ -58,7 +58,7 @@ namespace Ecommerce.Services
             var newBrand = _mapper.Map<Brand>(dto);
 
             newBrand.Id = Guid.NewGuid();
-            newBrand.ImageURL = urlImage;
+            newBrand.ImageUrl = urlImage;
             newBrand.BgBrand = urlBgBrand;
             newBrand.LogoBrand = urlLogoBrand;
 
@@ -74,12 +74,12 @@ namespace Ecommerce.Services
             if (existingBrand != null)
             {
                 existingBrand.Name = brand.Name;
-                existingBrand.ImageURL = brand.ImageURL;
+                existingBrand.ImageUrl = brand.ImageUrl;
                 _brandRepository.Update(existingBrand);
             }
             else
             {
-                throw new ArgumentException("Brand não encontrada.");
+                throw new ArgumentException("Brand not found.");
             }
         }
     }

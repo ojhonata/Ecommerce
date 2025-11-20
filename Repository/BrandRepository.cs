@@ -29,7 +29,7 @@ namespace Ecommerce.Repository
             }
             else
             {
-                throw new ArgumentException("Brand não encontrada.");
+                throw new ArgumentException("Brand not found.");
             }
         }
 
@@ -46,19 +46,19 @@ namespace Ecommerce.Repository
         {
             if (Guid.Empty == id)
             {
-                throw new ArgumentException("ID inválido.");
+                throw new ArgumentException("ID invalid.");
             }
             var brand = _context.Brands.FirstOrDefault(m => m.Id == id);
             if (brand == null)
             {
-                throw new ArgumentException("Brand não encontrada.");
+                throw new ArgumentException("Brand not found.");
             }
             return brand;
         }
 
         public Brand AddFromDTO(BrandDTO brand)
         {
-            var newBrand = new Brand { Name = brand.Name, ImageURL = brand.ImageURL };
+            var newBrand = new Brand { Name = brand.Name, ImageUrl = brand.ImageUrl };
             _context.Brands.Add(newBrand);
             _context.SaveChanges();
             return newBrand;
@@ -76,7 +76,7 @@ namespace Ecommerce.Repository
             var existing = _context.Brands.Find(brand.Id);
             if (existing != null)
             {
-                throw new ArgumentException("Brand não encontrada.");
+                throw new ArgumentException("Brand not found.");
             }
 
             _context.Entry(existing).CurrentValues.SetValues(brand);

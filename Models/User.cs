@@ -11,16 +11,23 @@ namespace Ecommerce.Models
     public class User
     {
         public Guid Id { get; set; }
-        [Required(ErrorMessage = "O nome é obrigatório.")]
+        [Required(ErrorMessage = "The name is required.")]
         public string Name { get; set; }
 
-        [Required(ErrorMessage = "O email é obrigatório.")]
+        [Required(ErrorMessage = "Email is required.")]
         [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
 
-        [Required(ErrorMessage = "A senha é obrigatória.")]
+        [Required(ErrorMessage = "A password is required.")]
         [DataType(DataType.Password)]
         public string Password { get; set; }
-        public string Role { get; set; }
+        public string Cep { get; set; }
+        public int Number { get; set; }
+        public string Road { get; set; }
+        public string Neighborhood { get; set; }
+        public string City { get; set; }
+        public string State { get; set; }
+        public string Role { get; set; } = "user";
+
     }
 }

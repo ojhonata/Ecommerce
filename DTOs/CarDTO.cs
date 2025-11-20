@@ -11,7 +11,7 @@ namespace Ecommerce.DTOs
         public string Engine { get; set; }
         public int Speed { get; set; }
         public string ImageUrl { get; set; }
-        public string InnerImageURL { get; set; }
+        public string InnerImageUrl { get; set; }
         public string ImageEngineUrl { get; set; }
         public string VideoDemoUrl { get; set; }
         public Guid CategoryId { get; set; }

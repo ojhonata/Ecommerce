@@ -52,7 +52,7 @@ namespace Ecommerce.Services
             var produto = _carRepository.GetById(id);
             if (produto == null)
             {
-                throw new ArgumentException("Produto não encontrado.");
+                throw new ArgumentException("Car not found.");
             }
             return produto;
         }
@@ -62,7 +62,7 @@ namespace Ecommerce.Services
             var produto = _carRepository.GetById(id);
             if (produto == null)
             {
-                throw new ArgumentException("Produto não encontrado.");
+                throw new ArgumentException("Car not found.");
             }
             _carRepository.Remove(id);
         }
@@ -72,19 +72,19 @@ namespace Ecommerce.Services
             var existingCar = _carRepository.GetById(car.Id);
             if (existingCar == null)
             {
-                throw new ArgumentException("Produto não encontrado.");
+                throw new ArgumentException("Car not found.");
             }
             if (string.IsNullOrEmpty(car.Name))
             {
-                throw new ArgumentException("O nome do car é obrigatório.");
+                throw new ArgumentException("The car's name is required.");
             }
             if (car.Price <= 0)
             {
-                throw new ArgumentException("O preço do car deve ser maior que zero.");
+                throw new ArgumentException("The price of the car must be greater than zero.");
             }
             if (car.Stock < 0)
             {
-                throw new ArgumentException("O estoque do car não pode ser negativo.");
+                throw new ArgumentException("The car inventory cannot be negative.");
             }
             _carRepository.Update(car);
         }

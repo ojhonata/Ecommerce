@@ -39,7 +39,7 @@ namespace Ecommerce.Controllers
                 var brand = _brandService.GetBrandById(id);
                 if (brand == null)
                 {
-                    return NotFound(new { message = "Brand não encontrada." });
+                    return NotFound(new { message = "Brand not found." });
                 }
                 return Ok(brand);
             }
@@ -70,12 +70,12 @@ namespace Ecommerce.Controllers
         {
             if (id != brand.Id)
             {
-                return BadRequest(new { message = "ID da brand não corresponde." });
+                return BadRequest(new { message = "The brand ID does not match." });
             }
             try
             {
                 _brandService.UpdateBrand(brand);
-                return Ok(new { message = "Brand atualizada com sucesso." });
+                return Ok(new { message = "Brand updated successfully." });
             }
             catch (Exception ex)
             {
@@ -90,7 +90,7 @@ namespace Ecommerce.Controllers
             try
             {
                 _brandService.DeleteBrand(id);
-                return Ok(new { message = "Brand deletada com sucesso." });
+                return Ok(new { message = "Brand successfully deleted." });
             }
             catch (Exception ex)
             {

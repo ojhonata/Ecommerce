@@ -13,11 +13,11 @@ namespace Ecommerce.Models
     {
         public Guid Id { get; set; }
 
-        [Required(ErrorMessage = "O nome da marca é obrigatório.")]
+        [Required(ErrorMessage = "The brand name is required.")]
         public string Name { get; set; }
         public string Description { get; set; }
         [DataType(DataType.ImageUrl)]
-        public string ImageURL { get; set; }
+        public string ImageUrl { get; set; }
         public string BgBrand { get; set; }
         public string LogoBrand { get; set; }
 

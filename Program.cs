@@ -89,6 +89,8 @@ builder.Services.AddScoped<IPaymentService, PaymentService>();
 
 builder.Services.AddScoped<ICloudinaryService, CloudinaryService>();
 
+builder.Services.AddHttpClient<IViaCepService, ViaCepService>();
+
 var key = Encoding.ASCII.GetBytes(Environment.GetEnvironmentVariable("TokenSecret"));
 
 builder.Services.AddAuthentication(x =>

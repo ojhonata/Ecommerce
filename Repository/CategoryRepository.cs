@@ -28,7 +28,7 @@ namespace Ecommerce.Repository
             }
             else
             {
-                throw new ArgumentException("Category não encontrada.");
+                throw new ArgumentException("Category not found.");
             }
         }
 
@@ -45,12 +45,12 @@ namespace Ecommerce.Repository
         {
             if (id == Guid.Empty)
             {
-                throw new ArgumentException("ID inválido.");
+                throw new ArgumentException("ID invalid.");
             }
             var categoria = _context.Categories.FirstOrDefault(c => c.Id == id);
             if (categoria == null)
             {
-                throw new ArgumentException("Category não encontrada.");
+                throw new ArgumentException("Category not found.");
             }
             return categoria;
         }
@@ -68,7 +68,7 @@ namespace Ecommerce.Repository
             var existing = _context.Categories.Find(category.Id);
             if (existing != null)
             {
-                throw new ArgumentException("Category não encontrada.");
+                throw new ArgumentException("Category not found.");
             }
             
             _context.Entry(existing).CurrentValues.SetValues(category);

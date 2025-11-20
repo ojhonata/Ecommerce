@@ -23,20 +23,12 @@ namespace Ecommerce.Repository
             return _context.Users.Select(user => user).ToList();
         }
 
-        public User PostUser(UserDTO user)
+        public User PostUser(User user)
         {
-            var newUser = new User
-            {
-                Name = user.Name,
-                Email = user.Email,
-                Password = user.Password,
-                Role = user.Role
-            };
-
-            _context.Users.Add(newUser);
+            _context.Users.Add(user);
             _context.SaveChanges();
 
-            return newUser;
+            return user;
         }
 
         public User GetByEmail(string email)
