@@ -105,5 +105,19 @@ namespace Ecommerce.Controllers
                 return BadRequest(new { message = ex.Message });
             }
         }
+
+        [HttpGet("Filter")]
+        public IActionResult FilterCars([FromQuery] CarFilterDTO filter)
+        {
+            try
+            {
+                var result = _carService.FilterCars(filter);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
     }
 }

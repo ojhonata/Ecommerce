@@ -14,14 +14,12 @@ namespace Ecommerce.Services
     {
         private readonly ICarRepository _carRepository;
         private readonly IMapper _mapper;
-        private readonly IImageService _imageService;
         private readonly ICloudinaryService _cloudinaryService;
 
-        public CarService(ICarRepository carRepository, IMapper mapper, IImageService imageService, ICloudinaryService cloudinaryService)
+        public CarService(ICarRepository carRepository, IMapper mapper, ICloudinaryService cloudinaryService)
         {
             _carRepository = carRepository;
             _mapper = mapper;
-            _imageService = imageService;
             _cloudinaryService = cloudinaryService;
         }
 
@@ -89,6 +87,49 @@ namespace Ecommerce.Services
                 throw new ArgumentException("O estoque do car não pode ser negativo.");
             }
             _carRepository.Update(car);
+        }
+
+        public PageResponseDTO<CarDTO> FilterCars(CarFilterDTO filter)
+        {
+            var query = _carRepository.Query();
+
+            if (!string.IsNullOrWhiteSpace(filter.Name))
+                query = query.Where(c => c.Name.Contains(filter.Name));
+
+            if (filter.PriceMin.HasValue)
+                query = query.Where(c => c.Price >= filter.PriceMin.Value);
+
+            if (filter.PriceMax.HasValue)
+                query = query.Where(c => c.Price <= filter.PriceMax.Value);
+
+            if (filter.YearMin.HasValue)
+                query = query.Where(c => c.Year >= filter.YearMin.Value);
+
+            if (filter.YearMax.HasValue)
+                query = query.Where(c => c.Year <= filter.YearMax.Value);
+
+            if (filter.BrandId.HasValue)
+                query = query.Where(c => c.BrandId == filter.BrandId.Value);
+
+            if (filter.CategoryId.HasValue)
+                query = query.Where(c => c.CategoryId == filter.CategoryId.Value);
+
+            var total = query.Count();
+
+            var cars = query
+                .Skip((filter.PageNumber - 1) * filter.PageSize)
+                .Take(filter.PageSize)
+                .ToList();
+
+            var dtoList = _mapper.Map<List<CarDTO>>(cars);
+
+            return new PageResponseDTO<CarDTO>
+            {
+                Items = dtoList,
+                PageNumber = filter.PageNumber,
+                PageSize = filter.PageSize,
+                TotalItems = total
+            };
         }
     }
 }

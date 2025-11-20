@@ -13,10 +13,10 @@ using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.Configure<FormOptions>(options =>
-{
-    options.MultipartBodyLengthLimit = 1024 * 1024 * 200; // 200mb
-});
+//builder.Services.Configure<FormOptions>(options =>
+//{
+//    options.MultipartBodyLengthLimit = 1024 * 1024 * 200; // 200mb
+//});
 
 builder.WebHost.ConfigureKestrel(options =>
 {
@@ -85,8 +85,6 @@ builder.Services.AddScoped<IBrandService, BrandService>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 
-builder.Services.AddScoped<IImageService, ImageService>();
-
 builder.Services.AddScoped<IPaymentService, PaymentService>();
 
 builder.Services.AddScoped<ICloudinaryService, CloudinaryService>();
@@ -123,7 +121,6 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
-app.UseStaticFiles();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

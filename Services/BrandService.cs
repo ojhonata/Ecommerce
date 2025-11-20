@@ -13,14 +13,12 @@ namespace Ecommerce.Services
     {
         private readonly IBrandRepository _brandRepository;
         private readonly IMapper _mapper;
-        private readonly IImageService _imageService;
         private readonly ICloudinaryService _cloudinaryService;
 
-        public BrandService(IBrandRepository brandRepository, IMapper mapper, IImageService imageService, ICloudinaryService cloudinaryService)
+        public BrandService(IBrandRepository brandRepository, IMapper mapper, ICloudinaryService cloudinaryService)
         {
             _brandRepository = brandRepository;
             _mapper = mapper;
-            _imageService = imageService;
             _cloudinaryService = cloudinaryService;
         }
 

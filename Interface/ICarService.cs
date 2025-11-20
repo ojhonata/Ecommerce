@@ -14,5 +14,6 @@ namespace Ecommerce.Interface
         public List<CarDTO> GetCars(int pageNumber, int pageQuantity);
         void UpdateProduto(Car car);
         void DeleteCar(Guid id);
+        public PageResponseDTO<CarDTO> FilterCars(CarFilterDTO filter);
     }
 }

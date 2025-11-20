@@ -11,3 +11,5 @@ bin/
 Storage/
 
 .config/
+
+wwwroot/

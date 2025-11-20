@@ -14,5 +14,6 @@ namespace Ecommerce.Interface
         public Car Add(Car car);
         void Update(Car car);
         void Remove(Guid id);
+        IQueryable<Car> Query();
     }
 }

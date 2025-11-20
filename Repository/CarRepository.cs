@@ -66,5 +66,13 @@ namespace Ecommerce.Repository
             _context.Entry(exisitngCar).CurrentValues.SetValues(car);
             _context.SaveChanges();
         }
+
+        public IQueryable<Car> Query()
+        {
+            return _context.Cars
+                .Include(c => c.Brand)
+                .Include(c => c.Category)
+                .AsQueryable();
+        }
     }
 }
