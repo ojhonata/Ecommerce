@@ -20,15 +20,15 @@ namespace Ecommerce.Services
             _mapper = mapper;
         }
 
-        public User PostUser(User user)
+        public User PostUser(UserDTO user)
         {
             if (
-                string.IsNullOrEmpty(user.Nome)
+                string.IsNullOrEmpty(user.Name)
                 || string.IsNullOrEmpty(user.Email)
-                || string.IsNullOrEmpty(user.Senha)
+                || string.IsNullOrEmpty(user.Password)
             )
             {
-                throw new ArgumentException("Nome, Email e Senha são obrigatórios.");
+                throw new ArgumentException("Name, Email e Password são obrigatórios.");
             }
             return _usuarioRepository.PostUser(user);
         }
@@ -37,6 +37,11 @@ namespace Ecommerce.Services
         {
             var users = _usuarioRepository.GetUsers();
             return _mapper.Map<List<UserDTO>>(users);
+        }
+
+        public User GetByEmail(string email)
+        {
+            return _usuarioRepository.GetByEmail(email);
         }
     }
 }

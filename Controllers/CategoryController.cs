@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Ecommerce.DTOs;
 using Ecommerce.Interface;
 using Ecommerce.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Ecommerce.Controllers
@@ -52,6 +53,7 @@ namespace Ecommerce.Controllers
             }
         }
 
+        [Authorize(Roles = "admin")]
         [HttpPost("AddCategory")]
         public ActionResult<Category> PostCategory([FromBody] CategoryDTO categoryDto)
         {
@@ -66,6 +68,7 @@ namespace Ecommerce.Controllers
             }
         }
 
+        [Authorize(Roles = "admin")]
         [HttpPut("{id:guid}", Name = "UpdateCategoiry")]
         public IActionResult UpdateCategory(Guid id, [FromBody] Category category)
         {
@@ -76,7 +79,7 @@ namespace Ecommerce.Controllers
             try
             {
                 _categoryService.UpdateCategory(category);
-                return Ok(new { message = "Categoria atualizada com sucesso." });
+                return Ok(new { message = "Category atualizada com sucesso." });
             }
             catch (Exception ex)
             {
@@ -84,6 +87,7 @@ namespace Ecommerce.Controllers
             }
         }
 
+        [Authorize(Roles = "admin")]
         [HttpDelete("{id:guid}", Name = "RemoveCategroy")]
         public IActionResult DeleteCategory(Guid id)
         {
@@ -94,7 +98,7 @@ namespace Ecommerce.Controllers
             try
             {
                 _categoryService.DeleteCategory(id);
-                return Ok(new { message = "Categoria deletada com sucesso." });
+                return Ok(new { message = "Category deletada com sucesso." });
             }
             catch (Exception ex)
             {

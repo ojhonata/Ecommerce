@@ -12,8 +12,8 @@ namespace Ecommerce.Models
     {
         public Guid Id { get; set; }
         [Required(ErrorMessage = "O nome da categoria é obrigatório.")]
-        public string Nome { get; set; }
+        public string Name { get; set; }
 
-        public virtual ICollection<Car>? Produtos { get; set; }
+        public virtual ICollection<Car>? Cars { get; set; }
     }
 }

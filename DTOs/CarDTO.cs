@@ -3,37 +3,37 @@ namespace Ecommerce.DTOs
     public class CarDTO
     {
         public Guid Id { get; set; }
-        public string Nome { get; set; }
-        public decimal Preco { get; set; }
-        public string Descricao { get; set; }
-        public int Estoque { get; set; }
-        public int Ano { get; set; }
-        public string Motor { get; set; }
-        public int Velocidade { get; set; }
-        public string ImagemUrl { get; set; }
-        public string ImagemInteriorUrl { get; set; }
-        public string ImagemMotorUrl { get; set; }
+        public string Name { get; set; }
+        public decimal Price { get; set; }
+        public string Description { get; set; }
+        public int Stock { get; set; }
+        public int Year { get; set; }
+        public string Engine { get; set; }
+        public int Speed { get; set; }
+        public string ImageUrl { get; set; }
+        public string InnerImageURL { get; set; }
+        public string ImageEngineUrl { get; set; }
         public string VideoDemoUrl { get; set; }
-        public Guid CategoriaId { get; set; }
-        public Guid MarcaId { get; set; }
+        public Guid CategoryId { get; set; }
+        public Guid BrandId { get; set; }
 
-        public BrandDTO Marca { get; set; }
+        public BrandDTO Brand { get; set; }
     }
 
     public class CreateCarDTO
     {
-        public string Nome { get; set; }
-        public decimal Preco { get; set; }
-        public string Descricao { get; set; }
-        public int Estoque { get; set; }
-        public int Ano { get; set; }
-        public string Motor { get; set; }
-        public int Velocidade { get; set; }
-        public IFormFile Imagem { get; set; }
-        public IFormFile ImagemInterior { get; set; }
-        public IFormFile ImagemMotor { get; set; }
+        public string Name { get; set; }
+        public decimal Price { get; set; }
+        public string Description { get; set; }
+        public int Stock { get; set; }
+        public int Year { get; set; }
+        public string Engine { get; set; }
+        public int Speed { get; set; }
+        public IFormFile Image { get; set; }
+        public IFormFile InnerImage { get; set; }
+        public IFormFile ImageEngine { get; set; }
         public IFormFile VideoDemoUrl { get; set; }
-        public Guid CategoriaId { get; set; }
-        public Guid MarcaId { get; set; }
+        public Guid CategoryId { get; set; }
+        public Guid BrandId { get; set; }
     }
 }

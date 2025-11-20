@@ -10,6 +10,7 @@ namespace Ecommerce.Interface
     public interface IUserService
     {
         public List<UserDTO> GetUsers();
-        public User PostUser(User user);
+        public User GetByEmail(string email);
+        public User PostUser(UserDTO user);
     }
 }

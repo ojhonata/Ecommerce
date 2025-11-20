@@ -36,7 +36,7 @@ namespace Ecommerce.Controllers
         }
 
         [HttpPost("PostUser")]
-        public IActionResult PostUsuario([FromBody] User user)
+        public IActionResult PostUsuario([FromBody] UserDTO user)
         {
             try
             {

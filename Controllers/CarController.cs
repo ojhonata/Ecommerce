@@ -6,6 +6,7 @@ using Ecommerce.Data;
 using Ecommerce.DTOs;
 using Ecommerce.Interface;
 using Ecommerce.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Ecommerce.Controllers
@@ -23,7 +24,7 @@ namespace Ecommerce.Controllers
             _cloudinaryService = cloudinaryService;
         }
 
-        [HttpGet("GetCar")]
+        [HttpGet("GetCars")]
         public IActionResult GetCars(int pageNumber = 1, int pageQuantity = 10)
         {
             try
@@ -55,22 +56,9 @@ namespace Ecommerce.Controllers
             }
         }
 
-        [HttpPost("AddCar")]
-        public ActionResult<Car> PostCar([FromForm] CreateCarDTO carDto)
-        {
-            try
-            {
-                var car = _carService.PostCar(carDto);
-                return CreatedAtRoute(nameof(GetCarById), new { id = car.Id }, car);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new { message = ex.Message });
-            }
-        }
-
-        [HttpPost("PostCarCloudinary")]
-        public IActionResult PostCarCloudinary([FromForm] CreateCarDTO dto)
+        [Authorize(Roles = "admin")]
+        [HttpPost("PostCar")]
+        public IActionResult PostCar([FromForm] CreateCarDTO dto)
         {
             try
             {
@@ -84,6 +72,7 @@ namespace Ecommerce.Controllers
             }
         }
 
+        [Authorize(Roles = "admin")]
         [HttpPut("{id:guid}", Name = "UpdateCar")]
         public IActionResult UpdateCar(Guid id, [FromBody] Car car)
         {
@@ -102,6 +91,7 @@ namespace Ecommerce.Controllers
             }
         }
 
+        [Authorize(Roles = "admin")]
         [HttpDelete("{id:guid}", Name = "RemoveCar")]
         public IActionResult DeleteCar(Guid id)
         {

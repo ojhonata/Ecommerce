@@ -8,13 +8,19 @@ namespace Ecommerce.DTOs
     public class BrandDTO
     {
         public Guid Id { get; set; }
-        public string Nome { get; set; }
-        public string ImagemURL { get; set; }
+        public string Name { get; set; }
+        public string ImageURL { get; set; }
+        public IFormFile BgBrand { get; set; }
+        public IFormFile LogoBrand { get; set; }
+        public string Description { get; set; }
     }
 
     public class CreateBrandDto
     {
-        public string Nome { get; set; }
-        public IFormFile Imagem { get; set; }
+        public string Name { get; set; }
+        public IFormFile Image { get; set; }
+        public IFormFile BgBrand { get; set; }
+        public IFormFile LogoBrand { get; set; }
+        public string Description { get; set; }
     }
 }

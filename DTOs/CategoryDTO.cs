@@ -9,9 +9,9 @@ namespace Ecommerce.DTOs
     public class CategoryDTO
     {
         public Guid Id { get; set; }
-        public string Nome { get; set; }
+        public string Name { get; set; }
 
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public List<CarDTO>? Produtos { get; set; }
+        public List<CarDTO>? Cars { get; set; }
     }
 }

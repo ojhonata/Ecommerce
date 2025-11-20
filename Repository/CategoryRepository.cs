@@ -23,21 +23,21 @@ namespace Ecommerce.Repository
             var category = GetById(id);
             if (category != null)
             {
-                _context.Categorias.Remove(category);
+                _context.Categories.Remove(category);
                 _context.SaveChanges();
             }
             else
             {
-                throw new ArgumentException("Categoria não encontrada.");
+                throw new ArgumentException("Category não encontrada.");
             }
         }
 
         public List<Category> GetAll(int pageNumber, int pageQuantity)
         {
             return _context
-                .Categorias.Skip((pageNumber - 1) * pageQuantity)
+                .Categories.Skip((pageNumber - 1) * pageQuantity)
                 .Take(pageQuantity)
-                .Include(c => c.Produtos)
+                .Include(c => c.Cars)
                 .ToList();
         }
 
@@ -47,28 +47,28 @@ namespace Ecommerce.Repository
             {
                 throw new ArgumentException("ID inválido.");
             }
-            var categoria = _context.Categorias.FirstOrDefault(c => c.Id == id);
+            var categoria = _context.Categories.FirstOrDefault(c => c.Id == id);
             if (categoria == null)
             {
-                throw new ArgumentException("Categoria não encontrada.");
+                throw new ArgumentException("Category não encontrada.");
             }
             return categoria;
         }
 
         public Category Add(Category category)
         {
-            var newCategories = new Category { Nome = category.Nome };
-            _context.Categorias.Add(newCategories);
+            var newCategories = new Category { Name = category.Name };
+            _context.Categories.Add(newCategories);
             _context.SaveChanges();
             return newCategories;
         }
 
         public void Update(Category category)
         {
-            var existing = _context.Categorias.Find(category.Id);
+            var existing = _context.Categories.Find(category.Id);
             if (existing != null)
             {
-                throw new ArgumentException("Categoria não encontrada.");
+                throw new ArgumentException("Category não encontrada.");
             }
             
             _context.Entry(existing).CurrentValues.SetValues(category);

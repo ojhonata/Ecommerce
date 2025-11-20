@@ -12,7 +12,6 @@ namespace Ecommerce.Interface
         public Car GetById(Guid id);
         public List<Car> GetAll(int pageNumber, int pageQuantity);
         public Car Add(Car car);
-        public Car PostCar(Car car);
         void Update(Car car);
         void Remove(Guid id);
     }

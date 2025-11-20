@@ -12,7 +12,7 @@ namespace Ecommerce.Models
     {
         public Guid Id { get; set; }
         [Required(ErrorMessage = "O nome é obrigatório.")]
-        public string Nome { get; set; }
+        public string Name { get; set; }
 
         [Required(ErrorMessage = "O email é obrigatório.")]
         [DataType(DataType.EmailAddress)]
@@ -20,7 +20,7 @@ namespace Ecommerce.Models
 
         [Required(ErrorMessage = "A senha é obrigatória.")]
         [DataType(DataType.Password)]
-        public string Senha { get; set; }
+        public string Password { get; set; }
         public string Role { get; set; }
     }
 }

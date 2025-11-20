@@ -31,41 +31,21 @@ namespace Ecommerce.Services
             return _mapper.Map<List<CarDTO>>(cars);
         }
 
-        public Car PostCar(CreateCarDTO car)
-        {
-            var urlImage = _imageService.ImageSave(car.Imagem);
-            var urlImageInterior = _imageService.IamgeInternalSave(car.ImagemInterior);
-            var urlImageMotor = _imageService.ImageEngineSave(car.ImagemMotor);
-            var urlVideoDemo = _imageService.VideoSave(car.VideoDemoUrl);
-
-
-            var newCar = _mapper.Map<Car>(car);
-            newCar.Id = Guid.NewGuid();
-            newCar.ImagemUrl = urlImage;
-            newCar.ImagemInteriorUrl = urlImageInterior;
-            newCar.ImagemMotorUrl = urlImageMotor;
-            newCar.VideoDemoUrl = urlVideoDemo;
-
-            _carRepository.PostCar(newCar);
-
-            return newCar;
-        }
-
         public Car PostCarCloudinary(CreateCarDTO car)
         {
-            var urlImage = _cloudinaryService.UploadImage(car.Imagem);
-            var urlImageInterior = _cloudinaryService.UploadImage(car.ImagemInterior);
-            var urlImageMotor = _cloudinaryService.UploadImage(car.ImagemMotor);
+            var urlImage = _cloudinaryService.UploadImage(car.Image);
+            var urlInnerImage = _cloudinaryService.UploadImage(car.InnerImage);
+            var urlImageEngine = _cloudinaryService.UploadImage(car.ImageEngine);
             var urlVideoDemo = _cloudinaryService.UploadVideo(car.VideoDemoUrl);
 
             var newCar = _mapper.Map<Car>(car);
             newCar.Id = Guid.NewGuid();
-            newCar.ImagemUrl = urlImage;
-            newCar.ImagemInteriorUrl = urlImageInterior;
-            newCar.ImagemMotorUrl = urlImageMotor;
+            newCar.ImageUrl = urlImage;
+            newCar.InnerImageUrl = urlInnerImage;
+            newCar.ImageEngineUrl = urlImageEngine;
             newCar.VideoDemoUrl = urlVideoDemo;
 
-            _carRepository.PostCar(newCar);
+            _carRepository.Add(newCar);
             return newCar;
         }
 
@@ -77,23 +57,6 @@ namespace Ecommerce.Services
                 throw new ArgumentException("Produto não encontrado.");
             }
             return produto;
-        }
-
-        public Car PostCar(Car car)
-        {
-            if (string.IsNullOrEmpty(car.Nome))
-            {
-                throw new ArgumentException("O nome do carro é obrigatório.");
-            }
-            if (car.Preco <= 0)
-            {
-                throw new ArgumentException("O preço do carro deve ser maior que zero.");
-            }
-            if (car.Estoque < 0)
-            {
-                throw new ArgumentException("O estoque do carro não pode ser negativo.");
-            }
-            return _carRepository.Add(car);
         }
 
         public void DeleteCar(Guid id)
@@ -113,15 +76,15 @@ namespace Ecommerce.Services
             {
                 throw new ArgumentException("Produto não encontrado.");
             }
-            if (string.IsNullOrEmpty(car.Nome))
+            if (string.IsNullOrEmpty(car.Name))
             {
                 throw new ArgumentException("O nome do car é obrigatório.");
             }
-            if (car.Preco <= 0)
+            if (car.Price <= 0)
             {
                 throw new ArgumentException("O preço do car deve ser maior que zero.");
             }
-            if (car.Estoque < 0)
+            if (car.Stock < 0)
             {
                 throw new ArgumentException("O estoque do car não pode ser negativo.");
             }

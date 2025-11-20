@@ -24,25 +24,13 @@ namespace Ecommerce.Services
             _cloudinaryService = cloudinaryService;
         }
 
-        public Brand PostBrand(CreateBrandDto dto)
-        {
-            var url = _imageService.ImageSave(dto.Imagem);
-
-            var newBrand = _mapper.Map<Brand>(dto);
-            newBrand.Id = Guid.NewGuid();
-            newBrand.ImagemURL = url;
-
-            _brandRepository.Add(newBrand);
-
-            return newBrand;
-        }
 
         public void DeleteBrand(Guid id)
         {
             var brand = _brandRepository.GetById(id);
             if (brand == null)
             {
-                throw new ArgumentException("Marca não encontrada.");
+                throw new ArgumentException("Brand não encontrada.");
             }
             _brandRepository.Delete(id);
         }
@@ -58,28 +46,24 @@ namespace Ecommerce.Services
             var brand = _brandRepository.GetById(id);
             if (brand == null)
             {
-                throw new ArgumentException("Marca não encontrada.");
+                throw new ArgumentException("Brand não encontrada.");
             }
             return brand;
         }
 
-        public Brand PostBrand(BrandDTO brand)
-        {
-            if (string.IsNullOrEmpty(brand.Nome) || string.IsNullOrEmpty(brand.ImagemURL))
-            {
-                throw new ArgumentException("O nome e a URL da imagem da brand são obrigatórios.");
-            }
-            var newBrand = new BrandDTO { Nome = brand.Nome, ImagemURL = brand.ImagemURL };
-            return _brandRepository.AddFromDTO(newBrand);
-        }
-
         public Brand PostBrandCloudinary(CreateBrandDto dto)
         {
-            var url = _cloudinaryService.UploadImage(dto.Imagem);
+            var urlImage = _cloudinaryService.UploadImage(dto.Image);
+            var urlBgBrand = _cloudinaryService.UploadImage(dto.BgBrand);
+            var urlLogoBrand = _cloudinaryService.UploadImage(dto.LogoBrand);
+
             var newBrand = _mapper.Map<Brand>(dto);
 
             newBrand.Id = Guid.NewGuid();
-            newBrand.ImagemURL = url;
+            newBrand.ImageURL = urlImage;
+            newBrand.BgBrand = urlBgBrand;
+            newBrand.LogoBrand = urlLogoBrand;
+
             _brandRepository.Add(newBrand);
 
             return newBrand;
@@ -91,13 +75,13 @@ namespace Ecommerce.Services
             var existingBrand = _brandRepository.GetById(brand.Id);
             if (existingBrand != null)
             {
-                existingBrand.Nome = brand.Nome;
-                existingBrand.ImagemURL = brand.ImagemURL;
+                existingBrand.Name = brand.Name;
+                existingBrand.ImageURL = brand.ImageURL;
                 _brandRepository.Update(existingBrand);
             }
             else
             {
-                throw new ArgumentException("Marca não encontrada.");
+                throw new ArgumentException("Brand não encontrada.");
             }
         }
     }

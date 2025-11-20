@@ -1,9 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Ecommerce.Models
 {
@@ -12,24 +8,24 @@ namespace Ecommerce.Models
     {
         public Guid Id { get; set; }
         [Required(ErrorMessage = "O nome do carro é obrigatório.")]
-        public string Nome { get; set; }
+        public string Name { get; set; }
         [DataType(DataType.Currency)]
-        public decimal Preco { get; set; }
+        public decimal Price { get; set; }
         [DataType(DataType.MultilineText)]
-        public string Descricao { get; set; }
-        public int Estoque { get; set; }
+        public string Description { get; set; }
+        public int Stock { get; set; }
         [DataType(DataType.Date)]
-        public int Ano { get; set; }
+        public int Year { get; set; }
         [DataType(DataType.ImageUrl)]
-        public string Motor { get; set; }
-        public int Velocidade { get; set; }
-        public string ImagemUrl { get; set; }
-        public string ImagemInteriorUrl { get; set; }
-        public string ImagemMotorUrl { get; set; }
+        public string Engine { get; set; }
+        public int Speed { get; set; }
+        public string ImageUrl { get; set; }
+        public string InnerImageUrl { get; set; }
+        public string ImageEngineUrl { get; set; }
         public string VideoDemoUrl { get; set; }
-        public Guid CategoriaId { get; set; }
-        public Category Categoria { get; set; }
-        public Guid MarcaId { get; set; }
-        public Brand Marca { get; set; }
+        public Guid CategoryId { get; set; }
+        public Category Category { get; set; }
+        public Guid BrandId { get; set; }
+        public Brand Brand { get; set; }
     }
 }
