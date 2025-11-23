@@ -48,5 +48,23 @@ namespace Ecommerce.Controllers
                 return BadRequest(new { message = ex.Message });
             }
         }
+
+        [HttpGet("{email}")]
+        public ActionResult<User> GetByEmail(string email)
+        {
+            try
+            {
+                var user = _userService.GetByEmail(email);
+                if (user == null)
+                {
+                    return NotFound(new { message = "User not found." });
+                }
+                return Ok(user);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
     }
 }

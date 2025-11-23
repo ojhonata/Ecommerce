@@ -53,7 +53,7 @@ namespace Ecommerce.Controllers
             }
         }
 
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "Admin")]
         [HttpPost("AddCategory")]
         public ActionResult<Category> PostCategory([FromBody] CategoryDTO categoryDto)
         {
@@ -68,7 +68,7 @@ namespace Ecommerce.Controllers
             }
         }
 
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "Admin")]
         [HttpPut("{id:guid}", Name = "UpdateCategoiry")]
         public IActionResult UpdateCategory(Guid id, [FromBody] Category category)
         {
@@ -87,7 +87,7 @@ namespace Ecommerce.Controllers
             }
         }
 
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id:guid}", Name = "RemoveCategroy")]
         public IActionResult DeleteCategory(Guid id)
         {

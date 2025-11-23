@@ -49,7 +49,7 @@ namespace Ecommerce.Controllers
             }
         }
 
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "Admin")]
         [HttpPost("AddCloudinary")]
         public ActionResult<Brand> PostBrandCloudinary([FromForm] CreateBrandDto brandDto)
         {
@@ -64,7 +64,7 @@ namespace Ecommerce.Controllers
             }
         }
 
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "Admin")]
         [HttpPut("{id:guid}", Name = "UpdateBrand")]
         public IActionResult UpdateBrand(Guid id, [FromBody] Brand brand)
         {
@@ -83,7 +83,7 @@ namespace Ecommerce.Controllers
             }
         }
 
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id:guid}", Name = "RemoveBrand")]
         public IActionResult DeleteBrand(Guid id)
         {

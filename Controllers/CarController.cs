@@ -56,7 +56,7 @@ namespace Ecommerce.Controllers
             }
         }
 
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "Admin")]
         [HttpPost("PostCar")]
         public IActionResult PostCar([FromForm] CreateCarDTO dto)
         {
@@ -72,7 +72,7 @@ namespace Ecommerce.Controllers
             }
         }
 
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "Admin")]
         [HttpPut("{id:guid}", Name = "UpdateCar")]
         public IActionResult UpdateCar(Guid id, [FromBody] Car car)
         {
@@ -91,7 +91,7 @@ namespace Ecommerce.Controllers
             }
         }
 
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id:guid}", Name = "RemoveCar")]
         public IActionResult DeleteCar(Guid id)
         {
