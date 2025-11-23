@@ -64,7 +64,6 @@ namespace Ecommerce.Controllers
             {
                 var car = _carService.PostCarCloudinary(dto);
                 return CreatedAtRoute(nameof(GetCarById), new { id = car.Id }, car);
-
             }
             catch (Exception ex)
             {

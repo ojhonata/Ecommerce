@@ -23,6 +23,7 @@ namespace Ecommerce.Models
         public string InnerImageUrl { get; set; }
         public string ImageEngineUrl { get; set; }
         public string VideoDemoUrl { get; set; }
+        public string Model3DUrl { get; set; }
         public Guid CategoryId { get; set; }
         public Category Category { get; set; }
         public Guid BrandId { get; set; }

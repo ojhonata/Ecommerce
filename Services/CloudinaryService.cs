@@ -7,6 +7,7 @@ namespace Ecommerce.Services
     public class CloudinaryService : ICloudinaryService
     {
         private readonly Cloudinary _cloudinary;
+
         public CloudinaryService(IConfiguration config)
         {
             var cloudName = Environment.GetEnvironmentVariable("CloudName");
@@ -23,7 +24,7 @@ namespace Ecommerce.Services
             var uploadParams = new ImageUploadParams()
             {
                 File = new FileDescription(imageFile.FileName, stream),
-                Folder = folder
+                Folder = folder,
             };
 
             var result = _cloudinary.Upload(uploadParams);
@@ -33,7 +34,6 @@ namespace Ecommerce.Services
             }
 
             return result.SecureUrl.ToString();
-
         }
 
         public string UploadVideo(IFormFile videoFile, string folder = "ecommerce/videos")
@@ -42,7 +42,7 @@ namespace Ecommerce.Services
             var uploadParams = new VideoUploadParams()
             {
                 File = new FileDescription(videoFile.FileName, stream),
-                Folder = folder
+                Folder = folder,
             };
             var result = _cloudinary.Upload(uploadParams);
             if (result.StatusCode != System.Net.HttpStatusCode.OK)
@@ -52,5 +52,21 @@ namespace Ecommerce.Services
             return result.SecureUrl.ToString();
         }
 
+        public string Upload3DModel(IFormFile file, string folder = "wwwroot/models3D")
+        {
+            if (file == null || file.Length == 0)
+                throw new Exception("Arquivo inválido.");
+
+            if (!Directory.Exists(folder))
+                Directory.CreateDirectory(folder);
+
+            var fileName = Guid.NewGuid() + ".glb";
+            var filePath = Path.Combine(folder, fileName);
+
+            using var stream = new FileStream(filePath, FileMode.Create);
+            file.CopyTo(stream);
+
+            return "/models3D/" + fileName;
+        }
     }
 }

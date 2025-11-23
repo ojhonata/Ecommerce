@@ -35,6 +35,7 @@ namespace Ecommerce.Services
             var urlInnerImage = _cloudinaryService.UploadImage(car.InnerImage);
             var urlImageEngine = _cloudinaryService.UploadImage(car.ImageEngine);
             var urlVideoDemo = _cloudinaryService.UploadVideo(car.VideoDemoUrl);
+            var urlModel3D = _cloudinaryService.Upload3DModel(car.Model3DUrl);
 
             var newCar = _mapper.Map<Car>(car);
             newCar.Id = Guid.NewGuid();
@@ -42,6 +43,7 @@ namespace Ecommerce.Services
             newCar.InnerImageUrl = urlInnerImage;
             newCar.ImageEngineUrl = urlImageEngine;
             newCar.VideoDemoUrl = urlVideoDemo;
+            newCar.Model3DUrl = urlModel3D;
 
             _carRepository.Add(newCar);
             return newCar;

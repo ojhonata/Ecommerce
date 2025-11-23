@@ -1,22 +1,22 @@
+using System.Text;
 using DotNetEnv;
 using Ecommerce.Data;
 using Ecommerce.Interface;
 using Ecommerce.Mapping;
 using Ecommerce.Repository;
 using Ecommerce.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.EntityFrameworkCore;
-using System.Text;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-//builder.Services.Configure<FormOptions>(options =>
-//{
-//    options.MultipartBodyLengthLimit = 1024 * 1024 * 200; // 200mb
-//});
+builder.Services.Configure<FormOptions>(options =>
+{
+    options.MultipartBodyLengthLimit = 1024 * 1024 * 200; // 200mb
+});
 
 builder.WebHost.ConfigureKestrel(options =>
 {
@@ -33,33 +33,36 @@ builder.Services.AddAutoMapper(typeof(MappingDTO));
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
-
-    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-    {
-        Name = "Authorization",
-        In = ParameterLocation.Header,
-        Type = SecuritySchemeType.ApiKey,
-        Scheme = "Bearer"
-    });
-
-    c.AddSecurityRequirement(new OpenApiSecurityRequirement()
-    {
-    {
+    c.AddSecurityDefinition(
+        "Bearer",
         new OpenApiSecurityScheme
         {
-        Reference = new OpenApiReference
-            {
-            Type = ReferenceType.SecurityScheme,
-            Id = "Bearer"
-            },
-            Scheme = "oauth2",
-            Name = "Bearer",
+            Name = "Authorization",
             In = ParameterLocation.Header,
-
-        },
-        new List<string>()
+            Type = SecuritySchemeType.ApiKey,
+            Scheme = "Bearer",
         }
-    });
+    );
+
+    c.AddSecurityRequirement(
+        new OpenApiSecurityRequirement()
+        {
+            {
+                new OpenApiSecurityScheme
+                {
+                    Reference = new OpenApiReference
+                    {
+                        Type = ReferenceType.SecurityScheme,
+                        Id = "Bearer",
+                    },
+                    Scheme = "oauth2",
+                    Name = "Bearer",
+                    In = ParameterLocation.Header,
+                },
+                new List<string>()
+            },
+        }
+    );
 });
 
 Env.Load(); // Carregar variáveis do .env
@@ -68,7 +71,7 @@ Env.Load(); // Carregar variáveis do .env
 // builder.Services.AddDbContext<AppDbContext>(options =>
 //     options.UseNpgsql(pgSqlString));
 
-var mySqlString = Environment.GetEnvironmentVariable("MYSQL_URL");  
+var mySqlString = Environment.GetEnvironmentVariable("MYSQL_URL");
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseMySql(mySqlString, ServerVersion.AutoDetect(mySqlString))
 );
@@ -93,22 +96,24 @@ builder.Services.AddHttpClient<IViaCepService, ViaCepService>();
 
 var key = Encoding.ASCII.GetBytes(Environment.GetEnvironmentVariable("TokenSecret"));
 
-builder.Services.AddAuthentication(x =>
-{
-    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-}).AddJwtBearer(x =>
-{
-    x.RequireHttpsMetadata = false;
-    x.SaveToken = true;
-    x.TokenValidationParameters = new TokenValidationParameters
+builder
+    .Services.AddAuthentication(x =>
     {
-        ValidateIssuerSigningKey = true,
-        IssuerSigningKey = new SymmetricSecurityKey(key),
-        ValidateIssuer = false,
-        ValidateAudience = false
-    };
-});
+        x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+        x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    })
+    .AddJwtBearer(x =>
+    {
+        x.RequireHttpsMetadata = false;
+        x.SaveToken = true;
+        x.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(key),
+            ValidateIssuer = false,
+            ValidateAudience = false,
+        };
+    });
 
 builder.Services.AddCors(options =>
 {
@@ -123,7 +128,6 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
-
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -134,6 +138,8 @@ if (app.Environment.IsDevelopment())
 app.UseCors("AllowAll");
 
 app.UseHttpsRedirection();
+
+app.UseStaticFiles();
 
 app.UseAuthorization();
 

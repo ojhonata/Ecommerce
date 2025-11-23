@@ -27,7 +27,7 @@ namespace Ecommerce.Models
         public string Neighborhood { get; set; }
         public string City { get; set; }
         public string State { get; set; }
-        public string Role { get; set; } = "user";
+        public string Role { get; set; } = "User";
 
     }
 }
