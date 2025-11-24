@@ -7,6 +7,7 @@ using Ecommerce.Repository;
 using Ecommerce.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http.Features;
+using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -139,7 +140,13 @@ app.UseCors("AllowAll");
 
 app.UseHttpsRedirection();
 
-app.UseStaticFiles();
+var provider = new FileExtensionContentTypeProvider();
+
+// Adiciona o mapeamento para arquivos 3D
+provider.Mappings[".glb"] = "model/gltf-binary";
+provider.Mappings[".gltf"] = "model/gltf+json";
+
+app.UseStaticFiles(new StaticFileOptions { ContentTypeProvider = provider });
 
 app.UseAuthorization();
 
