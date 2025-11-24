@@ -20,7 +20,7 @@ namespace Ecommerce.Controllers
         {
             if (request == null)
             {
-                return BadRequest("Dados inválida.");
+                return BadRequest("Invalid data.");
             }
 
             var response = _paymentService.ProcessPayment(request);

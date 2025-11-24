@@ -1,6 +1,7 @@
 using Ecommerce.DTOs;
 using Ecommerce.Interface;
 using Ecommerce.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Ecommerce.Controllers
@@ -38,7 +39,7 @@ namespace Ecommerce.Controllers
                 var brand = _brandService.GetBrandById(id);
                 if (brand == null)
                 {
-                    return NotFound(new { message = "Marca não encontrada." });
+                    return NotFound(new { message = "Brand not found." });
                 }
                 return Ok(brand);
             }
@@ -48,12 +49,13 @@ namespace Ecommerce.Controllers
             }
         }
 
-        [HttpPost("AddBrand")]
-        public ActionResult<Brand> PostMarca([FromForm] BrandImgDTO brandDto)
+        [Authorize(Roles = "Admin")]
+        [HttpPost("AddCloudinary")]
+        public ActionResult<Brand> PostBrandCloudinary([FromForm] CreateBrandDto brandDto)
         {
             try
             {
-                var brand = _brandService.PostBrand(brandDto);
+                var brand = _brandService.PostBrandCloudinary(brandDto);
                 return CreatedAtAction(nameof(GetBrandById), new { id = brand.Id }, brand);
             }
             catch (Exception ex)
@@ -62,17 +64,18 @@ namespace Ecommerce.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPut("{id:guid}", Name = "UpdateBrand")]
-        public IActionResult UpdateBrand(Guid id, [FromBody] Brand brand)
+        public IActionResult UpdateBrand(Guid id, [FromForm] Brand brand)
         {
             if (id != brand.Id)
             {
-                return BadRequest(new { message = "ID da brand não corresponde." });
+                return BadRequest(new { message = "The brand ID does not match." });
             }
             try
             {
                 _brandService.UpdateBrand(brand);
-                return Ok(new { message = "Marca atualizada com sucesso." });
+                return Ok(new { message = "Brand updated successfully." });
             }
             catch (Exception ex)
             {
@@ -80,13 +83,14 @@ namespace Ecommerce.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id:guid}", Name = "RemoveBrand")]
         public IActionResult DeleteBrand(Guid id)
         {
             try
             {
                 _brandService.DeleteBrand(id);
-                return Ok(new { message = "Marca deletada com sucesso." });
+                return Ok(new { message = "Brand successfully deleted." });
             }
             catch (Exception ex)
             {

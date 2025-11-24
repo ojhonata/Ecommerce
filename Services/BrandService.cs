@@ -13,26 +13,17 @@ namespace Ecommerce.Services
     {
         private readonly IBrandRepository _brandRepository;
         private readonly IMapper _mapper;
-        private readonly IImageService _imageService;    
+        private readonly ICloudinaryService _cloudinaryService;
 
-        public BrandService(IBrandRepository brandRepository, IMapper mapper, IImageService imageService)
+        public BrandService(
+            IBrandRepository brandRepository,
+            IMapper mapper,
+            ICloudinaryService cloudinaryService
+        )
         {
             _brandRepository = brandRepository;
             _mapper = mapper;
-            _imageService = imageService;
-        }
-
-        public Brand PostBrand(BrandImgDTO dto)
-        {
-            var url = _imageService.ImageSave(dto.Imagem);
-
-            var newBrand = _mapper.Map<Brand>(dto);
-            newBrand.Id = Guid.NewGuid();
-            newBrand.ImagemURL = url;
-
-            _brandRepository.Add(newBrand);
-
-            return newBrand;
+            _cloudinaryService = cloudinaryService;
         }
 
         public void DeleteBrand(Guid id)
@@ -40,7 +31,7 @@ namespace Ecommerce.Services
             var brand = _brandRepository.GetById(id);
             if (brand == null)
             {
-                throw new ArgumentException("Marca não encontrada.");
+                throw new ArgumentException("Brand not found.");
             }
             _brandRepository.Delete(id);
         }
@@ -56,19 +47,27 @@ namespace Ecommerce.Services
             var brand = _brandRepository.GetById(id);
             if (brand == null)
             {
-                throw new ArgumentException("Marca não encontrada.");
+                throw new ArgumentException("Brand not found.");
             }
             return brand;
         }
 
-        public Brand PostBrand(BrandDTO brand)
+        public Brand PostBrandCloudinary(CreateBrandDto dto)
         {
-            if (string.IsNullOrEmpty(brand.Nome) || string.IsNullOrEmpty(brand.ImagemURL))
-            {
-                throw new ArgumentException("O nome e a URL da imagem da brand são obrigatórios.");
-            }
-            var newBrand = new BrandDTO { Nome = brand.Nome, ImagemURL = brand.ImagemURL };
-            return _brandRepository.AddFromDTO(newBrand);
+            var urlImage = _cloudinaryService.UploadImage(dto.Image);
+            var urlBgBrand = _cloudinaryService.UploadImage(dto.BgBrand);
+            var urlLogoBrand = _cloudinaryService.UploadImage(dto.LogoBrand);
+
+            var newBrand = _mapper.Map<Brand>(dto);
+
+            newBrand.Id = Guid.NewGuid();
+            newBrand.ImageUrl = urlImage;
+            newBrand.BgBrand = urlBgBrand;
+            newBrand.LogoBrand = urlLogoBrand;
+
+            _brandRepository.Add(newBrand);
+
+            return newBrand;
         }
 
         public void UpdateBrand(Brand brand)
@@ -76,13 +75,13 @@ namespace Ecommerce.Services
             var existingBrand = _brandRepository.GetById(brand.Id);
             if (existingBrand != null)
             {
-                existingBrand.Nome = brand.Nome;
-                existingBrand.ImagemURL = brand.ImagemURL;
+                existingBrand.Name = brand.Name;
+                existingBrand.ImageUrl = brand.ImageUrl;
                 _brandRepository.Update(existingBrand);
             }
             else
             {
-                throw new ArgumentException("Marca não encontrada.");
+                throw new ArgumentException("Brand not found.");
             }
         }
     }

@@ -7,8 +7,8 @@ namespace Ecommerce.Services
     {
         public PaymentResponseDTO ProcessPayment(PaymentRequestDTO request)
         {
-            Console.WriteLine($"método: {request.PaymentMethod}");
-            Console.WriteLine($"Valor: {request.Amount}");
+            Console.WriteLine($"Method: {request.PaymentMethod}");
+            Console.WriteLine($"Value: {request.Amount}");
             switch (request.PaymentMethod.ToLower())
             {
                 case "cartão":
@@ -24,63 +24,59 @@ namespace Ecommerce.Services
                     return new PaymentResponseDTO
                     {
                         Status = "error",
-                        Message = "Método de pagamento inválido."
+                        Message = "Invalid payment method.",
                     };
             }
         }
 
-        private PaymentResponseDTO ProcessBoletoPayment(BoletoDTO boleto, decimal amount)
+        private PaymentResponseDTO ProcessBoletoPayment(BoletoDto boleto, decimal amount)
         {
             if (boleto == null)
-                return Error("Dados do boleto não fornecidos.");
+                return Error("\r\nPayment slip details not provided.");
 
             return new PaymentResponseDTO
             {
                 Status = "pending",
-                Message = "Boleto gerado com sucesso.",
+                Message = "Payment slip successfully generated.",
                 TransactionId = Guid.NewGuid().ToString(),
                 BoletoNumber = "23793.38127 60000.000009 04000.123456 7 78940000010000",
                 BoletoUrl = "https://example.com/boleto/123456",
                 Amount = amount,
-                PaymentMethod = "boleto"
+                PaymentMethod = "boleto",
             };
         }
 
         private PaymentResponseDTO ProcessPixPayment(PixDTO pix, decimal amount)
         {
             if (pix == null)
-                return Error("Dados do PIX não fornecidos.");
+                return Error("\r\nPIX data not provided.");
             return new PaymentResponseDTO
             {
                 Status = "pending",
-                Message = "PIX gerado com sucesso.",
+                Message = "PIX generated successfully.",
                 TransactionId = Guid.NewGuid().ToString(),
                 PixCode = $"00020126360014BR.GOV.BCB.PIX0114+5511999999995204000053039865404100",
                 Amount = amount,
-                PaymentMethod = "pix"
-
+                PaymentMethod = "pix",
             };
         }
 
         private PaymentResponseDTO ProcessCardPayment(CardDTO card, decimal amount)
         {
             if (card == null)
-                return Error("Dados do cartão não fornecidos.");
+                return Error("Card details not provided.");
 
             return new PaymentResponseDTO
             {
                 Status = "approved",
-                Message = "Pagamento com cartão aprovado.",
+                Message = "Card payment approved.",
                 TransactionId = Guid.NewGuid().ToString(),
                 Amount = amount,
-                PaymentMethod = "card"
+                PaymentMethod = "card",
             };
         }
 
-        private PaymentResponseDTO Error(string msg) => new PaymentResponseDTO
-        {
-            Status = "error",
-            Message = msg
-        };
+        private PaymentResponseDTO Error(string msg) =>
+            new PaymentResponseDTO { Status = "error", Message = msg };
     }
 }

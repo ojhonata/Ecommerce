@@ -36,7 +36,7 @@ namespace Ecommerce.Controllers
         }
 
         [HttpPost("PostUser")]
-        public IActionResult PostUsuario([FromBody] User user)
+        public IActionResult PostUsuario([FromBody] CreateUserDto user)
         {
             try
             {
@@ -48,5 +48,37 @@ namespace Ecommerce.Controllers
                 return BadRequest(new { message = ex.Message });
             }
         }
+
+        [HttpGet("{email}")]
+        public ActionResult<User> GetByEmail(string email)
+        {
+            try
+            {
+                var user = _userService.GetByEmail(email);
+                if (user == null)
+                {
+                    return NotFound(new { message = "User not found." });
+                }
+                return Ok(user);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+        [HttpPut("{email}")]
+        public IActionResult UpdateUser(string email, [FromBody] UpdateUserDTO dto)
+        {
+            try
+            {
+                _userService.UpdateUser(email, dto);
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
     }
 }

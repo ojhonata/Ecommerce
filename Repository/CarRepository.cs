@@ -24,53 +24,51 @@ namespace Ecommerce.Repository
             var car = GetById(id);
             if (car != null)
             {
-                _context.Produtos.Remove(car);
+                _context.Cars.Remove(car);
                 _context.SaveChanges();
             }
             else
             {
-                throw new ArgumentException("Produto não encontrado.");
+                throw new ArgumentException("Car not found.");
             }
         }
 
         public List<Car> GetAll(int pageNumber, int pageQuantity)
         {
             return _context
-                .Produtos.Skip((pageNumber - 1) * pageQuantity)
+                .Cars.Skip((pageNumber - 1) * pageQuantity)
                 .Take(pageQuantity)
-                .Include(c => c.Marca)
+                .Include(c => c.Brand)
                 .ToList();
         }
 
         public Car GetById(Guid id)
         {
-            return _context.Produtos.FirstOrDefault(p => p.Id == id);
+            return _context.Cars.FirstOrDefault(p => p.Id == id);
         }
 
         public Car Add(Car car)
         {
-            _context.Produtos.Add(car);
-            _context.SaveChanges();
-            return car;
-        }
-
-        public Car PostCar(Car car)
-        {
-            _context.Produtos.Add(car);
+            _context.Cars.Add(car);
             _context.SaveChanges();
             return car;
         }
 
         public void Update(Car car)
         {
-            var exisitngCar = _context.Produtos.Find(car.Id);
-            if (exisitngCar != null)
+            var exisitngCar = _context.Cars.Find(car.Id);
+            if (exisitngCar == null)
             {
-                throw new ArgumentException("Produto não encontrado.");
+                throw new ArgumentException("car not found.");
             }
-            
+
             _context.Entry(exisitngCar).CurrentValues.SetValues(car);
             _context.SaveChanges();
+        }
+
+        public IQueryable<Car> Query()
+        {
+            return _context.Cars.Include(c => c.Brand).Include(c => c.Category).AsQueryable();
         }
     }
 }

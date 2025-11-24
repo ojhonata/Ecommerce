@@ -9,7 +9,7 @@
 
         public CardDTO Card { get; set; }
         public PixDTO Pix { get; set; }
-        public BoletoDTO Boleto { get; set; }
+        public BoletoDto Boleto { get; set; }
     }
 
 }

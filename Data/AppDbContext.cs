@@ -9,10 +9,10 @@ namespace Ecommerce.Data
 {
     public partial class AppDbContext : DbContext
     {
-        public DbSet<User> Usuarios { get; set; }
-        public DbSet<Car> Produtos { get; set; }
-        public DbSet<Category> Categorias { get; set; }
-        public DbSet<Brand> Marcas { get; set; }
+        public DbSet<User> Users { get; set; }
+        public DbSet<Car> Cars { get; set; }
+        public DbSet<Category> Categories { get; set; }
+        public DbSet<Brand> Brands { get; set; }
 
         public AppDbContext(DbContextOptions<AppDbContext> options)
             : base(options) { }
@@ -27,17 +27,18 @@ namespace Ecommerce.Data
 
             modelBuilder.Entity<Brand>().HasKey(brand => brand.Id);
 
-            modelBuilder
-                .Entity<Car>()
-                .HasOne(car => car.Categoria)
-                .WithMany(category => category.Produtos)
-                .HasForeignKey(car => car.CategoriaId);
 
             modelBuilder
                 .Entity<Car>()
-                .HasOne(car => car.Marca)
-                .WithMany(brand => brand.Produtos)
-                .HasForeignKey(car => car.MarcaId);
+                .HasOne(car => car.Category)
+                .WithMany(category => category.Cars)
+                .HasForeignKey(car => car.CategoryId);
+
+            modelBuilder
+                .Entity<Car>()
+                .HasOne(car => car.Brand)
+                .WithMany(brand => brand.Cars)
+                .HasForeignKey(car => car.BrandId);
 
             base.OnModelCreating(modelBuilder);
         }

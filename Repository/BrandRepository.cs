@@ -24,21 +24,21 @@ namespace Ecommerce.Repository
             var brand = GetById(id);
             if (brand != null)
             {
-                _context.Marcas.Remove(brand);
+                _context.Brands.Remove(brand);
                 _context.SaveChanges();
             }
             else
             {
-                throw new ArgumentException("Marca não encontrada.");
+                throw new ArgumentException("Brand not found.");
             }
         }
 
         public List<Brand> GetAll(int pageNumber, int pageQuantity)
         {
             return _context
-                .Marcas.Skip((pageNumber - 1) * pageQuantity)
+                .Brands.Skip((pageNumber - 1) * pageQuantity)
                 .Take(pageQuantity)
-                .Include(m => m.Produtos)
+                .Include(m => m.Cars)
                 .ToList();
         }
 
@@ -46,37 +46,37 @@ namespace Ecommerce.Repository
         {
             if (Guid.Empty == id)
             {
-                throw new ArgumentException("ID inválido.");
+                throw new ArgumentException("ID invalid.");
             }
-            var brand = _context.Marcas.FirstOrDefault(m => m.Id == id);
+            var brand = _context.Brands.FirstOrDefault(m => m.Id == id);
             if (brand == null)
             {
-                throw new ArgumentException("Marca não encontrada.");
+                throw new ArgumentException("Brand not found.");
             }
             return brand;
         }
 
         public Brand AddFromDTO(BrandDTO brand)
         {
-            var newBrand = new Brand { Nome = brand.Nome, ImagemURL = brand.ImagemURL };
-            _context.Marcas.Add(newBrand);
+            var newBrand = new Brand { Name = brand.Name, ImageUrl = brand.ImageUrl };
+            _context.Brands.Add(newBrand);
             _context.SaveChanges();
             return newBrand;
         }
 
         public Brand Add(Brand brand)
         {
-            _context.Marcas.Add(brand);
+            _context.Brands.Add(brand);
             _context.SaveChanges();
             return brand;
         }
 
         public void Update(Brand brand)
         {
-            var existing = _context.Marcas.Find(brand.Id);
+            var existing = _context.Brands.Find(brand.Id);
             if (existing != null)
             {
-                throw new ArgumentException("Marca não encontrada.");
+                throw new ArgumentException("Brand not found.");
             }
 
             _context.Entry(existing).CurrentValues.SetValues(brand);

@@ -20,14 +20,26 @@ namespace Ecommerce.Repository
 
         public List<User> GetUsers()
         {
-            return _context.Usuarios.Select(user => user).ToList();
+            return _context.Users.Select(user => user).ToList();
         }
 
         public User PostUser(User user)
         {
-            _context.Usuarios.Add(user);
+            _context.Users.Add(user);
             _context.SaveChanges();
+
             return user;
+        }
+
+        public User GetByEmail(string email)
+        {
+            return _context.Users.FirstOrDefault(user => user.Email == email);
+        }
+
+        public void UpdateUser(User user)
+        {
+            _context.Users.Update(user);
+            _context.SaveChanges();
         }
     }
 }

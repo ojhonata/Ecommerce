@@ -6,6 +6,7 @@ using Ecommerce.Data;
 using Ecommerce.DTOs;
 using Ecommerce.Interface;
 using Ecommerce.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Ecommerce.Controllers
@@ -15,13 +16,15 @@ namespace Ecommerce.Controllers
     public class CarController : ControllerBase
     {
         private readonly ICarService _carService;
+        private readonly ICloudinaryService _cloudinaryService;
 
-        public CarController(ICarService carService)
+        public CarController(ICarService carService, ICloudinaryService cloudinaryService)
         {
             _carService = carService;
+            _cloudinaryService = cloudinaryService;
         }
 
-        [HttpGet("GetCar")]
+        [HttpGet("GetCars")]
         public IActionResult GetCars(int pageNumber = 1, int pageQuantity = 10)
         {
             try
@@ -43,7 +46,7 @@ namespace Ecommerce.Controllers
                 var produto = _carService.GetCarById(id);
                 if (produto == null)
                 {
-                    return NotFound(new { message = "Produto não encontrado." });
+                    return NotFound(new { message = "Produto not found." });
                 }
                 return Ok(produto);
             }
@@ -53,12 +56,13 @@ namespace Ecommerce.Controllers
             }
         }
 
-        [HttpPost("AddCar")]
-        public ActionResult<Car> PostCar([FromForm] CreateCarDTO carDto)
+        [Authorize(Roles = "Admin")]
+        [HttpPost("PostCar")]
+        public IActionResult PostCar([FromForm] CreateCarDTO dto)
         {
             try
             {
-                var car = _carService.PostCar(carDto);
+                var car = _carService.PostCarCloudinary(dto);
                 return CreatedAtRoute(nameof(GetCarById), new { id = car.Id }, car);
             }
             catch (Exception ex)
@@ -67,17 +71,18 @@ namespace Ecommerce.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPut("{id:guid}", Name = "UpdateCar")]
-        public IActionResult UpdateCar(Guid id, [FromBody] Car car)
+        public IActionResult UpdateCar(Guid id, [FromForm] UpdateCarDTO dto)
         {
-            if (id != car.Id)
+            if (!ModelState.IsValid)
             {
-                return BadRequest(new { message = "ID do car inválido." });
+                return BadRequest(ModelState);
             }
             try
             {
-                _carService.UpdateProduto(car);
-                return Ok(new { message = "Produto atualizado com sucesso." });
+                _carService.UpdateCar(id, dto);
+                return Ok(new { message = "Product updated successfully." });
             }
             catch (Exception ex)
             {
@@ -85,13 +90,28 @@ namespace Ecommerce.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id:guid}", Name = "RemoveCar")]
         public IActionResult DeleteCar(Guid id)
         {
             try
             {
                 _carService.DeleteCar(id);
-                return Ok(new { message = "Produto deletado com sucesso." });
+                return Ok(new { message = "Product successfully deleted." });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
+        [HttpGet("Filter")]
+        public IActionResult FilterCars([FromQuery] CarFilterDTO filter)
+        {
+            try
+            {
+                var result = _carService.FilterCars(filter);
+                return Ok(result);
             }
             catch (Exception ex)
             {
