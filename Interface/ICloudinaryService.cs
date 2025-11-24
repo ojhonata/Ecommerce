@@ -4,6 +4,6 @@
     {
         public string UploadImage(IFormFile imageFile, string folder = "ecommerce/products");
         public string UploadVideo(IFormFile videoFile, string folder = "ecommerce/videos");
-        public string Upload3DModel(IFormFile file, string folder = "wwwroot/models3D");
+        public string SalvarArquivoLocal(IFormFile file);
     }
 }

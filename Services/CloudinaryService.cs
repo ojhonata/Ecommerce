@@ -7,9 +7,12 @@ namespace Ecommerce.Services
     public class CloudinaryService : ICloudinaryService
     {
         private readonly Cloudinary _cloudinary;
+        private readonly IWebHostEnvironment _env;
 
-        public CloudinaryService(IConfiguration config)
+        public CloudinaryService(IConfiguration config, IWebHostEnvironment env)
         {
+            _env = env;
+
             var cloudName = Environment.GetEnvironmentVariable("CloudName");
             var apiKey = Environment.GetEnvironmentVariable("ApiKey");
             var apiSecret = Environment.GetEnvironmentVariable("ApiSecret");
@@ -52,21 +55,37 @@ namespace Ecommerce.Services
             return result.SecureUrl.ToString();
         }
 
-        public string Upload3DModel(IFormFile file, string folder = "wwwroot/models3D")
+        public string SalvarArquivoLocal(IFormFile file)
         {
             if (file == null || file.Length == 0)
-                throw new Exception("Arquivo inválido.");
+                throw new ArgumentException("Arquivo inválido.");
 
-            if (!Directory.Exists(folder))
-                Directory.CreateDirectory(folder);
+            string webRootPath = _env.WebRootPath;
 
-            var fileName = Guid.NewGuid() + ".glb";
-            var filePath = Path.Combine(folder, fileName);
+            if (string.IsNullOrWhiteSpace(webRootPath))
+            {
+                webRootPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
+            }
 
-            using var stream = new FileStream(filePath, FileMode.Create);
-            file.CopyTo(stream);
+            string folderName = "models3D";
+            string pastaDestino = Path.Combine(webRootPath, folderName);
 
-            return "/models3D/" + fileName;
+            if (!Directory.Exists(pastaDestino))
+            {
+                Directory.CreateDirectory(pastaDestino);
+            }
+
+            var extensao = Path.GetExtension(file.FileName);
+            var fileName = $"{Guid.NewGuid()}{extensao}";
+
+            var fullPath = Path.Combine(pastaDestino, fileName);
+
+            using (var stream = new FileStream(fullPath, FileMode.Create))
+            {
+                file.CopyTo(stream);
+            }
+
+            return $"/{folderName}/{fileName}";
         }
     }
 }
