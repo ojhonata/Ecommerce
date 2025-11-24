@@ -1,6 +1,6 @@
 ﻿namespace Ecommerce.DTOs
 {
-    public class BoletoDTO
+    public class BoletoDto
     {
         public string FullName { get; set; }
         public string CPF { get; set; }

@@ -16,17 +16,21 @@ namespace Ecommerce.Services
         private readonly IMapper _mapper;
         private readonly ICloudinaryService _cloudinaryService;
 
-        public CarService(ICarRepository carRepository, IMapper mapper, ICloudinaryService cloudinaryService)
+        public CarService(
+            ICarRepository carRepository,
+            IMapper mapper,
+            ICloudinaryService cloudinaryService
+        )
         {
             _carRepository = carRepository;
             _mapper = mapper;
             _cloudinaryService = cloudinaryService;
         }
 
-        public List<CarDTO> GetCars(int pageNumber, int pageQuantity)
+        public List<CarDto> GetCars(int pageNumber, int pageQuantity)
         {
             var cars = _carRepository.GetAll(pageNumber, pageQuantity);
-            return _mapper.Map<List<CarDTO>>(cars);
+            return _mapper.Map<List<CarDto>>(cars);
         }
 
         public Car PostCarCloudinary(CreateCarDTO car)
@@ -69,29 +73,53 @@ namespace Ecommerce.Services
             _carRepository.Remove(id);
         }
 
-        public void UpdateProduto(Car car)
+        public void UpdateCar(Guid id, UpdateCarDTO dto)
         {
-            var existingCar = _carRepository.GetById(car.Id);
+            var existingCar = _carRepository.GetById(id);
             if (existingCar == null)
-            {
                 throw new ArgumentException("Car not found.");
-            }
-            if (string.IsNullOrEmpty(car.Name))
+
+            if (!string.IsNullOrEmpty(dto.Name))
+                existingCar.Name = dto.Name;
+            if (!string.IsNullOrEmpty(dto.Description))
+                existingCar.Description = dto.Description;
+            if (!string.IsNullOrEmpty(dto.Engine))
+                existingCar.Engine = dto.Engine;
+
+            if (dto.Price.HasValue)
             {
-                throw new ArgumentException("The car's name is required.");
+                if (dto.Price.Value <= 0)
+                    throw new ArgumentException("Price > 0");
+                existingCar.Price = dto.Price.Value;
             }
-            if (car.Price <= 0)
+
+            if (dto.Stock.HasValue)
             {
-                throw new ArgumentException("The price of the car must be greater than zero.");
+                if (dto.Stock.Value < 0)
+                    throw new ArgumentException("Stock cannot be negative");
+                existingCar.Stock = dto.Stock.Value;
             }
-            if (car.Stock < 0)
-            {
-                throw new ArgumentException("The car inventory cannot be negative.");
-            }
-            _carRepository.Update(car);
+
+            if (dto.Year.HasValue)
+                existingCar.Year = dto.Year.Value;
+            if (dto.Speed.HasValue)
+                existingCar.Speed = dto.Speed.Value;
+
+            if (dto.Image != null)
+                existingCar.ImageUrl = _cloudinaryService.UploadImage(dto.Image);
+            if (dto.InnerImage != null)
+                existingCar.InnerImageUrl = _cloudinaryService.UploadImage(dto.InnerImage);
+            if (dto.ImageEngine != null)
+                existingCar.ImageEngineUrl = _cloudinaryService.UploadImage(dto.ImageEngine);
+            if (dto.VideoDemoUrl != null)
+                existingCar.VideoDemoUrl = _cloudinaryService.UploadVideo(dto.VideoDemoUrl);
+            if (dto.Model3DUrl != null)
+                existingCar.Model3DUrl = _cloudinaryService.SalvarArquivoLocal(dto.Model3DUrl);
+
+            _carRepository.Update(existingCar);
         }
 
-        public PageResponseDTO<CarDTO> FilterCars(CarFilterDTO filter)
+        public PageResponseDTO<CarDto> FilterCars(CarFilterDTO filter)
         {
             var query = _carRepository.Query();
 
@@ -123,14 +151,14 @@ namespace Ecommerce.Services
                 .Take(filter.PageSize)
                 .ToList();
 
-            var dtoList = _mapper.Map<List<CarDTO>>(cars);
+            var dtoList = _mapper.Map<List<CarDto>>(cars);
 
-            return new PageResponseDTO<CarDTO>
+            return new PageResponseDTO<CarDto>
             {
                 Items = dtoList,
                 PageNumber = filter.PageNumber,
                 PageSize = filter.PageSize,
-                TotalItems = total
+                TotalItems = total,
             };
         }
     }

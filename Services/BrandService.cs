@@ -15,13 +15,16 @@ namespace Ecommerce.Services
         private readonly IMapper _mapper;
         private readonly ICloudinaryService _cloudinaryService;
 
-        public BrandService(IBrandRepository brandRepository, IMapper mapper, ICloudinaryService cloudinaryService)
+        public BrandService(
+            IBrandRepository brandRepository,
+            IMapper mapper,
+            ICloudinaryService cloudinaryService
+        )
         {
             _brandRepository = brandRepository;
             _mapper = mapper;
             _cloudinaryService = cloudinaryService;
         }
-
 
         public void DeleteBrand(Guid id)
         {
@@ -65,7 +68,6 @@ namespace Ecommerce.Services
             _brandRepository.Add(newBrand);
 
             return newBrand;
-
         }
 
         public void UpdateBrand(Brand brand)

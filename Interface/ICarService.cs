@@ -11,9 +11,9 @@ namespace Ecommerce.Interface
     {
         public Car PostCarCloudinary(CreateCarDTO car);
         public Car GetCarById(Guid id);
-        public List<CarDTO> GetCars(int pageNumber, int pageQuantity);
-        void UpdateProduto(Car car);
+        public List<CarDto> GetCars(int pageNumber, int pageQuantity);
+        void UpdateCar(Guid id, UpdateCarDTO dto);
         void DeleteCar(Guid id);
-        public PageResponseDTO<CarDTO> FilterCars(CarFilterDTO filter);
+        public PageResponseDTO<CarDto> FilterCars(CarFilterDTO filter);
     }
 }

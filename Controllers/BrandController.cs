@@ -66,7 +66,7 @@ namespace Ecommerce.Controllers
 
         [Authorize(Roles = "Admin")]
         [HttpPut("{id:guid}", Name = "UpdateBrand")]
-        public IActionResult UpdateBrand(Guid id, [FromBody] Brand brand)
+        public IActionResult UpdateBrand(Guid id, [FromForm] Brand brand)
         {
             if (id != brand.Id)
             {

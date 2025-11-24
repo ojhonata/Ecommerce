@@ -73,15 +73,15 @@ namespace Ecommerce.Controllers
 
         [Authorize(Roles = "Admin")]
         [HttpPut("{id:guid}", Name = "UpdateCar")]
-        public IActionResult UpdateCar(Guid id, [FromBody] Car car)
+        public IActionResult UpdateCar(Guid id, [FromForm] UpdateCarDTO dto)
         {
-            if (id != car.Id)
+            if (!ModelState.IsValid)
             {
-                return BadRequest(new { message = "Invalid car ID." });
+                return BadRequest(ModelState);
             }
             try
             {
-                _carService.UpdateProduto(car);
+                _carService.UpdateCar(id, dto);
                 return Ok(new { message = "Product updated successfully." });
             }
             catch (Exception ex)

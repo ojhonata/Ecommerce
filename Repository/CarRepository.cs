@@ -57,9 +57,9 @@ namespace Ecommerce.Repository
         public void Update(Car car)
         {
             var exisitngCar = _context.Cars.Find(car.Id);
-            if (exisitngCar != null)
+            if (exisitngCar == null)
             {
-                throw new ArgumentException("cra not found.");
+                throw new ArgumentException("car not found.");
             }
 
             _context.Entry(exisitngCar).CurrentValues.SetValues(car);

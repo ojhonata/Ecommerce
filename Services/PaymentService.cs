@@ -24,12 +24,12 @@ namespace Ecommerce.Services
                     return new PaymentResponseDTO
                     {
                         Status = "error",
-                        Message = "Invalid payment method."
+                        Message = "Invalid payment method.",
                     };
             }
         }
 
-        private PaymentResponseDTO ProcessBoletoPayment(BoletoDTO boleto, decimal amount)
+        private PaymentResponseDTO ProcessBoletoPayment(BoletoDto boleto, decimal amount)
         {
             if (boleto == null)
                 return Error("\r\nPayment slip details not provided.");
@@ -42,7 +42,7 @@ namespace Ecommerce.Services
                 BoletoNumber = "23793.38127 60000.000009 04000.123456 7 78940000010000",
                 BoletoUrl = "https://example.com/boleto/123456",
                 Amount = amount,
-                PaymentMethod = "boleto"
+                PaymentMethod = "boleto",
             };
         }
 
@@ -57,8 +57,7 @@ namespace Ecommerce.Services
                 TransactionId = Guid.NewGuid().ToString(),
                 PixCode = $"00020126360014BR.GOV.BCB.PIX0114+5511999999995204000053039865404100",
                 Amount = amount,
-                PaymentMethod = "pix"
-
+                PaymentMethod = "pix",
             };
         }
 
@@ -73,14 +72,11 @@ namespace Ecommerce.Services
                 Message = "Card payment approved.",
                 TransactionId = Guid.NewGuid().ToString(),
                 Amount = amount,
-                PaymentMethod = "card"
+                PaymentMethod = "card",
             };
         }
 
-        private PaymentResponseDTO Error(string msg) => new PaymentResponseDTO
-        {
-            Status = "error",
-            Message = msg
-        };
+        private PaymentResponseDTO Error(string msg) =>
+            new PaymentResponseDTO { Status = "error", Message = msg };
     }
 }

@@ -11,6 +11,6 @@ namespace Ecommerce.DTOs
         public string Name { get; set; }
 
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public List<CarDTO>? Cars { get; set; }
+        public List<CarDto>? Cars { get; set; }
     }
 }
