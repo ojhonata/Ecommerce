@@ -16,6 +16,7 @@ namespace Ecommerce.Services
                     new[]
                     {
                         new Claim("user", user.Id.ToString()),
+                        new Claim(ClaimTypes.Email, user.Email),
                         new Claim(ClaimTypes.Role, user.Role),
                     }
                 ),
