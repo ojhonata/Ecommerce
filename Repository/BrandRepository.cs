@@ -81,7 +81,6 @@ namespace Ecommerce.Repository
 
             _context.Entry(existing).CurrentValues.SetValues(brand);
             _context.SaveChanges();
-
         }
     }
 }

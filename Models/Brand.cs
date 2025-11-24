@@ -16,6 +16,7 @@ namespace Ecommerce.Models
         [Required(ErrorMessage = "The brand name is required.")]
         public string Name { get; set; }
         public string Description { get; set; }
+
         [DataType(DataType.ImageUrl)]
         public string ImageUrl { get; set; }
         public string BgBrand { get; set; }

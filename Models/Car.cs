@@ -7,15 +7,20 @@ namespace Ecommerce.Models
     public class Car
     {
         public Guid Id { get; set; }
+
         [Required(ErrorMessage = "The car's name is required.")]
         public string Name { get; set; }
+
         [DataType(DataType.Currency)]
         public decimal Price { get; set; }
+
         [DataType(DataType.MultilineText)]
         public string Description { get; set; }
         public int Stock { get; set; }
+
         [DataType(DataType.Date)]
         public int Year { get; set; }
+
         [DataType(DataType.ImageUrl)]
         public string Engine { get; set; }
         public int Speed { get; set; }

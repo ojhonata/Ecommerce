@@ -66,6 +66,7 @@ namespace Ecommerce.Controllers
                 return BadRequest(new { message = ex.Message });
             }
         }
+
         [HttpPut("{email}")]
         public IActionResult UpdateUser(string email, [FromBody] UpdateUserDTO dto)
         {
@@ -79,6 +80,5 @@ namespace Ecommerce.Controllers
                 return BadRequest(new { message = ex.Message });
             }
         }
-
     }
 }

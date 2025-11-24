@@ -27,7 +27,6 @@ namespace Ecommerce.Data
 
             modelBuilder.Entity<Brand>().HasKey(brand => brand.Id);
 
-
             modelBuilder
                 .Entity<Car>()
                 .HasOne(car => car.Category)

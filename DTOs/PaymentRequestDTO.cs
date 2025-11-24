@@ -11,5 +11,4 @@
         public PixDTO Pix { get; set; }
         public BoletoDto Boleto { get; set; }
     }
-
 }

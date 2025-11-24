@@ -11,6 +11,7 @@ namespace Ecommerce.Models
     public class User
     {
         public Guid Id { get; set; }
+
         [Required(ErrorMessage = "The name is required.")]
         public string Name { get; set; }
 
@@ -28,6 +29,5 @@ namespace Ecommerce.Models
         public string City { get; set; }
         public string State { get; set; }
         public string Role { get; set; } = "User";
-
     }
 }
