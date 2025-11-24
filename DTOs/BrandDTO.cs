@@ -23,4 +23,13 @@ namespace Ecommerce.DTOs
         public IFormFile LogoBrand { get; set; }
         public string Description { get; set; }
     }
+
+    public class UpdateBrandDto
+    {
+        public string? Name { get; set; }
+        public IFormFile? Image { get; set; }
+        public IFormFile? BgBrand { get; set; }
+        public IFormFile? LogoBrand { get; set; }
+        public string? Description { get; set; }
+    }
 }
