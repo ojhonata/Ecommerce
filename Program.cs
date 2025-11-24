@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
@@ -146,7 +147,16 @@ var provider = new FileExtensionContentTypeProvider();
 provider.Mappings[".glb"] = "model/gltf-binary";
 provider.Mappings[".gltf"] = "model/gltf+json";
 
-app.UseStaticFiles(new StaticFileOptions { ContentTypeProvider = provider });
+app.UseStaticFiles(
+    new StaticFileOptions
+    {
+        FileProvider = new PhysicalFileProvider(
+            Path.Combine(builder.Environment.ContentRootPath, "wwwroot", "models3D")
+        ),
+        RequestPath = "/models3D",
+        ContentTypeProvider = provider,
+    }
+);
 
 app.UseAuthorization();
 
