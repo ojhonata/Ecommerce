@@ -47,7 +47,6 @@ namespace Ecommerce.Repository
             return _context.Cars.FirstOrDefault(p => p.Id == id);
         }
 
-
         public Car Add(Car car)
         {
             _context.Cars.Add(car);
@@ -62,17 +61,14 @@ namespace Ecommerce.Repository
             {
                 throw new ArgumentException("cra not found.");
             }
-            
+
             _context.Entry(exisitngCar).CurrentValues.SetValues(car);
             _context.SaveChanges();
         }
 
         public IQueryable<Car> Query()
         {
-            return _context.Cars
-                .Include(c => c.Brand)
-                .Include(c => c.Category)
-                .AsQueryable();
+            return _context.Cars.Include(c => c.Brand).Include(c => c.Category).AsQueryable();
         }
     }
 }

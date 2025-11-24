@@ -70,7 +70,6 @@ namespace Ecommerce.Repository
             {
                 throw new ArgumentException("Category not found.");
             }
-            
             _context.Entry(existing).CurrentValues.SetValues(category);
             _context.SaveChanges();
         }

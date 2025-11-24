@@ -12,5 +12,6 @@ namespace Ecommerce.Interface
         public List<User> GetUsers();
         public User PostUser(User user);
         public User GetByEmail(string email);
+        public void UpdateUser(User user);
     }
 }

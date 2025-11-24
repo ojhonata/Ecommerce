@@ -66,5 +66,19 @@ namespace Ecommerce.Controllers
                 return BadRequest(new { message = ex.Message });
             }
         }
+        [HttpPut("{email}")]
+        public IActionResult UpdateUser(string email, [FromBody] UpdateUserDTO dto)
+        {
+            try
+            {
+                _userService.UpdateUser(email, dto);
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
     }
 }

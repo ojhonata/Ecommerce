@@ -17,8 +17,6 @@ namespace Ecommerce.DTOs
         public string Neighborhood { get; set; }
         public string City { get; set; }
         public string State { get; set; }
-
-        public string Role { get; set; } = "user";
     }
 
     public class CreateUserDto
@@ -28,7 +26,17 @@ namespace Ecommerce.DTOs
         public string Password { get; set; }
         public string Cep { get; set; }
         public int Number { get; set; }
-        public string Role { get; set; } = "user";
+        public string Role { get; set; } = "User";
     }
 
+    public class UpdateUserDTO
+    {
+        public string Name { get; set; }
+        public string Cep { get; set; }
+        public int Number { get; set; }
+        public string Road { get; set; }
+        public string Neighborhood { get; set; }
+        public string City { get; set; }
+        public string State { get; set; }
+    }
 }

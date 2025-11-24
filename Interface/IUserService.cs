@@ -12,5 +12,6 @@ namespace Ecommerce.Interface
         public List<UserDTO> GetUsers();
         public User GetByEmail(string email);
         public User PostUser(CreateUserDto user);
+        public void UpdateUser(string email, UpdateUserDTO user);
     }
 }

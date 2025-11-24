@@ -17,6 +17,7 @@ namespace Ecommerce.Mapping
             CreateMap<UserDTO, User>();
             CreateMap<User, CreateUserDto>();
             CreateMap<CreateUserDto, User>();
+            CreateMap<UpdateUserDTO, User>();
         }
     }
 }
