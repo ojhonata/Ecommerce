@@ -1,19 +1,33 @@
-# Estágio 1: Build (Compilação)
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
-WORKDIR /src
-COPY ["Ecommerce.csproj", "./"]
-RUN dotnet restore "Ecommerce.csproj"
-COPY . .
-RUN dotnet publish "Ecommerce.csproj" -c Release -o /app/publish /p:UseAppHost=false
-
-# Estágio 2: Runtime (Execução)
-FROM mcr.microsoft.com/dotnet/aspnet:8.0
+# Estágio de Build
+# Usa a imagem oficial do Node.js com Alpine Linux para um tamanho menor
+FROM node:lts-alpine as build-stage
 WORKDIR /app
-COPY --from=build /app/publish .
+# Copia apenas os arquivos de dependências primeiro para aproveitar o cache do Docker
+COPY package*.json ./
+RUN npm install
+# Copia o restante do código
+COPY . .
+# Executa o build da aplicação (gerando os arquivos estáticos na pasta 'dist')
+RUN npm run build
 
-# Variáveis de ambiente para o Render
-ENV ASPNETCORE_URLS=http://+:8080
+---
+
+# Estágio de Produção (Servidor Nginx)
+# Usa a imagem oficial do Nginx com Alpine Linux
+FROM nginx:stable-alpine as production-stage
+# Copia os artefatos de build do estágio anterior
+# O caminho '/app/dist' é o resultado do 'npm run build' no estágio 'build-stage'
+COPY --from=build-stage /app/dist /usr/share/nginx/html
+
+# --- Configuração do Nginx ---
+# A correção aqui é usar o seu arquivo de configuração personalizado.
+# Você deve criar um arquivo 'nginx.conf' na mesma pasta do Dockerfile.
+# Ele será copiado substituindo o padrão.
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
+# O Cloud Run requer que a aplicação escute na porta definida pela variável de ambiente PORT (geralmente 8080).
+# O Nginx já está configurado para 8080 no arquivo 'nginx.conf' corrigido.
 EXPOSE 8080
 
-# O ERRO ESTAVA AQUI (Corrigido para apenas um .dll)
-ENTRYPOINT ["dotnet", "Ecommerce.dll"]
+# Comando para iniciar o Nginx
+CMD ["nginx", "-g", "daemon off;"]
