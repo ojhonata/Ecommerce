@@ -1,33 +1,23 @@
-# Estágio de Build
-# Usa a imagem oficial do Node.js com Alpine Linux para um tamanho menor
-FROM node:lts-alpine as build-stage
-WORKDIR /app
-# Copia apenas os arquivos de dependências primeiro para aproveitar o cache do Docker
-COPY package*.json ./
-RUN npm install
-# Copia o restante do código
+# Estágio 1: Build (Compilação)
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+WORKDIR /src
+COPY ["Ecommerce.csproj", "./"]
+RUN dotnet restore "Ecommerce.csproj"
 COPY . .
-# Executa o build da aplicação (gerando os arquivos estáticos na pasta 'dist')
-RUN npm run build
+RUN dotnet publish "Ecommerce.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
----
+# Estágio 2: Runtime (Execução)
+FROM mcr.microsoft.com/dotnet/aspnet:8.0
+WORKDIR /app
+COPY --from=build /app/publish .
 
-# Estágio de Produção (Servidor Nginx)
-# Usa a imagem oficial do Nginx com Alpine Linux
-FROM nginx:stable-alpine as production-stage
-# Copia os artefatos de build do estágio anterior
-# O caminho '/app/dist' é o resultado do 'npm run build' no estágio 'build-stage'
-COPY --from=build-stage /app/dist /usr/share/nginx/html
-
-# --- Configuração do Nginx ---
-# A correção aqui é usar o seu arquivo de configuração personalizado.
-# Você deve criar um arquivo 'nginx.conf' na mesma pasta do Dockerfile.
-# Ele será copiado substituindo o padrão.
-COPY nginx.conf /etc/nginx/conf.d/default.conf
-
-# O Cloud Run requer que a aplicação escute na porta definida pela variável de ambiente PORT (geralmente 8080).
-# O Nginx já está configurado para 8080 no arquivo 'nginx.conf' corrigido.
+# Variáveis de ambiente
+# ASPNETCORE_URLS define onde o Kestrel deve escutar.
+# Usar a porta 8080 como fallback, mas o Render geralmente injeta sua própria porta via variável PORT.
+# A porta é definida no ENTRYPOINT para ser flexível.
+ENV ASPNETCORE_URLS=http://+:8080
 EXPOSE 8080
 
-# Comando para iniciar o Nginx
-CMD ["nginx", "-g", "daemon off;"]
+# 🚀 CORREÇÃO AQUI: Usar a variável de ambiente $PORT do Render no comando
+# O Render injeta a variável $PORT. O Kestrel escuta na porta definida por essa variável.
+ENTRYPOINT ["dotnet", "Ecommerce.dll", "--urls", "http://0.0.0.0:$PORT"]
