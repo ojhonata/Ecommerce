@@ -2,8 +2,8 @@
 {
     public interface ICloudinaryService
     {
-        public string UploadImage(IFormFile imageFile, string folder = "ecommerce/products");
-        public string UploadVideo(IFormFile videoFile, string folder = "ecommerce/videos");
-        public string SalvarArquivoLocal(IFormFile file);
+        string UploadImage(IFormFile imageFile, string folder = "ecommerce/products");
+        string UploadVideo(IFormFile videoFile, string folder = "ecommerce/videos");
+        string UploadFile(IFormFile file, string folder = "ecommerce/models3D");
     }
 }

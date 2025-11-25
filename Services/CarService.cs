@@ -39,7 +39,7 @@ namespace Ecommerce.Services
             var urlInnerImage = _cloudinaryService.UploadImage(car.InnerImage);
             var urlImageEngine = _cloudinaryService.UploadImage(car.ImageEngine);
             var urlVideoDemo = _cloudinaryService.UploadVideo(car.VideoDemoUrl);
-            var urlModel3D = _cloudinaryService.SalvarArquivoLocal(car.Model3DUrl);
+            var urlModel3D = _cloudinaryService.UploadFile(car.Model3DUrl);
 
             var newCar = _mapper.Map<Car>(car);
             newCar.Id = Guid.NewGuid();
@@ -114,7 +114,7 @@ namespace Ecommerce.Services
             if (dto.VideoDemoUrl != null)
                 existingCar.VideoDemoUrl = _cloudinaryService.UploadVideo(dto.VideoDemoUrl);
             if (dto.Model3DUrl != null)
-                existingCar.Model3DUrl = _cloudinaryService.SalvarArquivoLocal(dto.Model3DUrl);
+                existingCar.Model3DUrl = _cloudinaryService.UploadFile(dto.Model3DUrl);
 
             _carRepository.Update(existingCar);
         }
