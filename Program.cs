@@ -94,7 +94,7 @@ builder.Services.AddAuthentication(x =>
 });
 
 // =============================================================
-// NOVO CÓDIGO CORS (Focado na Origem Específica)
+// DEFINIÇÃO DA POLÍTICA CORS
 // =============================================================
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins"; 
 
@@ -107,23 +107,25 @@ builder.Services.AddCors(options =>
               .AllowAnyMethod()
               .AllowAnyHeader();
     });
-    // Você pode remover a política "AllowAll" se não for mais usá-la.
 });
 
 // =============================================================
-// PIPELINE DE EXECUÇÃO (A ORDEM É CRÍTICA PARA O CORS)
+// PIPELINE DE EXECUÇÃO (ORDEM CORRIGIDA)
 // =============================================================
 var app = builder.Build();
 
-// 1. SWAGGER (Fica no topo para debug)
+// 1. SWAGGER 
 app.UseSwagger();
 app.UseSwaggerUI();
 
 // 2. REDIRECIONAMENTO HTTPS
 app.UseHttpsRedirection();
 
-// 3. CORS: DEVE VIR ANTES DE QUALQUER COISA QUE FAÇA AUTENTICAÇÃO/AUTORIZAÇÃO/ROTEAMENTO
-app.UseCors(MyAllowSpecificOrigins); // Aplicando a nova política
+// 3. CORS: DEVE VIR ANTES DE QUALQUER COISA QUE FAÇA AUTENTICAÇÃO/AUTORIZAÇÃO
+app.UseCors(MyAllowSpecificOrigins); 
+
+// 🚀 CORREÇÃO FINAL: ADICIONANDO USE ROUTING ANTES DE AUTENTICAÇÃO E AUTORIZAÇÃO
+app.UseRouting(); 
 
 // 4. STATIC FILES (Carregamento de modelos 3D/arquivos estáticos)
 var provider = new FileExtensionContentTypeProvider();
@@ -140,7 +142,7 @@ app.UseStaticFiles(new StaticFileOptions
     ContentTypeProvider = provider,
 });
 
-// 5. SEGURANÇA E ROTEAMENTO (Vem por último)
+// 5. SEGURANÇA E EXECUÇÃO
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
