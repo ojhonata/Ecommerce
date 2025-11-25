@@ -26,26 +26,74 @@ builder.Services.AddControllers();
 builder.Services.AddAutoMapper(typeof(MappingDTO));
 builder.Services.AddEndpointsApiExplorer();
 
-// Swagger (Configurações omitidas para brevidade)
-builder.Services.AddSwaggerGen(c => { /* ... */ });
+// Swagger
+builder.Services.AddSwaggerGen(c =>
+{
+    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.ApiKey,
+        Scheme = "Bearer"
+    });
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "Bearer" },
+                Scheme = "oauth2",
+                Name = "Bearer",
+                In = ParameterLocation.Header,
+            },
+            new List<string>()
+        }
+    });
+});
 
-// Configuração do DB e Serviços (Omitida para brevidade)
+// Configuração do Banco de Dados (Lê do .env ou das Vars do Render)
 var mySqlString = Environment.GetEnvironmentVariable("MYSQL_URL");
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseMySql(mySqlString, ServerVersion.AutoDetect(mySqlString))
 );
 
-// ... Injeção de Dependências e JWT ...
+// Injeção de Dependências
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<ICarRepository, CarRepository>();
+builder.Services.AddScoped<ICarService, CarService>();
+builder.Services.AddScoped<IBrandRepository, BrandRepository>();
+builder.Services.AddScoped<IBrandService, BrandService>();
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<IPaymentService, PaymentService>();
+builder.Services.AddScoped<ICloudinaryService, CloudinaryService>();
+builder.Services.AddHttpClient<IViaCepService, ViaCepService>();
+
+// JWT
+var tokenSecret = Environment.GetEnvironmentVariable("TokenSecret");
+var key = Encoding.ASCII.GetBytes(tokenSecret);
 
 builder.Services.AddAuthentication(x =>
 {
     x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
 })
-.AddJwtBearer(x => { /* ... */ });
+.AddJwtBearer(x =>
+{
+    x.RequireHttpsMetadata = false;
+    x.SaveToken = true;
+    x.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(key),
+        ValidateIssuer = false,
+        ValidateAudience = false,
+    };
+});
 
-// CORS (Liberado para o Render)
+// CORS (Definição da Política)
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: "AllowAll", policy =>
@@ -54,22 +102,22 @@ builder.Services.AddCors(options =>
     });
 });
 
+// =============================================================
+// PIPELINE DE EXECUÇÃO (A ORDEM É CRÍTICA PARA O CORS)
+// =============================================================
 var app = builder.Build();
 
-// Configure o HTTP request pipeline.
-
-// Swagger visível na produção para facilitar seus testes
+// 1. SWAGGER (Fica no topo para debug)
 app.UseSwagger();
 app.UseSwaggerUI();
 
+// 2. REDIRECIONAMENTO HTTPS
 app.UseHttpsRedirection();
 
-// ----------------------------------------------------
-// ✅ CORREÇÃO CRÍTICA AQUI: CORS DEVE VIR ANTES DE AUTH
-// ----------------------------------------------------
-app.UseCors("AllowAll"); // AQUI! Colocado ANTES de UseStaticFiles, UseAuthentication e UseAuthorization.
+// 3. CORS: DEVE VIR ANTES DE QUALQUER COISA QUE FAÇA AUTENTICAÇÃO/AUTORIZAÇÃO/ROTEAMENTO
+app.UseCors("AllowAll"); 
 
-// Configurações de Static Files (mantidas)
+// 4. STATIC FILES (Carregamento de modelos 3D/arquivos estáticos)
 var provider = new FileExtensionContentTypeProvider();
 provider.Mappings[".glb"] = "model/gltf-binary";
 provider.Mappings[".gltf"] = "model/gltf+json";
@@ -84,7 +132,7 @@ app.UseStaticFiles(new StaticFileOptions
     ContentTypeProvider = provider,
 });
 
-// Autenticação e Autorização devem vir depois do CORS
+// 5. SEGURANÇA E ROTEAMENTO (Vem por último)
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
