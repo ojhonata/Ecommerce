@@ -93,13 +93,21 @@ builder.Services.AddAuthentication(x =>
     };
 });
 
-// CORS (Definição da Política)
+// =============================================================
+// NOVO CÓDIGO CORS (Focado na Origem Específica)
+// =============================================================
+var MyAllowSpecificOrigins = "_myAllowSpecificOrigins"; 
+
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy(name: "AllowAll", policy =>
+    // Define a política que permite apenas o domínio do seu frontend
+    options.AddPolicy(name: MyAllowSpecificOrigins, policy =>
     {
-        policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+        policy.WithOrigins("https://ecommerce-frontend-65gk.onrender.com")
+              .AllowAnyMethod()
+              .AllowAnyHeader();
     });
+    // Você pode remover a política "AllowAll" se não for mais usá-la.
 });
 
 // =============================================================
@@ -115,7 +123,7 @@ app.UseSwaggerUI();
 app.UseHttpsRedirection();
 
 // 3. CORS: DEVE VIR ANTES DE QUALQUER COISA QUE FAÇA AUTENTICAÇÃO/AUTORIZAÇÃO/ROTEAMENTO
-app.UseCors("AllowAll"); 
+app.UseCors(MyAllowSpecificOrigins); // Aplicando a nova política
 
 // 4. STATIC FILES (Carregamento de modelos 3D/arquivos estáticos)
 var provider = new FileExtensionContentTypeProvider();
