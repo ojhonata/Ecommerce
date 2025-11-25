@@ -100,12 +100,15 @@ var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
 builder.Services.AddCors(options =>
 {
-    // Define a política que permite apenas o domínio do seu frontend
     options.AddPolicy(name: MyAllowSpecificOrigins, policy =>
     {
-        policy.WithOrigins("https://ecommerce-frontend-65gk.onrender.com")
-              .AllowAnyMethod()
-              .AllowAnyHeader();
+        policy.WithOrigins(
+            "https://ecommerce-frontend-65gk.onrender.com", // Seu front no Render
+            "https://dreamcar.kozow.com",                   // Seu novo domínio (sem a barra no final!)
+            "http://localhost:5173"                           // (Opcional) Seu Localhost para testes
+        )
+        .AllowAnyMethod()
+        .AllowAnyHeader();
     });
 });
 
