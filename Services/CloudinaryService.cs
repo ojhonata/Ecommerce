@@ -16,6 +16,9 @@ namespace Ecommerce.Services
 
             var account = new Account(cloudName, apiKey, apiSecret);
             _cloudinary = new Cloudinary(account);
+            
+            // Aumenta o timeout da API para garantir que uploads grandes não caiam
+            _cloudinary.Api.Timeout = int.MaxValue; 
         }
 
         public string UploadImage(IFormFile imageFile, string folder = "ecommerce/products")
@@ -38,13 +41,18 @@ namespace Ecommerce.Services
 
         public string UploadVideo(IFormFile videoFile, string folder = "ecommerce/videos")
         {
+            // Videos já usam UploadLarge automaticamente em muitas versões, 
+            // mas aqui mantemos o padrão se for pequeno.
             using var stream = videoFile.OpenReadStream();
             var uploadParams = new VideoUploadParams()
             {
                 File = new FileDescription(videoFile.FileName, stream),
                 Folder = folder,
             };
-            var result = _cloudinary.Upload(uploadParams);
+            
+            // Se quiser garantir para vídeos grandes também, pode usar UploadLarge aqui
+            var result = _cloudinary.Upload(uploadParams); 
+            
             if (result.StatusCode != System.Net.HttpStatusCode.OK)
             {
                 throw new Exception("Erro no upload: " + result.Error?.Message);
@@ -57,16 +65,25 @@ namespace Ecommerce.Services
             if (file == null || file.Length == 0) return null;
 
             using var stream = file.OpenReadStream();
+            
             var uploadParams = new RawUploadParams
             {
                 File = new FileDescription(file.FileName, stream),
                 Folder = folder,
                 Overwrite = true,
                 UseFilename = true,
-                UniqueFilename = true
+                UniqueFilename = true,
             };
 
-            var result = _cloudinary.Upload(uploadParams);
+            // =======================================================
+            // SOLUÇÃO PARA O LIMITE DE 10MB: UPLOAD LARGE (CHUNKED)
+            // =======================================================
+            
+            // Define pedaços de 5MB (5 * 1024 * 1024 bytes)
+            // Isso garante que cada pedaço passe pelo limite de 10MB do plano free
+            int bufferSize = 5 * 1024 * 1024; 
+
+            var result = _cloudinary.UploadLarge(uploadParams, bufferSize);
 
             if (result.StatusCode != System.Net.HttpStatusCode.OK)
             {
