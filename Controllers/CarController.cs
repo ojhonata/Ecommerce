@@ -24,7 +24,8 @@ namespace Ecommerce.Controllers
             _cloudinaryService = cloudinaryService;
         }
 
-        [HttpGet("GetCars")]
+        // CORREÇÃO: Removendo "GetCars" para usar a rota base /api/Car
+        [HttpGet] 
         public IActionResult GetCars(int pageNumber = 1, int pageQuantity = 10)
         {
             try
