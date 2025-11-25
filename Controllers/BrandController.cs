@@ -3,6 +3,10 @@ using Ecommerce.Interface;
 using Ecommerce.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Ecommerce.Controllers
 {
@@ -17,7 +21,8 @@ namespace Ecommerce.Controllers
             _brandService = brandService;
         }
 
-        [HttpGet("GetBrand")]
+        // CORREÇÃO AQUI: Rota principal agora é [HttpGet] para evitar 404
+        [HttpGet] 
         public IActionResult GetBrands(int pageNumber = 1, int pageQuantity = 10)
         {
             try
