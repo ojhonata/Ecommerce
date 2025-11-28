@@ -66,16 +66,16 @@ namespace Ecommerce.Controllers
 
         [Authorize(Roles = "Admin")]
         [HttpPut("{id:guid}", Name = "UpdateBrand")]
-        public IActionResult UpdateBrand(Guid id, [FromForm] Brand brand)
+        public IActionResult UpdateBrand(Guid id, [FromForm] UpdateBrandDto brandDto)
         {
-            if (id != brand.Id)
-            {
-                return BadRequest(new { message = "The brand ID does not match." });
-            }
             try
             {
-                _brandService.UpdateBrand(brand);
+                _brandService.UpdateBrand(id, brandDto);
                 return Ok(new { message = "Brand updated successfully." });
+            }
+            catch (ArgumentException ex)
+            {
+                return NotFound(new { message = ex.Message });
             }
             catch (Exception ex)
             {

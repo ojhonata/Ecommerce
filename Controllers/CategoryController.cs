@@ -70,15 +70,11 @@ namespace Ecommerce.Controllers
 
         [Authorize(Roles = "Admin")]
         [HttpPut("{id:guid}", Name = "UpdateCategoiry")]
-        public IActionResult UpdateCategory(Guid id, [FromBody] Category category)
+        public IActionResult UpdateCategory(Guid id, [FromBody] CategoryCreateDto category)
         {
-            if (id != category.Id)
-            {
-                return BadRequest(new { message = "The category ID does not match." });
-            }
             try
             {
-                _categoryService.UpdateCategory(category);
+                _categoryService.UpdateCategory(id, category);
                 return Ok(new { message = "Category updated successfully." });
             }
             catch (Exception ex)

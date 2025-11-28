@@ -12,7 +12,7 @@ namespace Ecommerce.Interface
         public List<CategoryDTO> GetCategories(int pageNumber, int pageQuantity);
         public CategoryDTO GetCategoryById(Guid id);
         public Category PostCategory(CategoryDTO category);
-        void UpdateCategory(Category category);
+        void UpdateCategory(Guid id, CategoryCreateDto category);
         void DeleteCategory(Guid id);
     }
 }

@@ -70,19 +70,26 @@ namespace Ecommerce.Services
             return newBrand;
         }
 
-        public void UpdateBrand(Brand brand)
+        public Brand UpdateBrand(Guid id, UpdateBrandDto dto)
         {
-            var existingBrand = _brandRepository.GetById(brand.Id);
-            if (existingBrand != null)
-            {
-                existingBrand.Name = brand.Name;
-                existingBrand.ImageUrl = brand.ImageUrl;
-                _brandRepository.Update(existingBrand);
-            }
-            else
-            {
+            var brand = _brandRepository.GetById(id);
+            if (brand == null)
                 throw new ArgumentException("Brand not found.");
-            }
+            brand.Name = dto.Name;
+            brand.Description = dto.Description;
+
+            if (dto.Image != null)
+                brand.ImageUrl = _cloudinaryService.UploadImage(dto.Image);
+
+            if (dto.LogoBrand != null)
+                brand.LogoBrand = _cloudinaryService.UploadImage(dto.LogoBrand);
+
+            if (dto.BgBrand != null)
+                brand.BgBrand = _cloudinaryService.UploadImage(dto.BgBrand);
+
+            _brandRepository.Update(brand);
+
+            return brand;
         }
     }
 }

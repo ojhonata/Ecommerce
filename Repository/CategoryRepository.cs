@@ -66,7 +66,7 @@ namespace Ecommerce.Repository
         public void Update(Category category)
         {
             var existing = _context.Categories.Find(category.Id);
-            if (existing != null)
+            if (existing == null)
             {
                 throw new ArgumentException("Category not found.");
             }

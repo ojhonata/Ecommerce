@@ -12,7 +12,7 @@ namespace Ecommerce.Interface
         public List<BrandDTO> GetBrands(int pageNumber, int pageQuantity);
         public Brand GetBrandById(Guid id);
         public Brand PostBrandCloudinary(CreateBrandDto dto);
-        void UpdateBrand(Brand brand);
+        public Brand UpdateBrand(Guid id, UpdateBrandDto dto);
         void DeleteBrand(Guid id);
     }
 }

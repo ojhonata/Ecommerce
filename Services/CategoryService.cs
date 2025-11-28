@@ -58,18 +58,16 @@ namespace Ecommerce.Services
             return _categoryRepository.Add(newCategory);
         }
 
-        public void UpdateCategory(Category category)
+        public void UpdateCategory(Guid id, CategoryCreateDto category)
         {
-            var existingCategory = _categoryRepository.GetById(category.Id);
-            if (existingCategory != null)
-            {
-                existingCategory.Name = category.Name;
-                _categoryRepository.Update(existingCategory);
-            }
-            else
-            {
-                throw new ArgumentException("Category not found.");
-            }
+            var existingCategory = _categoryRepository.GetById(id);
+
+            if (existingCategory == null)
+                throw new Exception("Category not found.");
+
+            existingCategory.Name = category.Name;
+
+            _categoryRepository.Update(existingCategory);
         }
     }
 }

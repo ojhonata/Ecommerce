@@ -74,7 +74,7 @@ namespace Ecommerce.Repository
         public void Update(Brand brand)
         {
             var existing = _context.Brands.Find(brand.Id);
-            if (existing != null)
+            if (existing == null)
             {
                 throw new ArgumentException("Brand not found.");
             }
