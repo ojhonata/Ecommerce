@@ -23,7 +23,7 @@ namespace Ecommerce.Controllers
 
         // CORREÇÃO AQUI: Rota principal agora é [HttpGet] para evitar 404
         [HttpGet] 
-        public IActionResult GetBrands(int pageNumber = 1, int pageQuantity = 10)
+        public IActionResult GetBrands(int pageNumber = 1, int pageQuantity = 30)
         {
             try
             {
