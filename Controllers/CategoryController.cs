@@ -23,7 +23,7 @@ namespace Ecommerce.Controllers
 
         // CORREÇÃO: Removendo "GetCategory" para usar a rota base /api/Category
         [HttpGet] 
-        public IActionResult GetCategory(int pageNumber = 1, int pageQuantity = 10)
+        public IActionResult GetCategory(int pageNumber = 1, int pageQuantity = 20)
         {
             try
             {
