@@ -1,7 +1,7 @@
 # [DreamCar](https://dreamcar.kozow.com/)
 ## Backend – E-commerce de Carros de Luxo
 
-Backend desenvolvido para uma plataforma de e-commerce especializada em **carros de luxo**, oferecendo uma API completa para cadastro, gerenciamento e venda de veículos premium.  
+Beckend desenvolvido para uma plataforma de e-commerce especializada em **carros de luxo**, oferecendo uma API completa para cadastro, gerenciamento e venda de veículos premium.  
 O sistema inclui autenticação JWT, integração com ViaCEP, organização por categorias e marcas, upload de imagens, gerenciamento de usuários e estrutura preparada para integração com frontend e serviços externos.
 
 ---
@@ -35,6 +35,7 @@ O objetivo deste backend é fornecer uma **API robusta, segura e escalável** pa
 - **.env loader** para variáveis de ambiente
 
 ---
+# Como Rodar o Projeto Localmente
 
 ## Criar o Arquivo `.env`
 
@@ -54,7 +55,6 @@ ApiSecret =
 TokenSecret =
 ```
 
-# Como Rodar o Projeto Localmente
 Instalar dependências do projeto
 ```
 dotnet restore
