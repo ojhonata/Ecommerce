@@ -1,7 +1,7 @@
 # [DreamCar](https://dreamcar.kozow.com/)
 ## Backend – E-commerce de Carros de Luxo
 
-Beckend desenvolvido para uma plataforma de e-commerce especializada em **carros de luxo**, oferecendo uma API completa para cadastro, gerenciamento e venda de veículos premium.  
+Backend desenvolvido para uma plataforma de e-commerce especializada em **carros de luxo**, oferecendo uma API completa para cadastro, gerenciamento e venda de veículos premium.  
 O sistema inclui autenticação JWT, integração com ViaCEP, organização por categorias e marcas, upload de imagens, gerenciamento de usuários e estrutura preparada para integração com frontend e serviços externos.
 
 ---
